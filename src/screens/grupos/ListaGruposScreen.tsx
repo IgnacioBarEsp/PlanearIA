@@ -28,11 +28,12 @@ interface ListaGruposScreenProps {
 }
 
 const ListaGruposScreen: React.FC<ListaGruposScreenProps> = ({ navigation }) => {
-  const { colors: DT, isDark, scaled, highContrast } = useAppTheme();
-  const styles = useMemo(
-    () => getStyles({ colors: DT, isDark, scaled, highContrast }),
-    [DT, isDark, scaled, highContrast]
-  );
+  // Se pasa el objeto completo de useAppTheme para satisfacer ThemedStylesInput;
+  // la fabrica solo consume `colors`. Su identidad es estable entre renders, asi
+  // que el StyleSheet no se recrea mientras no cambie una preferencia.
+  const theme = useAppTheme();
+  const DT = theme.colors;
+  const styles = useMemo(() => getStyles(theme), [theme]);
 
   const { width } = useBreakpoint();
   const wideLayout = width >= 920;
@@ -230,7 +231,11 @@ const ListaGruposScreen: React.FC<ListaGruposScreenProps> = ({ navigation }) => 
   );
 };
 
-const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInput) =>
+// Honra las cuatro preferencias que exige la spec de una pantalla migrada: tema y
+// daltonismo llegan en `colors`, la escala tipografica en `scaled` y el refuerzo de
+// contraste en `highContrast`. En escala media `scaled` es identidad, asi que la
+// presentacion por defecto no cambia.
+const getStyles = ({ colors: DT, scaled, highContrast }: ThemedStylesInput) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -246,7 +251,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     loadingText: {
       marginTop: 12,
-      fontSize: 14,
+      fontSize: scaled(14),
       color: DT.textTertiary,
     },
     errorContainer: {
@@ -256,15 +261,15 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       padding: 20,
     },
     errorTitle: {
-      fontSize: 20,
+      fontSize: scaled(20),
       fontWeight: "700",
       color: DT.danger,
       marginTop: 12,
       marginBottom: 6,
     },
     errorText: {
-      fontSize: 14,
-      color: DT.textSecondary,
+      fontSize: scaled(14),
+      color: highContrast ? DT.text : DT.textSecondary,
       textAlign: "center",
     },
     header: {
@@ -276,15 +281,15 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       maxWidth: 1220,
     },
     title: {
-      fontSize: 34,
+      fontSize: scaled(34),
       fontWeight: "800",
       color: DT.text,
       letterSpacing: -0.4,
     },
     subtitle: {
       marginTop: 2,
-      fontSize: 15,
-      color: DT.textSecondary,
+      fontSize: scaled(15),
+      color: highContrast ? DT.text : DT.textSecondary,
       marginBottom: 10,
     },
     searchContainer: {
@@ -331,7 +336,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       borderColor: "#F5D7B0",
     },
     syncText: {
-      fontSize: 12,
+      fontSize: scaled(12),
       fontWeight: "700",
       color: DT.text,
     },
@@ -340,21 +345,21 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       alignItems: "center",
       gap: 6,
       borderWidth: 1,
-      borderColor: DT.borderLight,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
       backgroundColor: DT.surface,
       borderRadius: 10,
       paddingHorizontal: 10,
       paddingVertical: 6,
     },
     syncButtonText: {
-      fontSize: 12,
+      fontSize: scaled(12),
       fontWeight: "700",
       color: DT.primary,
     },
     searchInput: {
       flex: 1,
       marginLeft: 8,
-      fontSize: 15,
+      fontSize: scaled(15),
       color: DT.text,
       paddingVertical: 0,
     },
@@ -401,18 +406,18 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       flex: 1,
     },
     grupoNombre: {
-      fontSize: 17,
+      fontSize: scaled(17),
       fontWeight: "700",
       color: DT.text,
     },
     grupoMateria: {
-      fontSize: 14,
+      fontSize: scaled(14),
       color: DT.textDark,
       marginTop: 1,
     },
     grupoDetalles: {
       marginTop: 1,
-      fontSize: 12,
+      fontSize: scaled(12),
       color: "#7D8EA7",
     },
     grupoFooter: {
@@ -430,12 +435,12 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       gap: 5,
     },
     badgeText: {
-      fontSize: 12,
+      fontSize: scaled(12),
       color: DT.primary,
       fontWeight: "700",
     },
     estadoText: {
-      fontSize: 12,
+      fontSize: scaled(12),
       fontWeight: "700",
     },
     estadoActivoBadge: {
@@ -457,13 +462,13 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       width: "100%",
     },
     emptyTitle: {
-      fontSize: 18,
+      fontSize: scaled(18),
       fontWeight: "700",
       color: DT.textDark,
       marginTop: 8,
     },
     emptyText: {
-      fontSize: 14,
+      fontSize: scaled(14),
       color: "#7D8EA7",
       marginTop: 3,
     },

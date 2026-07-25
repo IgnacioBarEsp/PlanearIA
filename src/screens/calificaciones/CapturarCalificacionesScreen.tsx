@@ -74,11 +74,13 @@ const buildCalificacionesInput = (
   }, {});
 
 const CapturarCalificacionesScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { colors: DT, isDark, scaled, highContrast } = useAppTheme();
-  const styles = useMemo(
-    () => getStyles({ colors: DT, isDark, scaled, highContrast }),
-    [DT, isDark, scaled, highContrast]
-  );
+  // Se pasa el objeto completo de useAppTheme para satisfacer ThemedStylesInput;
+  // la fabrica solo consume `colors`. Su identidad es estable entre renders, asi
+  // que el StyleSheet no se recrea mientras no cambie una preferencia.
+  const theme = useAppTheme();
+  const DT = theme.colors;
+  const highContrast = theme.highContrast;
+  const styles = useMemo(() => getStyles(theme), [theme]);
 
   const { grupoId } = route.params;
   const { grupos } = useGrupos();
@@ -369,7 +371,11 @@ const CapturarCalificacionesScreen: React.FC<Props> = ({ navigation, route }) =>
         {alumnosDelGrupo.length === 0 ? (
           <View style={styles.emptyState}>
             <View style={styles.emptyIconCircle}>
-              <MaterialIcons name="format-list-numbered" size={40} color={DT.textSecondary} />
+              <MaterialIcons
+                name="format-list-numbered"
+                size={40}
+                color={highContrast ? DT.text : DT.textSecondary}
+              />
             </View>
             <Text style={styles.emptyTitle}>Sin alumnos en este grupo</Text>
             <Text style={styles.emptySubtitle}>
@@ -416,7 +422,7 @@ const CapturarCalificacionesScreen: React.FC<Props> = ({ navigation, route }) =>
                     keyboardType="numeric"
                     maxLength={5}
                     placeholder="--"
-                    placeholderTextColor={DT.textSecondary}
+                    placeholderTextColor={highContrast ? DT.text : DT.textSecondary}
                     textAlign="center"
                   />
                 </View>
@@ -458,7 +464,11 @@ const CapturarCalificacionesScreen: React.FC<Props> = ({ navigation, route }) =>
   );
 };
 
-const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInput) =>
+// Honra las cuatro preferencias que exige la spec de una pantalla migrada: tema y
+// daltonismo llegan en `colors`, la escala tipografica en `scaled` y el refuerzo de
+// contraste en `highContrast`. En escala media `scaled` es identidad, asi que la
+// presentacion por defecto no cambia.
+const getStyles = ({ colors: DT, scaled, highContrast }: ThemedStylesInput) =>
   StyleSheet.create({
     safeArea: {
       flex: 1,
@@ -479,7 +489,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     headerTitle: {
       flex: 1,
       color: "white",
-      fontSize: 20,
+      fontSize: scaled(20),
       fontWeight: "700",
     },
     trashButton: {
@@ -519,13 +529,13 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     grupoLabelText: {
       color: "white",
-      fontSize: 10,
+      fontSize: scaled(10),
       fontWeight: "700",
       letterSpacing: 1,
     },
     grupoNombre: {
       color: "white",
-      fontSize: 18,
+      fontSize: scaled(18),
       fontWeight: "700",
       marginBottom: 6,
     },
@@ -536,7 +546,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     grupoMetaText: {
       color: "rgba(255,255,255,0.8)",
-      fontSize: 12,
+      fontSize: scaled(12),
       marginRight: 10,
     },
     // Parcial Selector
@@ -551,9 +561,9 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       marginBottom: 10,
     },
     parcialLabel: {
-      fontSize: 11,
+      fontSize: scaled(11),
       fontWeight: "700",
-      color: DT.textSecondary,
+      color: highContrast ? DT.text : DT.textSecondary,
       letterSpacing: 0.5,
     },
     activoBadge: {
@@ -564,7 +574,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     activoBadgeText: {
       color: "#27AE60",
-      fontSize: 11,
+      fontSize: scaled(11),
       fontWeight: "600",
     },
     parcialSelector: {
@@ -592,9 +602,9 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       }),
     },
     parcialPillText: {
-      fontSize: 12,
+      fontSize: scaled(12),
       fontWeight: "600",
-      color: DT.textSecondary,
+      color: highContrast ? DT.text : DT.textSecondary,
     },
     parcialPillTextActive: {
       color: DT.primary,
@@ -616,16 +626,16 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       marginBottom: 16,
     },
     emptyTitle: {
-      fontSize: 18,
+      fontSize: scaled(18),
       fontWeight: "700",
       color: DT.text,
       marginBottom: 8,
     },
     emptySubtitle: {
-      fontSize: 14,
-      color: DT.textSecondary,
+      fontSize: scaled(14),
+      color: highContrast ? DT.text : DT.textSecondary,
       textAlign: "center",
-      lineHeight: 20,
+      lineHeight: scaled(20),
       marginBottom: 24,
     },
     emptyButton: {
@@ -640,7 +650,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     emptyButtonText: {
       color: DT.primary,
-      fontSize: 14,
+      fontSize: scaled(14),
       fontWeight: "600",
     },
     // Student List
@@ -679,7 +689,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     avatarText: {
       color: "white",
-      fontSize: 16,
+      fontSize: scaled(16),
       fontWeight: "700",
     },
     studentInfo: {
@@ -687,14 +697,14 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       marginRight: 12,
     },
     studentName: {
-      fontSize: 15,
+      fontSize: scaled(15),
       fontWeight: "600",
       color: DT.text,
       marginBottom: 2,
     },
     studentNC: {
-      fontSize: 12,
-      color: DT.textSecondary,
+      fontSize: scaled(12),
+      color: highContrast ? DT.text : DT.textSecondary,
     },
     gradeInputContainer: {
       width: 56,
@@ -708,7 +718,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     gradeInput: {
       width: 50,
       height: 50,
-      fontSize: 18,
+      fontSize: scaled(18),
       fontWeight: "700",
       color: DT.text,
       padding: 0,
@@ -736,14 +746,14 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       marginRight: 16,
     },
     bottomPromedioLabel: {
-      fontSize: 9,
+      fontSize: scaled(9),
       fontWeight: "700",
-      color: DT.textSecondary,
+      color: highContrast ? DT.text : DT.textSecondary,
       letterSpacing: 0.5,
       marginBottom: 2,
     },
     bottomPromedioValue: {
-      fontSize: 22,
+      fontSize: scaled(22),
       fontWeight: "800",
       color: DT.primary,
     },
@@ -759,7 +769,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       borderRadius: 10,
     },
     calificadosText: {
-      fontSize: 11,
+      fontSize: scaled(11),
       fontWeight: "600",
       color: DT.primary,
     },
@@ -777,7 +787,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     guardarButtonText: {
       color: "white",
-      fontSize: 14,
+      fontSize: scaled(14),
       fontWeight: "700",
     },
   });

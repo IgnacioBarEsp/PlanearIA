@@ -84,6 +84,18 @@ Errores observados en el navegador durante el recorrido, todos **preexistentes y
 
 Ninguna pantalla migrada emitio error ni warning propio. En Jest, la guardia de consola quedo satisfecha: cero `console.error`/`console.warn` no declarados en la suite completa.
 
+## Hallazgos de la revision adversarial y su correccion
+
+La revision adversarial encontro tres defectos reales en la primera version de este change. Los tres se corrigieron antes de archivar; se documentan porque explican por que la implementacion final es distinta de la inicial.
+
+**1. Major: las pantallas se declaraban migradas sin honrar la escala tipografica.** La capability exige que una pantalla migrada refleje tema, escala de fuente y daltonismo, y las pantallas migradas en #78 usan `scaled()` (45 usos en `CuentaScreen`, 10 en `AdminRolesScreen`, 8 en `SesionesActivasScreen`). Las seis de este batch usaban cero: retirarlas del registro habria declarado conformidad falsa, y el docente que agranda la fuente no habria visto efecto. Corregido cableando `scaled()` en 118 declaraciones numericas de `fontSize` y `lineHeight` mas 36 referencias a `FONT_SIZES`, y `highContrast` en 45 sitios de borde y texto secundario, con el mismo patron de #78 (`highContrast ? borderStrong : borderLight`, `highContrast ? text : textSecondary`). En escala media el factor es 1, asi que la presentacion por defecto no cambia. La spec gana un escenario que prohibe retirar una entrada cuando la pantalla honra solo parte de las preferencias.
+
+**2. Major: los tests no probaban lo que sus nombres afirmaban.** El caso llamado "ClassroomHomeScreen repinta sus estilos" solo afirmaba sobre una sonda que consume `useAppTheme` directamente: probaba que `ThemeContext` funciona, comportamiento anterior a este change, y habria pasado igual con la pantalla congelada en `COLORS` estatico. Corregido afirmando sobre el estilo real del boton "Crear clase" de la pantalla, con valores anclados (`lightTheme.primary` y `darkTheme.primary`) para que no pueda pasar en vacio si el lector de estilo devolviera `undefined`, y comprobando que el valor regresa al original al revertir la preferencia.
+
+**3. Minor: parametros muertos en las fabricas.** Cinco fabricas desestructuraban `isDark`, `scaled` y `highContrast` sin usarlos, anunciando un soporte inexistente; `@typescript-eslint/no-unused-vars` esta apagado, asi que nada lo atrapaba. Resuelto por la correccion del hallazgo 1: `scaled` y `highContrast` ahora se usan de verdad, e `isDark` salio de las firmas porque ninguna pantalla del batch lo necesita.
+
+Ademas, la propia suite de pruebas nueva violaba `react-hooks/globals` al reasignar variables de modulo durante el render, que es la misma clase de defecto que corrigio la Ola 1. Se movio la publicacion de los setters a un efecto post-commit.
+
 ## Limitaciones
 
 - **GJ2 y GJ3 no se ejecutaron.** Cuatro de las seis pantallas migradas (`ListaGrupos`, `DetalleGrupo`, `CapturarCalificaciones`, `PromediosCalificaciones`, `CrearTareaGrupo`) no son alcanzables en sesion de invitado sin grupos y alumnos sembrados, y esos journeys estan marcados `parcial` en el manifiesto precisamente por eso. Su migracion queda verificada por typecheck, por la suite y por la sustitucion mecanica del identificador, no por captura visual. No se fabricaron capturas de rutas inalcanzables.

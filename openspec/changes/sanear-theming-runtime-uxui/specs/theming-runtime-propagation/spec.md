@@ -52,7 +52,9 @@ El registro SHALL estar respaldado por una verificacion ejecutable y reproducibl
 
 El rollout de theming SHALL avanzar por la politica fix-on-touch: cuando un cambio migra una pantalla legacy al punto de consumo en runtime, ese mismo cambio SHALL retirar su entrada del registro. El registro SHALL encoger de forma monotona, y su tamano SHALL ser la medida vigente del trabajo pendiente.
 
-Una pantalla SHALL considerarse migrada cuando deja de importar los colores estaticos y obtiene sus colores del punto de consumo en runtime. Esa condicion SHALL NOT interpretarse como que la pantalla obtiene la totalidad de sus colores de tokens: los colores fijos escritos directamente en el archivo son una condicion distinta, ajena a este registro, y SHALL declararse por pantalla en la evidencia del cambio en vez de darse por resuelta.
+Una pantalla SHALL considerarse migrada cuando deja de importar los colores estaticos y obtiene del punto de consumo en runtime las cuatro preferencias que la capability exige: tema, modo daltonismo, escala tipografica y refuerzo de contraste. Retirar su entrada del registro SHALL NOT admitirse mientras la pantalla honre solo una parte de ellas.
+
+Esa condicion SHALL NOT interpretarse como que la pantalla obtiene la totalidad de sus colores de tokens: los colores fijos escritos directamente en el archivo son una condicion distinta, ajena a este registro, y SHALL declararse por pantalla en la evidencia del cambio en vez de darse por resuelta.
 
 #### Scenario: Un cambio migra una pantalla legacy
 
@@ -68,6 +70,11 @@ Una pantalla SHALL considerarse migrada cuando deja de importar los colores esta
 
 - **WHEN** una pantalla migrada conserva valores de color escritos directamente en su codigo
 - **THEN** sale igualmente del registro, porque ya no importa los colores estaticos, y la evidencia del cambio declara cuantos valores fijos conserva sin afirmar que la pantalla obtiene todos sus colores de tokens
+
+#### Scenario: Una pantalla sale del registro honrando solo el tema
+
+- **WHEN** un cambio convierte una pantalla al punto de consumo pero deja su tipografia con tamanos fijos, sin pasar por la escala tipografica
+- **THEN** la pantalla no se considera migrada y su entrada no puede retirarse, porque el docente que agranda la fuente seguiria sin ver efecto
 
 #### Scenario: Una pantalla figura en el registro sin usar los colores estaticos
 

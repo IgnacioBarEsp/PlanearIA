@@ -130,7 +130,7 @@ const TabContent: React.FC<{
     guardarNotasGrupo,
     descartarCambiosNotas,
   }) => {
-    const { colors: DT } = useAppTheme();
+    const { colors: DT, highContrast } = useAppTheme();
     const styles = useThemedStyles();
 
     switch (activeTab) {
@@ -401,7 +401,11 @@ const TabContent: React.FC<{
                           pts
                         </Text>
                       </View>
-                      <MaterialIcons name="chevron-right" size={24} color={DT.textSecondary} />
+                      <MaterialIcons
+                        name="chevron-right"
+                        size={24}
+                        color={highContrast ? DT.text : DT.textSecondary}
+                      />
                     </View>
                   </Pressable>
                 ))
@@ -667,7 +671,7 @@ const TabContent: React.FC<{
  * Solo JSX y StyleSheet - la logica vive en useDetalleGrupoViewModel
  */
 const DetalleGrupoScreen: React.FC = () => {
-  const { colors: DT } = useAppTheme();
+  const { colors: DT, highContrast } = useAppTheme();
   const styles = useThemedStyles();
   const { width } = useWindowDimensions();
   const chartWidth = Math.max(280, Math.min(width - 56, 620));
@@ -855,7 +859,9 @@ const DetalleGrupoScreen: React.FC = () => {
               <MaterialIcons
                 name={tab.icon as any}
                 size={24}
-                color={activeTab === tab.id ? DT.primary : DT.textSecondary}
+                color={
+                  activeTab === tab.id ? DT.primary : highContrast ? DT.text : DT.textSecondary
+                }
               />
               <Text style={[styles.tabLabel, activeTab === tab.id && styles.activeTabLabel]}>
                 {tab.label}
@@ -1228,7 +1234,11 @@ const DetalleGrupoScreen: React.FC = () => {
 /**
  * Estilos del componente
  */
-const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInput) =>
+// Honra las cuatro preferencias que exige la spec de una pantalla migrada: tema y
+// daltonismo llegan en `colors`, la escala tipografica en `scaled` y el refuerzo de
+// contraste en `highContrast`. En escala media `scaled` es identidad, asi que la
+// presentacion por defecto no cambia.
+const getStyles = ({ colors: DT, scaled, highContrast }: ThemedStylesInput) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -1250,12 +1260,12 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       flexWrap: "wrap",
     },
     grupoNombre: {
-      fontSize: FONT_SIZES.large,
+      fontSize: scaled(FONT_SIZES.large),
       fontWeight: "bold",
       color: DT.text,
     },
     grupoId: {
-      fontSize: FONT_SIZES.small,
+      fontSize: scaled(FONT_SIZES.small),
       color: DT.textTertiary,
       marginTop: 4,
     },
@@ -1270,7 +1280,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     editarButtonText: {
       color: DT.primary,
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "700",
     },
     exportarButton: {
@@ -1284,7 +1294,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     exportarButtonText: {
       color: "#0E7A56",
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "700",
     },
     eliminarButton: {
@@ -1298,7 +1308,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     eliminarButtonText: {
       color: DT.error,
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "700",
     },
     tabsContainer: {
@@ -1320,8 +1330,8 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       boxShadow: "0px 4px 12px rgba(0, 72, 132, 0.06)",
     },
     tabLabel: {
-      fontSize: FONT_SIZES.small,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
       marginLeft: 8,
       fontWeight: "500",
     },
@@ -1344,7 +1354,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       gap: 8,
     },
     inlineStateText: {
-      fontSize: FONT_SIZES.small,
+      fontSize: scaled(FONT_SIZES.small),
       color: DT.primaryDark,
       fontWeight: "600",
     },
@@ -1360,7 +1370,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       gap: 8,
     },
     inlineStateErrorText: {
-      fontSize: FONT_SIZES.small,
+      fontSize: scaled(FONT_SIZES.small),
       color: DT.dangerDark,
       fontWeight: "700",
     },
@@ -1370,19 +1380,19 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       paddingBottom: 110,
     },
     tabTitle: {
-      fontSize: FONT_SIZES.xlarge,
+      fontSize: scaled(FONT_SIZES.xlarge),
       fontWeight: "bold",
       color: DT.text,
       marginBottom: 8,
     },
     tabDescription: {
-      fontSize: FONT_SIZES.medium,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.medium),
+      color: highContrast ? DT.text : DT.textSecondary,
       marginBottom: 20,
     },
     emptyText: {
-      fontSize: FONT_SIZES.medium,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.medium),
+      color: highContrast ? DT.text : DT.textSecondary,
       backgroundColor: DT.surfaceContainerLow,
       borderRadius: 16,
       paddingHorizontal: 14,
@@ -1401,7 +1411,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     actionButtonText: {
       color: "white",
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "bold",
       marginLeft: 8,
     },
@@ -1418,7 +1428,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
     },
     alumnoNombre: {
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       color: DT.text,
       fontWeight: "700",
     },
@@ -1428,7 +1438,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     alumnoControl: {
       color: DT.textTertiary,
-      fontSize: FONT_SIZES.small,
+      fontSize: scaled(FONT_SIZES.small),
       marginTop: 2,
     },
     removeAlumnoButton: {
@@ -1442,7 +1452,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     removeAlumnoButtonText: {
       color: DT.error,
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "700",
     },
     statsContainer: {
@@ -1460,18 +1470,18 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
     },
     statNumber: {
-      fontSize: 32,
+      fontSize: scaled(32),
       fontWeight: "bold",
       color: DT.primary,
       marginBottom: 5,
     },
     statLabel: {
-      fontSize: FONT_SIZES.small,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
       textAlign: "center",
     },
     sectionTitle: {
-      fontSize: FONT_SIZES.large,
+      fontSize: scaled(FONT_SIZES.large),
       fontWeight: "bold",
       color: DT.text,
       marginBottom: 15,
@@ -1484,19 +1494,19 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
     },
     comentarioAlumno: {
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "bold",
       color: DT.text,
       marginBottom: 5,
     },
     comentarioTexto: {
-      fontSize: FONT_SIZES.medium,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.medium),
+      color: highContrast ? DT.text : DT.textSecondary,
       marginBottom: 5,
     },
     comentarioFecha: {
-      fontSize: FONT_SIZES.small,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
     },
     statsHeaderRow: {
       flexDirection: "row",
@@ -1507,7 +1517,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     updatedAtText: {
       color: "#6C7D95",
-      fontSize: 12,
+      fontSize: scaled(12),
       fontWeight: "600",
       marginTop: 6,
     },
@@ -1534,7 +1544,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     insightText: {
       flex: 1,
       color: "#6A5823",
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "600",
     },
     openReportButtonContainer: {
@@ -1553,7 +1563,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     openReportButtonText: {
       color: DT.surface,
       fontWeight: "800",
-      fontSize: 14,
+      fontSize: scaled(14),
     },
     notesSuggestionCard: {
       backgroundColor: DT.surface,
@@ -1569,16 +1579,16 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     notesSuggestionTitle: {
       color: "#5D6E87",
-      fontSize: 14,
+      fontSize: scaled(14),
       fontWeight: "700",
       textTransform: "capitalize",
     },
     notesSuggestionText: {
       color: "#24364E",
-      fontSize: 16,
+      fontSize: scaled(16),
       fontWeight: "700",
       marginTop: 3,
-      lineHeight: 23,
+      lineHeight: scaled(23),
     },
     notesCard: {
       backgroundColor: DT.surface,
@@ -1601,7 +1611,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     notesPrivateText: {
       color: DT.textTertiary,
-      fontSize: 14,
+      fontSize: scaled(14),
       fontWeight: "600",
     },
     notesPrivateBadge: {
@@ -1612,7 +1622,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     notesPrivateBadgeText: {
       color: "#2E6EBB",
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "800",
       textTransform: "uppercase",
     },
@@ -1625,8 +1635,8 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       paddingHorizontal: 14,
       paddingVertical: 12,
       color: "#2B3D57",
-      fontSize: 22,
-      lineHeight: 32,
+      fontSize: scaled(22),
+      lineHeight: scaled(32),
       fontWeight: "500",
     },
     notesMetaRow: {
@@ -1658,17 +1668,17 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     notesStatusText: {
       color: "#334861",
-      fontSize: 15,
+      fontSize: scaled(15),
       fontWeight: "700",
     },
     notesTimestamp: {
       color: DT.textTertiary,
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "500",
     },
     notesErrorText: {
       color: DT.dangerDark,
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "700",
       marginBottom: 8,
     },
@@ -1688,8 +1698,8 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       backgroundColor: DT.surface,
     },
     notesDiscardButtonText: {
-      color: DT.textSecondary,
-      fontSize: 19,
+      color: highContrast ? DT.text : DT.textSecondary,
+      fontSize: scaled(19),
       fontWeight: "700",
     },
     notesSaveButton: {
@@ -1706,14 +1716,14 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     notesSaveButtonText: {
       color: DT.surface,
-      fontSize: 22,
+      fontSize: scaled(22),
       fontWeight: "800",
     },
     notesFooterText: {
       color: "#6C7D95",
-      fontSize: 18,
+      fontSize: scaled(18),
       fontWeight: "500",
-      lineHeight: 25,
+      lineHeight: scaled(25),
       textAlign: "center",
       marginTop: 14,
     },
@@ -1749,14 +1759,14 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       marginLeft: 12,
     },
     tareaTitulo: {
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "600",
       color: DT.text,
       marginBottom: 4,
     },
     tareaMetadata: {
-      fontSize: FONT_SIZES.small,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
     },
     tareaProgress: {
       marginTop: 8,
@@ -1774,8 +1784,8 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       borderRadius: 3,
     },
     progressText: {
-      fontSize: FONT_SIZES.small,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
     },
     modalBackdrop: {
       flex: 1,
@@ -1792,13 +1802,13 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       gap: 12,
     },
     modalTitle: {
-      fontSize: 34,
+      fontSize: scaled(34),
       fontWeight: "800",
       color: DT.text,
       letterSpacing: -0.4,
     },
     modalSubtitle: {
-      fontSize: 16,
+      fontSize: scaled(16),
       color: DT.textDark,
     },
     searchBox: {
@@ -1815,7 +1825,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     searchInput: {
       flex: 1,
       color: DT.text,
-      fontSize: 14,
+      fontSize: scaled(14),
     },
     studentsList: {
       maxHeight: 320,
@@ -1825,7 +1835,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       color: "#5B6D86",
       textAlign: "center",
       paddingVertical: 12,
-      fontSize: 14,
+      fontSize: scaled(14),
     },
     studentRow: {
       borderWidth: 1,
@@ -1851,12 +1861,12 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     studentName: {
       color: DT.text,
-      fontSize: 14,
+      fontSize: scaled(14),
       fontWeight: "700",
     },
     studentMeta: {
       color: "#5B6D86",
-      fontSize: 12,
+      fontSize: scaled(12),
       marginTop: 2,
     },
     createStudentCard: {
@@ -1874,7 +1884,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       backgroundColor: DT.surface,
       paddingHorizontal: 10,
       paddingVertical: 9,
-      fontSize: 14,
+      fontSize: scaled(14),
       color: DT.text,
     },
     secondaryModalButton: {
@@ -1890,7 +1900,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     secondaryModalButtonText: {
       color: "#245C9E",
       fontWeight: "700",
-      fontSize: 14,
+      fontSize: scaled(14),
     },
     primaryModalButton: {
       borderRadius: 999,
@@ -1903,7 +1913,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     primaryModalButtonText: {
       color: DT.surface,
       fontWeight: "800",
-      fontSize: 14,
+      fontSize: scaled(14),
     },
     successCard: {
       margin: 24,
@@ -1924,12 +1934,12 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     successTitle: {
       color: DT.text,
-      fontSize: 22,
+      fontSize: scaled(22),
       fontWeight: "800",
     },
     successText: {
       color: DT.textDark,
-      fontSize: 14,
+      fontSize: scaled(14),
       textAlign: "center",
       marginBottom: 4,
     },
@@ -1947,7 +1957,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       gap: 8,
     },
     impactText: {
-      fontSize: 16,
+      fontSize: scaled(16),
       color: DT.text,
       fontWeight: "700",
     },
@@ -1982,13 +1992,13 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     confirmText: {
       flex: 1,
       color: "#42536D",
-      fontSize: 15,
-      lineHeight: 20,
+      fontSize: scaled(15),
+      lineHeight: scaled(20),
     },
     deleteErrorText: {
       color: DT.error,
       fontWeight: "700",
-      fontSize: 13,
+      fontSize: scaled(13),
     },
     modalActions: {
       flexDirection: "row",
@@ -1999,7 +2009,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       flex: 1,
       borderRadius: 999,
       borderWidth: 1,
-      borderColor: DT.borderLight,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
       backgroundColor: DT.surface,
       alignItems: "center",
       justifyContent: "center",
@@ -2008,7 +2018,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     cancelModalButtonText: {
       color: DT.textDark,
       fontWeight: "700",
-      fontSize: 15,
+      fontSize: scaled(15),
     },
     deleteModalButton: {
       flex: 1.4,
@@ -2026,7 +2036,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     deleteModalButtonText: {
       color: DT.surface,
       fontWeight: "800",
-      fontSize: 14,
+      fontSize: scaled(14),
     },
   });
 

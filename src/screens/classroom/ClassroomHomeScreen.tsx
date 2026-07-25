@@ -347,7 +347,11 @@ function formatDate(value?: string): string {
   return Number.isFinite(date.getTime()) ? date.toLocaleDateString() : "Sin fecha";
 }
 
-const getStyles = ({ colors: DT }: ThemedStylesInput) =>
+// Honra las cuatro preferencias que exige la spec de una pantalla migrada: tema y
+// daltonismo llegan en `colors`, la escala tipografica en `scaled` y el refuerzo de
+// contraste en `highContrast`. En escala media `scaled` es identidad, asi que la
+// presentacion por defecto no cambia.
+const getStyles = ({ colors: DT, scaled, highContrast }: ThemedStylesInput) =>
   StyleSheet.create({
     safeArea: {
       flex: 1,
@@ -384,21 +388,21 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     eyebrow: {
       color: DT.primary,
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "800",
       letterSpacing: 1,
       textTransform: "uppercase",
     },
     title: {
       color: "#122033",
-      fontSize: 27,
+      fontSize: scaled(27),
       fontWeight: "900",
-      lineHeight: 32,
+      lineHeight: scaled(32),
     },
     subtitle: {
       color: "#526173",
-      fontSize: 15,
-      lineHeight: 22,
+      fontSize: scaled(15),
+      lineHeight: scaled(22),
     },
     heroActions: {
       flexDirection: "row",
@@ -417,7 +421,7 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     primaryButtonText: {
       color: "#FFFFFF",
-      fontSize: 15,
+      fontSize: scaled(15),
       fontWeight: "800",
     },
     secondaryButton: {
@@ -434,7 +438,7 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     secondaryButtonText: {
       color: DT.primary,
-      fontSize: 15,
+      fontSize: scaled(15),
       fontWeight: "800",
     },
     kpiGrid: {
@@ -467,7 +471,7 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     tabText: {
       color: "#64748B",
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "900",
     },
     tabTextActive: {
@@ -484,13 +488,13 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     kpiValue: {
       color: "#122033",
-      fontSize: 26,
+      fontSize: scaled(26),
       fontWeight: "900",
       marginTop: 8,
     },
     kpiLabel: {
       color: "#64748B",
-      fontSize: 13,
+      fontSize: scaled(13),
       fontWeight: "700",
     },
     statusCard: {
@@ -504,12 +508,12 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     statusTitle: {
       color: "#9A3412",
-      fontSize: 16,
+      fontSize: scaled(16),
       fontWeight: "900",
     },
     statusText: {
       color: "#9A3412",
-      fontSize: 14,
+      fontSize: scaled(14),
     },
     statusButton: {
       alignSelf: "flex-start",
@@ -543,13 +547,13 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     emptyTitle: {
       color: "#122033",
-      fontSize: 21,
+      fontSize: scaled(21),
       fontWeight: "900",
     },
     emptyText: {
       color: "#64748B",
-      fontSize: 15,
-      lineHeight: 22,
+      fontSize: scaled(15),
+      lineHeight: scaled(22),
       textAlign: "center",
     },
     emptyActions: {
@@ -563,12 +567,12 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     sectionTitle: {
       color: "#122033",
-      fontSize: 21,
+      fontSize: scaled(21),
       fontWeight: "900",
     },
     sectionCaption: {
       color: "#64748B",
-      fontSize: 13,
+      fontSize: scaled(13),
       marginTop: 3,
     },
     classGrid: {
@@ -588,13 +592,13 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     classCoverTitle: {
       color: "#FFFFFF",
-      fontSize: 23,
+      fontSize: scaled(23),
       fontWeight: "900",
       maxWidth: 280,
     },
     classCoverSubtitle: {
       color: "rgba(255,255,255,0.88)",
-      fontSize: 14,
+      fontSize: scaled(14),
       fontWeight: "800",
       marginTop: 5,
     },
@@ -613,7 +617,7 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     avatarBubbleText: {
       color: DT.primary,
-      fontSize: 22,
+      fontSize: scaled(22),
       fontWeight: "900",
     },
     classBody: {
@@ -637,7 +641,7 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
       backgroundColor: "#E7F8EF",
       borderRadius: 999,
       color: "#166534",
-      fontSize: 12,
+      fontSize: scaled(12),
       fontWeight: "900",
       paddingHorizontal: 11,
       paddingVertical: 6,
@@ -645,13 +649,13 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     classTitle: {
       color: "#122033",
-      fontSize: 19,
+      fontSize: scaled(19),
       fontWeight: "900",
       marginTop: 14,
     },
     classSubtitle: {
       color: "#64748B",
-      fontSize: 14,
+      fontSize: scaled(14),
       marginTop: 4,
     },
     cardMetrics: {
@@ -667,12 +671,12 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     miniMetricValue: {
       color: "#122033",
-      fontSize: 18,
+      fontSize: scaled(18),
       fontWeight: "900",
     },
     miniMetricLabel: {
       color: "#64748B",
-      fontSize: 11,
+      fontSize: scaled(11),
       fontWeight: "700",
       marginTop: 2,
     },
@@ -705,12 +709,12 @@ const getStyles = ({ colors: DT }: ThemedStylesInput) =>
     },
     timelineTitle: {
       color: "#122033",
-      fontSize: 15,
+      fontSize: scaled(15),
       fontWeight: "900",
     },
     timelineSubtitle: {
       color: "#64748B",
-      fontSize: 12,
+      fontSize: scaled(12),
       marginTop: 2,
     },
     timelineEmpty: {

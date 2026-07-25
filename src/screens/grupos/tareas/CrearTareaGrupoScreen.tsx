@@ -35,14 +35,24 @@ try {
 // lineas a un componente que ya rozaba el umbral de tamano de React Doctor, y la
 // migracion no deberia empeorar ese diagnostico. Conserva la memoizacion porque
 // la identidad del objeto de useAppTheme solo cambia con una preferencia.
-function useThemedStyles() {
+function useTemaDePantalla() {
   const theme = useAppTheme();
-  return useMemo(() => getStyles(theme), [theme]);
+  // Los alias derivados viven aqui y no en el cuerpo del componente: repetir el
+  // ternario en el JSX obligaba a prettier a partir lineas y empujaba al
+  // componente por encima del umbral de tamano de React Doctor.
+  return useMemo(
+    () => ({
+      DT: theme.colors,
+      styles: getStyles(theme),
+      textoTenue: theme.highContrast ? theme.colors.text : theme.colors.textSecondary,
+      bordeTenue: theme.highContrast ? theme.colors.borderStrong : theme.colors.borderLight,
+    }),
+    [theme]
+  );
 }
 
 const CrearTareaGrupoScreen: React.FC = () => {
-  const { colors: DT } = useAppTheme();
-  const styles = useThemedStyles();
+  const { DT, styles, textoTenue, bordeTenue } = useTemaDePantalla();
 
   const route = useRoute<RouteProp<AppRoutesParamList, "CrearTareaGrupo">>();
   const navigation = useNavigation();
@@ -142,7 +152,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                   placeholder="Ej. Ensayo sobre la Revolución Industrial"
                   value={vm.titulo}
                   onChangeText={vm.setTitulo}
-                  placeholderTextColor={DT.textSecondary}
+                  placeholderTextColor={textoTenue}
                 />
               </View>
 
@@ -156,7 +166,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                     value={vm.valor}
                     onChangeText={vm.setValor}
                     keyboardType="numeric"
-                    placeholderTextColor={DT.textSecondary}
+                    placeholderTextColor={textoTenue}
                   />
                   {isExamen && <Text style={styles.valorSuffix}>%</Text>}
                 </View>
@@ -174,7 +184,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                   onChangeText={vm.setDescripcion}
                   multiline
                   numberOfLines={4}
-                  placeholderTextColor={DT.textSecondary}
+                  placeholderTextColor={textoTenue}
                 />
               </View>
 
@@ -192,7 +202,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                     >
                       {vm.fechaAsignacion || "dd/mm/aaaa"}
                     </Text>
-                    <MaterialIcons name="calendar-today" size={20} color={DT.textSecondary} />
+                    <MaterialIcons name="calendar-today" size={20} color={textoTenue} />
                   </Pressable>
                 </View>
               )}
@@ -211,7 +221,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                   <Text style={[styles.dateInputText, !vm.fechaEntrega && styles.datePlaceholder]}>
                     {vm.fechaEntrega || "dd/mm/aaaa"}
                   </Text>
-                  <MaterialIcons name="calendar-today" size={20} color={DT.textSecondary} />
+                  <MaterialIcons name="calendar-today" size={20} color={textoTenue} />
                 </Pressable>
               </View>
 
@@ -232,7 +242,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                   value={vm.permitirEntregaTardia}
                   onValueChange={vm.setPermitirEntregaTardia}
                   trackColor={{
-                    false: DT.borderLight,
+                    false: bordeTenue,
                     true: DT.primary,
                   }}
                   thumbColor="white"
@@ -264,7 +274,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                     placeholder="Recordatorios internos para el docente..."
                     value={vm.notas}
                     onChangeText={vm.setNotas}
-                    placeholderTextColor={DT.textSecondary}
+                    placeholderTextColor={textoTenue}
                   />
                 </View>
               )}
@@ -339,7 +349,11 @@ const CrearTareaGrupoScreen: React.FC = () => {
   );
 };
 
-const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInput) =>
+// Honra las cuatro preferencias que exige la spec de una pantalla migrada: tema y
+// daltonismo llegan en `colors`, la escala tipografica en `scaled` y el refuerzo de
+// contraste en `highContrast`. En escala media `scaled` es identidad, asi que la
+// presentacion por defecto no cambia.
+const getStyles = ({ colors: DT, scaled, highContrast }: ThemedStylesInput) =>
   StyleSheet.create({
     container: {
       flex: 1,
@@ -359,7 +373,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       marginRight: 12,
     },
     headerTitle: {
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "bold",
       color: "white",
     },
@@ -371,7 +385,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     headerSaveText: {
       color: "white",
-      fontSize: FONT_SIZES.small,
+      fontSize: scaled(FONT_SIZES.small),
       fontWeight: "bold",
     },
     scrollView: {
@@ -386,9 +400,9 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       paddingBottom: 110,
     },
     sectionLabel: {
-      fontSize: FONT_SIZES.small,
+      fontSize: scaled(FONT_SIZES.small),
       fontWeight: "600",
-      color: DT.textSecondary,
+      color: highContrast ? DT.text : DT.textSecondary,
       letterSpacing: 0.5,
       marginBottom: 10,
     },
@@ -410,7 +424,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       borderColor: DT.primary,
     },
     tipoPillText: {
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "600",
       color: DT.text,
     },
@@ -420,7 +434,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     formCard: {
       backgroundColor: DT.surface,
       borderWidth: 1,
-      borderColor: DT.borderLight,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
       borderRadius: 16,
       padding: 20,
       marginBottom: 20,
@@ -443,14 +457,14 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       alignItems: "center",
     },
     grupoLabel: {
-      fontSize: FONT_SIZES.small,
+      fontSize: scaled(FONT_SIZES.small),
       fontWeight: "bold",
       color: DT.primary,
       letterSpacing: 0.5,
       marginBottom: 2,
     },
     grupoNombre: {
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "bold",
       color: DT.text,
     },
@@ -458,19 +472,19 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       marginBottom: 18,
     },
     label: {
-      fontSize: FONT_SIZES.small,
+      fontSize: scaled(FONT_SIZES.small),
       fontWeight: "600",
-      color: DT.textSecondary,
+      color: highContrast ? DT.text : DT.textSecondary,
       letterSpacing: 0.3,
       marginBottom: 8,
     },
     input: {
       backgroundColor: DT.backgroundSoft,
       borderWidth: 1,
-      borderColor: DT.borderLight,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
       borderRadius: 10,
       padding: 14,
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       color: DT.text,
     },
     textArea: {
@@ -485,9 +499,9 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       flex: 1,
     },
     valorSuffix: {
-      fontSize: FONT_SIZES.large,
+      fontSize: scaled(FONT_SIZES.large),
       fontWeight: "600",
-      color: DT.textSecondary,
+      color: highContrast ? DT.text : DT.textSecondary,
       marginLeft: 10,
     },
     dateInput: {
@@ -495,18 +509,18 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       alignItems: "center",
       backgroundColor: DT.backgroundSoft,
       borderWidth: 1,
-      borderColor: DT.borderLight,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
       borderRadius: 10,
       padding: 14,
       gap: 10,
     },
     dateInputText: {
       flex: 1,
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       color: DT.text,
     },
     datePlaceholder: {
-      color: DT.textSecondary,
+      color: highContrast ? DT.text : DT.textSecondary,
     },
     toggleContainer: {
       flexDirection: "row",
@@ -527,20 +541,20 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       flex: 1,
     },
     toggleTitle: {
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "bold",
       color: DT.text,
     },
     toggleSubtitle: {
-      fontSize: FONT_SIZES.small,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
       marginTop: 2,
     },
     extendedDateContainer: {
       backgroundColor: DT.backgroundSoft,
       borderRadius: 10,
       borderWidth: 1,
-      borderColor: DT.borderLight,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
       padding: 14,
       marginBottom: 16,
     },
@@ -550,11 +564,11 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
       gap: 8,
     },
     extendedDateLabel: {
-      fontSize: FONT_SIZES.small,
-      color: DT.textSecondary,
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
     },
     extendedDateValue: {
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "bold",
       color: DT.text,
       marginLeft: "auto",
@@ -574,7 +588,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     saveButtonText: {
       color: "white",
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "bold",
     },
     cancelButton: {
@@ -588,7 +602,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     cancelButtonText: {
       color: DT.text,
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "600",
     },
     deleteButton: {
@@ -605,7 +619,7 @@ const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInp
     },
     deleteButtonText: {
       color: DT.error,
-      fontSize: FONT_SIZES.medium,
+      fontSize: scaled(FONT_SIZES.medium),
       fontWeight: "600",
     },
   });
