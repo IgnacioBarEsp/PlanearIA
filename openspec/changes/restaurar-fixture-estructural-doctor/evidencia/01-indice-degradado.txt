@@ -1,0 +1,78 @@
+### diagnose
+Repository: C:\Users\RitualBoatLaptop\Documents\Projects\PlanearIA
+Branch: development
+Indexed: 7/25/2026, 1:37:49 AM
+Indexed commit: b967275
+Current commit: b967275
+Status: ✅ up-to-date
+
+### impact --uid Function: (fixture actual)
+{
+  "error": "Target 'Function:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel' not found",
+  "target": {},
+  "direction": "upstream",
+  "impactedCount": 0,
+  "risk": "UNKNOWN"
+}
+
+### impact --uid Const:
+{
+  "target": {
+    "id": "Const:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel",
+    "name": "useCrearPlaneacionViewModel",
+    "type": "",
+    "filePath": "src/hooks/useCrearPlaneacionViewModel.ts"
+  },
+  "direction": "upstream",
+  "impactedCount": 0,
+  "risk": "LOW",
+  "epistemic": "exact",
+  "summary": {
+    "direct": 0,
+    "processes_affected": 0,
+    "modules_affected": 0
+  },
+  "byDepthCounts": {},
+  "affected_processes": [],
+  "affected_modules": [],
+  "byDepth": {}
+}
+
+### impact por nombre (ambiguo)
+{
+  "status": "ambiguous",
+  "message": "Found 2 symbols matching 'useCrearPlaneacionViewModel'. Blast radius differs per candidate (max 202 impacted at risk CRITICAL). Disambiguate with target_uid (or file_path/kind) for a single authoritative result.",
+  "target": {
+    "name": "useCrearPlaneacionViewModel"
+  },
+  "direction": "upstream",
+  "totalCandidates": 2,
+  "impactedCount": 0,
+  "risk": "UNKNOWN",
+  "maxImpactedCount": 202,
+  "maxRisk": "CRITICAL",
+  "candidates": [
+    {
+      "uid": "",
+      "name": "useCrearPlaneacionViewModel",
+      "kind": "",
+      "filePath": "src/hooks/useCrearPlaneacionViewModel.ts",
+      "line": 368,
+      "score": 0.5,
+      "impactedCount": 202,
+      "risk": "CRITICAL",
+      "direct": 105
+    },
+    {
+      "uid": "Const:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel",
+      "name": "useCrearPlaneacionViewModel",
+      "kind": "",
+      "filePath": "src/hooks/useCrearPlaneacionViewModel.ts",
+      "line": 368,
+      "score": 0.5,
+      "impactedCount": 0,
+      "risk": "LOW",
+      "direct": 0
+    }
+  ]
+}

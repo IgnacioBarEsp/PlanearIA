@@ -1,0 +1,33 @@
+Refutacion de la hipotesis de version - #149
+fecha: 2026-07-25
+
+La hipotesis del issue era que el indexador habia reclasificado el simbolo. Eso exigiria que el
+binario hubiera cambiado pese a estar fijado. Se descarta por dos vias independientes.
+
+=== 1. El tarball instalado es el que publica el registro ===
+-- integridad segun el registro npm --
+sha512-AY3j37e5HPMI53bo1wQD5eJsvO4owaQQVDzy4WJ4kif/AeC2EL2Ql5rVv11X3ejucvBeKoj5KkJVdBUlmEQsgQ==
+-- integridad del arbol resuelto por npx --
+sha512-AY3j37e5HPMI53bo1wQD5eJsvO4owaQQVDzy4WJ4kif/AeC2EL2Ql5rVv11X3ejucvBeKoj5KkJVdBUlmEQsgQ==
+-- version que reporta el binario --
+1.6.10-rc.23
+
+=== 2. La version tiene una sola fecha de publicacion, anterior al commit que la fijo ===
+1.6.10-rc.23 publicada: 2026-07-14T16:28:07.112Z
+commit que fijo la version (c5d9a27):
+c5d9a27 2026-07-14T21:37:01-06:00 fix: repair GitNexus FTS readiness
+
+Conclusion: el rc no se republico. La reclasificacion no vino del proveedor.
+
+=== 3. Hallazgo lateral: npx no fija de forma exacta ===
+manifiesto efimero que npx escribe para 'npx -y gitnexus@1.6.10-rc.23':
+{"gitnexus":"^1.6.10-rc.23"}
+que admite ese rango, segun semver:
+   ^1.6.10-rc.23 -> 1.6.10-rc.23 : true
+   ^1.6.10-rc.23 -> 1.6.10-rc.109 : true
+   ^1.6.10-rc.23 -> 1.6.10 : true
+   ^1.6.10-rc.23 -> 1.7.0 : true
+   ^1.6.10-rc.23 -> 2.0.0 : false
+Hoy resuelve a rc.23 porque el lockfile de esa cache ya lo fijaba. Si la cache se limpia, la
+version fijada del wrapper deja de garantizar el binario. Se registra como external-risk; no se
+corrige en este change.

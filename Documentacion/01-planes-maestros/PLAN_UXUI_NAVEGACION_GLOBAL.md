@@ -260,7 +260,8 @@ de datos definido por `MAPA_DDD_ESTRATEGICO_LIGERO.md`.
 - **Criterio de aceptacion:** cambiar tema oscuro repinta cualquier pantalla redisenada; fuente escala
   tipografia; daltonismo ajusta colores de estado; nada de esto rompe pantallas legacy no migradas.
 - **Paridad:** funcional. **Ground truth:** no aplica.
-- **Depende de:** nada. **Estado:** pendiente (patron piloteado en 1 pantalla; falta el rollout completo).
+- **Depende de:** nada. **Estado:** archivado 2026-07-17 (issue #78); rollout completado 2026-07-25 por
+  la Ola 2a del epic de saneamiento #141 (issue #145, change `sanear-theming-runtime-uxui`).
 - **Dimensionamiento (verificado 2026-07):** 60 archivos importan `COLORS` estatico; 18 pantallas ya usan
   el patron reactivo (`getStyles`/`useTheme`). O sea el trabajo es **desplegar un patron probado**, no
   inventarlo. Es un rollout grande: acotar el piloto a (a) construir la infra `useTheme()` + fabrica +
@@ -279,7 +280,9 @@ de datos definido por `MAPA_DDD_ESTRATEGICO_LIGERO.md`.
   se reacomoda al momento.
 - **Criterio de aceptacion:** hook `useBreakpoint()` reactivo (movil/tablet/web); `responsive.ts` jubilado
   o delegando al hook; rotacion/resize no requiere recargar.
-- **Paridad:** funcional. **Depende de:** `theming-runtime` (comparte la migracion, ver abajo). **Estado:** pendiente.
+- **Paridad:** funcional. **Depende de:** `theming-runtime` (comparte la migracion, ver abajo).
+  **Estado:** archivado 2026-07-17 (issue #79); rollout completado 2026-07-25 por la Ola 2b del epic de
+  saneamiento #141 (issue #106, change `sanear-breakpoints-uxui`), que cerro ese epic.
 - **Hallazgo verificado (2026-07):** el problema real de R2 no es `Dimensions.get()`, es que 10 de 11
   consumidores llaman `responsive()`/`isWeb()` dentro de un `StyleSheet.create` **a nivel de modulo**
   (congelado al importar). Jubilar `responsive.ts` obliga a mover esos estilos a una fabrica
@@ -298,7 +301,9 @@ de datos definido por `MAPA_DDD_ESTRATEGICO_LIGERO.md`.
   elevacion, movimiento, z-index) para que toda pantalla nueva sea consistente sin decisiones ad hoc.
 - **Criterio de aceptacion:** tokens definidos en `src/themes/`, tipografia multiplicada por
   `FontSizeContext`, documentados con previews (Claude Design/DesignSync).
-- **Paridad:** funcional. **Depende de:** `theming-runtime`. **Estado:** pendiente.
+- **Paridad:** funcional. **Depende de:** `theming-runtime`. **Estado:** archivado 2026-07-18 (issue #80).
+  **Nota:** el pendiente de literales de color de `ClassroomHomeScreen` que la Ola 2a atribuyo a este
+  change se rastrea en el issue #148, abierto; no reabre `tokens-completos`.
 
 ### Ola 1: Shell y componentes
 

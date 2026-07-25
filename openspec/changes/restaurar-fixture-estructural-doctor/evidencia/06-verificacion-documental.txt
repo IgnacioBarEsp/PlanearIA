@@ -1,0 +1,52 @@
+Verificacion documental del plan UX/UI - #149
+fecha: 2026-07-25
+
+Metodo: no se revisa a ojo. Se extraen los bloques '**Estado:**' del plan asociandolos a su
+encabezado de change, y se contrastan contra los directorios reales de openspec/changes/archive/.
+Un estado solo se corrige si la comprobacion lo respalda.
+
+bloques Estado analizados: 23
+declaran pendiente estando archivados: 0 (ninguno)
+
+pendientes confirmados como NO archivados (16):
+  linea 397 escritorio-docente
+  linea 408 office-home-crear
+  linea 416 onboarding-suite
+  linea 427 notasplan-editor
+  linea 435 calcuplan-hoja
+  linea 444 classroom-redesign
+  linea 455 asistente-ia-base
+  linea 466 asistente-ia-2plano
+  linea 479 cuenta-preferencias
+  linea 491 conectaplan
+  linea 502 agendaplan
+  linea 511 presentaplan-mvp
+  linea 522 disenaplan-mvp
+  linea 534 reportaplan
+  linea 543 notificaciones-chrome
+  linea 555 landing-web
+
+declarados archivados y presentes en archive (7):
+  linea 263 theming-runtime | en archive: true
+  linea 284 breakpoints-reactivos | en archive: true
+  linea 304 tokens-completos | en archive: true
+  linea 319 app-shell-navegacion | en archive: true
+  linea 331 componentes-base | en archive: true
+  linea 339 sync-status-ui | en archive: true
+  linea 347 assign-sheet | en archive: true
+
+=== Numeros de issue tomados del readiness.json de cada change archivado, no de memoria ===
+  2026-07-17-theming-runtime                 issue=78
+  2026-07-17-breakpoints-reactivos           issue=79
+  2026-07-18-tokens-completos                issue=80
+  2026-07-25-sanear-theming-runtime-uxui     issue=145
+  2026-07-25-sanear-breakpoints-uxui         issue=106
+
+=== Lineas corregidas ===
+263:- **Depende de:** nada. **Estado:** archivado 2026-07-17 (issue #78); rollout completado 2026-07-25 por
+284:  **Estado:** archivado 2026-07-17 (issue #79); rollout completado 2026-07-25 por la Ola 2b del epic de
+304:- **Paridad:** funcional. **Depende de:** `theming-runtime`. **Estado:** archivado 2026-07-18 (issue #80).
+
+Alcance de la correccion: solo los tres estados del backlog de Ola 0 que declaraban 'pendiente'
+sobre trabajo archivado. Los 16 pendientes restantes se dejaron intactos porque la comprobacion
+confirma que sus changes no existen en archive.

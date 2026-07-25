@@ -1,0 +1,29 @@
+Prueba de no vacuidad por mutacion - npm run test:gitnexus
+fecha: 2026-07-25   commit base: 72bac47
+Metodo: se muta el codigo, se corre la suite y se exige que FALLE. Una guardia que sobrevive a su
+propia mutacion no esta comprobando nada.
+
+=== Mutacion A: quitar la puerta estructural de repair (volver a medir solo la frescura) ===
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  code: 'ERR_ASSERTION',
+  actual: [ 'analyze', 'status' ],
+  expected: [ 'analyze', 'status', 'query', 'impact' ],
+  operator: 'deepStrictEqual',
+exit real de npm run test:gitnexus = 1   (esperado: distinto de 0)
+
+=== Mutacion B: cambiar FIXTURE_UID a Const: (el atajo descartado en design D1) ===
+AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+  code: 'ERR_ASSERTION',
+  actual: '{"target":{"id":"Const:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel"},"epistemic":"exact"}',
+  expected: '{"target":{"id":"Const:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel"},"epistemic":"exact"}',
+  operator: 'notStrictEqual',
+exit real de npm run test:gitnexus = 1   (esperado: distinto de 0)
+Lectura: con el fixture apuntando a Const:, la carga util degradada de #149 deja de ser
+distinguible del caso sano, es decir la verificacion aceptaria el nodo sin radio de impacto.
+
+=== Codigo restaurado: la suite vuelve a verde ===
+
+Repository indexed successfullyRepository indexed successfullyRepository indexed successfullyRepository indexed successfullyGitNexus FTS verifier unit smoke passed.
+exit real = 0
+
+=== git status tras las mutaciones (sin residuo) ===
