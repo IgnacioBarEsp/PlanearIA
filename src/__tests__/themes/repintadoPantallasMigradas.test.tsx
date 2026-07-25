@@ -255,7 +255,9 @@ describe("repintado en runtime de las pantallas migradas (#145)", () => {
       alternarTema();
     });
     expect(fondoDelBoton()).toBe(fondoBotonClaro);
-  });
+    // Montar la pantalla completa cuesta segundos: el default de 5 s de Jest
+    // alcanza en local pero no en los runners de CI.
+  }, 30000);
 
   it("ClassroomHomeScreen escala su tipografia con la preferencia de fuente, como exige la spec", async () => {
     const ClassroomHomeScreen = require("../../screens/classroom/ClassroomHomeScreen").default;
@@ -285,7 +287,7 @@ describe("repintado en runtime de las pantallas migradas (#145)", () => {
       ponerEscala("medium");
     });
     expect(fuenteDelBoton()).toBe(15);
-  });
+  }, 30000);
 
   it("el alto contraste refuerza el color de texto secundario de una pantalla migrada", async () => {
     await montarSonda();
