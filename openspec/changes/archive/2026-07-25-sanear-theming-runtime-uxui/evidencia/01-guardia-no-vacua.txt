@@ -1,0 +1,5 @@
+Registro del rollout de theming invalido: 4 hallazgo(s).
+  [huerfana] src/components/FloatingActionIcons.tsx: la entrada no corresponde a ningun archivo del repositorio
+  [muerta] src/components/SyncStatusBanner.tsx: el archivo ya no importa COLORS: la migracion no se registro
+  [huerfana] src/navigation/AppTabsNavigator.tsx: la entrada no corresponde a ningun archivo del repositorio
+  [muerta] src/navigation/StackNavigator.tsx: el archivo ya no importa COLORS: la migracion no se registro

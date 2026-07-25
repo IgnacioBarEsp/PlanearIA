@@ -18,7 +18,6 @@ import { StackNavigationProp } from "@react-navigation/stack";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Sharing from "expo-sharing";
-import { COLORS } from "../../../types";
 import { AppRoutesParamList } from "../../navigation/StackNavigator";
 import {
   useContenidoViewModel,

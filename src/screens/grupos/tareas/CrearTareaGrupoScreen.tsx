@@ -12,7 +12,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { COLORS, FONT_SIZES } from "../../../../types";
+import { FONT_SIZES } from "../../../../types";
+import { useAppTheme } from "../../../themes/useAppTheme";
+import type { ThemedStylesInput } from "../../../themes/types";
 import WebScrollView from "../../../components/WebScrollView";
 import { useCrearTareaGrupoViewModel } from "../../../hooks/useCrearTareaGrupoViewModel";
 import { useRoute, RouteProp, useNavigation } from "@react-navigation/native";
@@ -29,7 +31,29 @@ try {
  * Pantalla para crear un nuevo entregable (View)
  * Diseño basado en Stitch screenshots — coincide con el diseño de Figma
  */
+// El hook vive fuera del componente a proposito: componer el tema dentro sumaba
+// lineas a un componente que ya rozaba el umbral de tamano de React Doctor, y la
+// migracion no deberia empeorar ese diagnostico. Conserva la memoizacion porque
+// la identidad del objeto de useAppTheme solo cambia con una preferencia.
+function useTemaDePantalla() {
+  const theme = useAppTheme();
+  // Los alias derivados viven aqui y no en el cuerpo del componente: repetir el
+  // ternario en el JSX obligaba a prettier a partir lineas y empujaba al
+  // componente por encima del umbral de tamano de React Doctor.
+  return useMemo(
+    () => ({
+      DT: theme.colors,
+      styles: getStyles(theme),
+      textoTenue: theme.highContrast ? theme.colors.text : theme.colors.textSecondary,
+      bordeTenue: theme.highContrast ? theme.colors.borderStrong : theme.colors.borderLight,
+    }),
+    [theme]
+  );
+}
+
 const CrearTareaGrupoScreen: React.FC = () => {
+  const { DT, styles, textoTenue, bordeTenue } = useTemaDePantalla();
+
   const route = useRoute<RouteProp<AppRoutesParamList, "CrearTareaGrupo">>();
   const navigation = useNavigation();
   const vm = useCrearTareaGrupoViewModel(
@@ -53,7 +77,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.primary} barStyle="light-content" />
+      <StatusBar backgroundColor={DT.primary} barStyle="light-content" />
 
       <SafeAreaView style={styles.safeArea}>
         {/* Header */}
@@ -112,7 +136,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
               {/* Grupo asignado */}
               <View style={styles.grupoCard}>
                 <View style={styles.grupoIconContainer}>
-                  <MaterialIcons name="groups" size={24} color={COLORS.primary} />
+                  <MaterialIcons name="groups" size={24} color={DT.primary} />
                 </View>
                 <View>
                   <Text style={styles.grupoLabel}>GRUPO ASIGNADO</Text>
@@ -128,7 +152,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                   placeholder="Ej. Ensayo sobre la Revolución Industrial"
                   value={vm.titulo}
                   onChangeText={vm.setTitulo}
-                  placeholderTextColor={COLORS.textSecondary}
+                  placeholderTextColor={textoTenue}
                 />
               </View>
 
@@ -142,7 +166,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                     value={vm.valor}
                     onChangeText={vm.setValor}
                     keyboardType="numeric"
-                    placeholderTextColor={COLORS.textSecondary}
+                    placeholderTextColor={textoTenue}
                   />
                   {isExamen && <Text style={styles.valorSuffix}>%</Text>}
                 </View>
@@ -160,7 +184,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                   onChangeText={vm.setDescripcion}
                   multiline
                   numberOfLines={4}
-                  placeholderTextColor={COLORS.textSecondary}
+                  placeholderTextColor={textoTenue}
                 />
               </View>
 
@@ -172,13 +196,13 @@ const CrearTareaGrupoScreen: React.FC = () => {
                     style={({ pressed }) => [styles.dateInput, pressed && { opacity: 0.6 }]}
                     onPress={() => vm.setShowFechaAsignacionPicker(true)}
                   >
-                    <MaterialIcons name="event" size={20} color={COLORS.primary} />
+                    <MaterialIcons name="event" size={20} color={DT.primary} />
                     <Text
                       style={[styles.dateInputText, !vm.fechaAsignacion && styles.datePlaceholder]}
                     >
                       {vm.fechaAsignacion || "dd/mm/aaaa"}
                     </Text>
-                    <MaterialIcons name="calendar-today" size={20} color={COLORS.textSecondary} />
+                    <MaterialIcons name="calendar-today" size={20} color={textoTenue} />
                   </Pressable>
                 </View>
               )}
@@ -192,19 +216,19 @@ const CrearTareaGrupoScreen: React.FC = () => {
                   <MaterialIcons
                     name={isExamen ? "event" : "event-busy"}
                     size={20}
-                    color={isExamen ? COLORS.primary : COLORS.error}
+                    color={isExamen ? DT.primary : DT.error}
                   />
                   <Text style={[styles.dateInputText, !vm.fechaEntrega && styles.datePlaceholder]}>
                     {vm.fechaEntrega || "dd/mm/aaaa"}
                   </Text>
-                  <MaterialIcons name="calendar-today" size={20} color={COLORS.textSecondary} />
+                  <MaterialIcons name="calendar-today" size={20} color={textoTenue} />
                 </Pressable>
               </View>
 
               {/* Late submission toggle */}
               <View style={styles.toggleContainer}>
                 <View style={styles.toggleInfo}>
-                  <MaterialIcons name="schedule" size={22} color={COLORS.text} />
+                  <MaterialIcons name="schedule" size={22} color={DT.text} />
                   <View style={styles.toggleTextContainer}>
                     <Text style={styles.toggleTitle}>Permitir entrega tardía</Text>
                     <Text style={styles.toggleSubtitle}>
@@ -218,8 +242,8 @@ const CrearTareaGrupoScreen: React.FC = () => {
                   value={vm.permitirEntregaTardia}
                   onValueChange={vm.setPermitirEntregaTardia}
                   trackColor={{
-                    false: COLORS.borderLight,
-                    true: COLORS.primary,
+                    false: bordeTenue,
+                    true: DT.primary,
                   }}
                   thumbColor="white"
                 />
@@ -232,7 +256,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                     style={({ pressed }) => [styles.extendedDateRow, pressed && { opacity: 0.6 }]}
                     onPress={() => vm.setShowFechaLimitePicker(true)}
                   >
-                    <MaterialIcons name="event-busy" size={18} color={COLORS.primary} />
+                    <MaterialIcons name="event-busy" size={18} color={DT.primary} />
                     <Text style={styles.extendedDateLabel}>Fecha límite extendida:</Text>
                     <Text style={styles.extendedDateValue}>
                       {vm.fechaLimiteEntregaTardia || "dd/mm/aaaa"}
@@ -250,7 +274,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                     placeholder="Recordatorios internos para el docente..."
                     value={vm.notas}
                     onChangeText={vm.setNotas}
-                    placeholderTextColor={COLORS.textSecondary}
+                    placeholderTextColor={textoTenue}
                   />
                 </View>
               )}
@@ -288,7 +312,7 @@ const CrearTareaGrupoScreen: React.FC = () => {
                 style={({ pressed }) => [styles.deleteButton, pressed && { opacity: 0.6 }]}
                 onPress={vm.handleEliminar}
               >
-                <MaterialIcons name="delete" size={20} color={COLORS.error} />
+                <MaterialIcons name="delete" size={20} color={DT.error} />
                 <Text style={styles.deleteButtonText}>Eliminar Entregable</Text>
               </Pressable>
             )}
@@ -325,274 +349,279 @@ const CrearTareaGrupoScreen: React.FC = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  safeArea: {
-    flex: 1,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-  },
-  headerBackButton: {
-    marginRight: 12,
-  },
-  headerTitle: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
-    color: "white",
-  },
-  headerSaveButton: {
-    backgroundColor: "rgba(255,255,255,0.2)",
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  headerSaveText: {
-    color: "white",
-    fontSize: FONT_SIZES.small,
-    fontWeight: "bold",
-  },
-  scrollView: {
-    flex: 1,
-  },
-  content: {
-    width: "100%",
-    maxWidth: 960,
-    alignSelf: "center",
-    paddingHorizontal: 16,
-    paddingTop: 20,
-    paddingBottom: 110,
-  },
-  sectionLabel: {
-    fontSize: FONT_SIZES.small,
-    fontWeight: "600",
-    color: COLORS.textSecondary,
-    letterSpacing: 0.5,
-    marginBottom: 10,
-  },
-  tipoContainer: {
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 20,
-  },
-  tipoPill: {
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.surface,
-  },
-  tipoPillActive: {
-    backgroundColor: COLORS.primary,
-    borderColor: COLORS.primary,
-  },
-  tipoPillText: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "600",
-    color: COLORS.text,
-  },
-  tipoPillTextActive: {
-    color: "white",
-  },
-  formCard: {
-    backgroundColor: COLORS.surface,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 20,
-  },
-  grupoCard: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: `${COLORS.primary}08`,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 20,
-    gap: 12,
-  },
-  grupoIconContainer: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    backgroundColor: `${COLORS.primary}15`,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  grupoLabel: {
-    fontSize: FONT_SIZES.small,
-    fontWeight: "bold",
-    color: COLORS.primary,
-    letterSpacing: 0.5,
-    marginBottom: 2,
-  },
-  grupoNombre: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
-    color: COLORS.text,
-  },
-  inputGroup: {
-    marginBottom: 18,
-  },
-  label: {
-    fontSize: FONT_SIZES.small,
-    fontWeight: "600",
-    color: COLORS.textSecondary,
-    letterSpacing: 0.3,
-    marginBottom: 8,
-  },
-  input: {
-    backgroundColor: COLORS.backgroundSoft,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    borderRadius: 10,
-    padding: 14,
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.text,
-  },
-  textArea: {
-    minHeight: 100,
-    textAlignVertical: "top",
-  },
-  valorRow: {
-    flexDirection: "row",
-    alignItems: "center",
-  },
-  valorInput: {
-    flex: 1,
-  },
-  valorSuffix: {
-    fontSize: FONT_SIZES.large,
-    fontWeight: "600",
-    color: COLORS.textSecondary,
-    marginLeft: 10,
-  },
-  dateInput: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.backgroundSoft,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    borderRadius: 10,
-    padding: 14,
-    gap: 10,
-  },
-  dateInputText: {
-    flex: 1,
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.text,
-  },
-  datePlaceholder: {
-    color: COLORS.textSecondary,
-  },
-  toggleContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "space-between",
-    backgroundColor: `${COLORS.primary}08`,
-    borderRadius: 12,
-    padding: 14,
-    marginBottom: 16,
-  },
-  toggleInfo: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-    gap: 10,
-  },
-  toggleTextContainer: {
-    flex: 1,
-  },
-  toggleTitle: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
-    color: COLORS.text,
-  },
-  toggleSubtitle: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textSecondary,
-    marginTop: 2,
-  },
-  extendedDateContainer: {
-    backgroundColor: COLORS.backgroundSoft,
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    padding: 14,
-    marginBottom: 16,
-  },
-  extendedDateRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  extendedDateLabel: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textSecondary,
-  },
-  extendedDateValue: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
-    color: COLORS.text,
-    marginLeft: "auto",
-  },
-  saveButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: COLORS.primary,
-    paddingVertical: 16,
-    borderRadius: 30,
-    gap: 8,
-    marginBottom: 12,
-  },
-  saveButtonDisabled: {
-    opacity: 0.6,
-  },
-  saveButtonText: {
-    color: "white",
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
-  },
-  cancelButton: {
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 14,
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: COLORS.border,
-    backgroundColor: COLORS.surface,
-  },
-  cancelButtonText: {
-    color: COLORS.text,
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "600",
-  },
-  deleteButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 14,
-    borderRadius: 30,
-    borderWidth: 1,
-    borderColor: COLORS.error,
-    backgroundColor: "#FFF5F5",
-    marginTop: 8,
-    gap: 8,
-  },
-  deleteButtonText: {
-    color: COLORS.error,
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "600",
-  },
-});
+// Honra las cuatro preferencias que exige la spec de una pantalla migrada: tema y
+// daltonismo llegan en `colors`, la escala tipografica en `scaled` y el refuerzo de
+// contraste en `highContrast`. En escala media `scaled` es identidad, asi que la
+// presentacion por defecto no cambia.
+const getStyles = ({ colors: DT, scaled, highContrast }: ThemedStylesInput) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: DT.background,
+    },
+    safeArea: {
+      flex: 1,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: DT.primary,
+      paddingHorizontal: 16,
+      paddingVertical: 14,
+    },
+    headerBackButton: {
+      marginRight: 12,
+    },
+    headerTitle: {
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "bold",
+      color: "white",
+    },
+    headerSaveButton: {
+      backgroundColor: "rgba(255,255,255,0.2)",
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      borderRadius: 20,
+    },
+    headerSaveText: {
+      color: "white",
+      fontSize: scaled(FONT_SIZES.small),
+      fontWeight: "bold",
+    },
+    scrollView: {
+      flex: 1,
+    },
+    content: {
+      width: "100%",
+      maxWidth: 960,
+      alignSelf: "center",
+      paddingHorizontal: 16,
+      paddingTop: 20,
+      paddingBottom: 110,
+    },
+    sectionLabel: {
+      fontSize: scaled(FONT_SIZES.small),
+      fontWeight: "600",
+      color: highContrast ? DT.text : DT.textSecondary,
+      letterSpacing: 0.5,
+      marginBottom: 10,
+    },
+    tipoContainer: {
+      flexDirection: "row",
+      gap: 10,
+      marginBottom: 20,
+    },
+    tipoPill: {
+      paddingVertical: 10,
+      paddingHorizontal: 20,
+      borderRadius: 20,
+      borderWidth: 1,
+      borderColor: DT.border,
+      backgroundColor: DT.surface,
+    },
+    tipoPillActive: {
+      backgroundColor: DT.primary,
+      borderColor: DT.primary,
+    },
+    tipoPillText: {
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "600",
+      color: DT.text,
+    },
+    tipoPillTextActive: {
+      color: "white",
+    },
+    formCard: {
+      backgroundColor: DT.surface,
+      borderWidth: 1,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
+      borderRadius: 16,
+      padding: 20,
+      marginBottom: 20,
+    },
+    grupoCard: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: `${DT.primary}08`,
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 20,
+      gap: 12,
+    },
+    grupoIconContainer: {
+      width: 44,
+      height: 44,
+      borderRadius: 22,
+      backgroundColor: `${DT.primary}15`,
+      justifyContent: "center",
+      alignItems: "center",
+    },
+    grupoLabel: {
+      fontSize: scaled(FONT_SIZES.small),
+      fontWeight: "bold",
+      color: DT.primary,
+      letterSpacing: 0.5,
+      marginBottom: 2,
+    },
+    grupoNombre: {
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "bold",
+      color: DT.text,
+    },
+    inputGroup: {
+      marginBottom: 18,
+    },
+    label: {
+      fontSize: scaled(FONT_SIZES.small),
+      fontWeight: "600",
+      color: highContrast ? DT.text : DT.textSecondary,
+      letterSpacing: 0.3,
+      marginBottom: 8,
+    },
+    input: {
+      backgroundColor: DT.backgroundSoft,
+      borderWidth: 1,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
+      borderRadius: 10,
+      padding: 14,
+      fontSize: scaled(FONT_SIZES.medium),
+      color: DT.text,
+    },
+    textArea: {
+      minHeight: 100,
+      textAlignVertical: "top",
+    },
+    valorRow: {
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    valorInput: {
+      flex: 1,
+    },
+    valorSuffix: {
+      fontSize: scaled(FONT_SIZES.large),
+      fontWeight: "600",
+      color: highContrast ? DT.text : DT.textSecondary,
+      marginLeft: 10,
+    },
+    dateInput: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: DT.backgroundSoft,
+      borderWidth: 1,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
+      borderRadius: 10,
+      padding: 14,
+      gap: 10,
+    },
+    dateInputText: {
+      flex: 1,
+      fontSize: scaled(FONT_SIZES.medium),
+      color: DT.text,
+    },
+    datePlaceholder: {
+      color: highContrast ? DT.text : DT.textSecondary,
+    },
+    toggleContainer: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "space-between",
+      backgroundColor: `${DT.primary}08`,
+      borderRadius: 12,
+      padding: 14,
+      marginBottom: 16,
+    },
+    toggleInfo: {
+      flexDirection: "row",
+      alignItems: "center",
+      flex: 1,
+      gap: 10,
+    },
+    toggleTextContainer: {
+      flex: 1,
+    },
+    toggleTitle: {
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "bold",
+      color: DT.text,
+    },
+    toggleSubtitle: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
+      marginTop: 2,
+    },
+    extendedDateContainer: {
+      backgroundColor: DT.backgroundSoft,
+      borderRadius: 10,
+      borderWidth: 1,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
+      padding: 14,
+      marginBottom: 16,
+    },
+    extendedDateRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    },
+    extendedDateLabel: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
+    },
+    extendedDateValue: {
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "bold",
+      color: DT.text,
+      marginLeft: "auto",
+    },
+    saveButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: DT.primary,
+      paddingVertical: 16,
+      borderRadius: 30,
+      gap: 8,
+      marginBottom: 12,
+    },
+    saveButtonDisabled: {
+      opacity: 0.6,
+    },
+    saveButtonText: {
+      color: "white",
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "bold",
+    },
+    cancelButton: {
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 14,
+      borderRadius: 30,
+      borderWidth: 1,
+      borderColor: DT.border,
+      backgroundColor: DT.surface,
+    },
+    cancelButtonText: {
+      color: DT.text,
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "600",
+    },
+    deleteButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 14,
+      borderRadius: 30,
+      borderWidth: 1,
+      borderColor: DT.error,
+      backgroundColor: "#FFF5F5",
+      marginTop: 8,
+      gap: 8,
+    },
+    deleteButtonText: {
+      color: DT.error,
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "600",
+    },
+  });
 
 export default CrearTareaGrupoScreen;

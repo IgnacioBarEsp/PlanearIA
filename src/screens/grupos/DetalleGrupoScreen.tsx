@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import {
   Pressable,
   View,
@@ -15,7 +15,9 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
-import { COLORS, FONT_SIZES } from "../../../types";
+import { FONT_SIZES } from "../../../types";
+import { useAppTheme } from "../../themes/useAppTheme";
+import type { ThemedStylesInput } from "../../themes/types";
 import type {
   Alumno,
   Asistencia,
@@ -50,6 +52,15 @@ const getLastRefreshText = (lastRefreshAt: Date | null): string => {
 /**
  * Componente que renderiza el contenido según la pestaña activa
  */
+
+// Dos componentes de esta pantalla consumen los mismos estilos. El hook local
+// evita duplicar la composicion y conserva la memoizacion: el objeto de
+// useAppTheme solo cambia de identidad cuando cambia una preferencia.
+function useThemedStyles() {
+  const theme = useAppTheme();
+  return useMemo(() => getStyles(theme), [theme]);
+}
+
 const TabContent: React.FC<{
   activeTab: TabType;
   alumnos: Alumno[];
@@ -119,6 +130,9 @@ const TabContent: React.FC<{
     guardarNotasGrupo,
     descartarCambiosNotas,
   }) => {
+    const { colors: DT, highContrast } = useAppTheme();
+    const styles = useThemedStyles();
+
     switch (activeTab) {
       case "alumnos":
         return (
@@ -139,7 +153,7 @@ const TabContent: React.FC<{
               ) : (
                 alumnos.map((alumno) => (
                   <View key={String(alumno.id)} style={styles.alumnoItem}>
-                    <MaterialIcons name="account-circle" size={40} color={COLORS.primary} />
+                    <MaterialIcons name="account-circle" size={40} color={DT.primary} />
                     <View style={styles.alumnoInfo}>
                       <Text
                         style={styles.alumnoNombre}
@@ -153,7 +167,7 @@ const TabContent: React.FC<{
                       ]}
                       onPress={() => openRemoveStudentModal(alumno)}
                     >
-                      <MaterialIcons name="person-remove" size={16} color={COLORS.error} />
+                      <MaterialIcons name="person-remove" size={16} color={DT.error} />
                       <Text style={styles.removeAlumnoButtonText}>Quitar</Text>
                     </Pressable>
                   </View>
@@ -181,7 +195,7 @@ const TabContent: React.FC<{
             <Pressable
               style={({ pressed }) => [
                 styles.actionButton,
-                { backgroundColor: COLORS.primaryDark, marginTop: 8 },
+                { backgroundColor: DT.primaryDark, marginTop: 8 },
                 pressed && { opacity: 0.6 },
               ]}
               onPress={navigatePromediosCalificaciones}
@@ -236,7 +250,7 @@ const TabContent: React.FC<{
             <Pressable
               style={({ pressed }) => [
                 styles.actionButton,
-                { backgroundColor: COLORS.primaryDark, marginTop: 8 },
+                { backgroundColor: DT.primaryDark, marginTop: 8 },
                 pressed && { opacity: 0.6 },
               ]}
               onPress={navigateHistorialAsistencia}
@@ -378,7 +392,7 @@ const TabContent: React.FC<{
                     onPress={() => navigateDetalleTarea(tarea.id)}
                   >
                     <View style={styles.tareaHeader}>
-                      <MaterialIcons name="assignment" size={24} color={COLORS.warning} />
+                      <MaterialIcons name="assignment" size={24} color={DT.warning} />
                       <View style={styles.tareaInfo}>
                         <Text style={styles.tareaTitulo}>{tarea.titulo}</Text>
                         <Text style={styles.tareaMetadata}>
@@ -387,7 +401,11 @@ const TabContent: React.FC<{
                           pts
                         </Text>
                       </View>
-                      <MaterialIcons name="chevron-right" size={24} color={COLORS.textSecondary} />
+                      <MaterialIcons
+                        name="chevron-right"
+                        size={24}
+                        color={highContrast ? DT.text : DT.textSecondary}
+                      />
                     </View>
                   </Pressable>
                 ))
@@ -425,7 +443,7 @@ const TabContent: React.FC<{
               <StatCard
                 label="PROMEDIO"
                 value={stats.promedioGeneral.toFixed(1)}
-                accentColor={COLORS.primary}
+                accentColor={DT.primary}
                 trend={stats.promedioGeneral >= 8 ? "up" : "flat"}
                 footerText="Meta: 8.0"
               />
@@ -449,7 +467,7 @@ const TabContent: React.FC<{
               <StatCard
                 label="ENTREGAS"
                 value={`${Math.round(stats.indiceEntregasATiempo)}%`}
-                accentColor={COLORS.warning}
+                accentColor={DT.warning}
                 trend={stats.indiceEntregasATiempo >= 70 ? "up" : "down"}
                 footerText={`${Math.round(completionRatio)}% avance`}
               />
@@ -459,7 +477,7 @@ const TabContent: React.FC<{
               <TrendMiniChart
                 title="Evolución del promedio"
                 subtitle={`${stats.promedioGeneral.toFixed(1)} / 10 actual`}
-                color={COLORS.primary}
+                color={DT.primary}
                 bars={[
                   Math.max(10, avgRaw - 10),
                   Math.max(10, avgRaw - 7),
@@ -471,7 +489,7 @@ const TabContent: React.FC<{
               <TrendMiniChart
                 title="Cumplimiento de tareas"
                 subtitle={`${Math.round(stats.indiceEntregasATiempo)}% a tiempo`}
-                color={COLORS.warning}
+                color={DT.warning}
                 bars={[
                   Math.max(10, stats.indiceEntregasATiempo - 20),
                   Math.max(10, stats.indiceEntregasATiempo - 14),
@@ -499,7 +517,7 @@ const TabContent: React.FC<{
                 style={({ pressed }) => [styles.openReportButton, pressed && { opacity: 0.6 }]}
                 onPress={navigateReportesGrupo}
               >
-                <MaterialIcons name="insights" size={18} color={COLORS.surface} />
+                <MaterialIcons name="insights" size={18} color={DT.surface} />
                 <Text style={styles.openReportButtonText}>Abrir reporte completo</Text>
               </Pressable>
             </View>
@@ -525,7 +543,7 @@ const TabContent: React.FC<{
                 <View>
                   <Text style={styles.tabTitle}>Notas personales</Text>
                   <View style={styles.notesPrivateRow}>
-                    <MaterialIcons name="lock-outline" size={14} color={COLORS.textTertiary} />
+                    <MaterialIcons name="lock-outline" size={14} color={DT.textTertiary} />
                     <Text style={styles.notesPrivateText}>Solo visible para ti</Text>
                   </View>
                 </View>
@@ -653,6 +671,8 @@ const TabContent: React.FC<{
  * Solo JSX y StyleSheet - la logica vive en useDetalleGrupoViewModel
  */
 const DetalleGrupoScreen: React.FC = () => {
+  const { colors: DT, highContrast } = useAppTheme();
+  const styles = useThemedStyles();
   const { width } = useWindowDimensions();
   const chartWidth = Math.max(280, Math.min(width - 56, 620));
 
@@ -786,7 +806,7 @@ const DetalleGrupoScreen: React.FC = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar backgroundColor={COLORS.background} barStyle="dark-content" />
+      <StatusBar backgroundColor={DT.background} barStyle="dark-content" />
 
       <SafeAreaView style={styles.safeArea}>
         {/* Header con info del grupo */}
@@ -799,7 +819,7 @@ const DetalleGrupoScreen: React.FC = () => {
               style={({ pressed }) => [styles.editarButton, pressed && { opacity: 0.6 }]}
               onPress={navigateEditarGrupo}
             >
-              <MaterialIcons name="edit" size={16} color={COLORS.primary} />
+              <MaterialIcons name="edit" size={16} color={DT.primary} />
               <Text style={styles.editarButtonText}>Editar</Text>
             </Pressable>
             <Pressable
@@ -813,7 +833,7 @@ const DetalleGrupoScreen: React.FC = () => {
               style={({ pressed }) => [styles.eliminarButton, pressed && { opacity: 0.6 }]}
               onPress={openDeleteModal}
             >
-              <MaterialIcons name="delete-outline" size={16} color={COLORS.error} />
+              <MaterialIcons name="delete-outline" size={16} color={DT.error} />
               <Text style={styles.eliminarButtonText}>Eliminar</Text>
             </Pressable>
           </View>
@@ -839,7 +859,9 @@ const DetalleGrupoScreen: React.FC = () => {
               <MaterialIcons
                 name={tab.icon as any}
                 size={24}
-                color={activeTab === tab.id ? COLORS.primary : COLORS.textSecondary}
+                color={
+                  activeTab === tab.id ? DT.primary : highContrast ? DT.text : DT.textSecondary
+                }
               />
               <Text style={[styles.tabLabel, activeTab === tab.id && styles.activeTabLabel]}>
                 {tab.label}
@@ -850,14 +872,14 @@ const DetalleGrupoScreen: React.FC = () => {
 
         {isLoadingData ? (
           <View style={styles.inlineState}>
-            <ActivityIndicator size="small" color={COLORS.primary} />
+            <ActivityIndicator size="small" color={DT.primary} />
             <Text style={styles.inlineStateText}>Cargando datos reales del grupo...</Text>
           </View>
         ) : null}
 
         {!isLoadingData && loadError ? (
           <View style={styles.inlineStateError}>
-            <MaterialIcons name="error-outline" size={18} color={COLORS.dangerDark} />
+            <MaterialIcons name="error-outline" size={18} color={DT.dangerDark} />
             <Text style={styles.inlineStateErrorText}>{loadError}</Text>
           </View>
         ) : null}
@@ -914,7 +936,7 @@ const DetalleGrupoScreen: React.FC = () => {
 
               <View style={styles.impactCard}>
                 <View style={styles.impactRow}>
-                  <MaterialIcons name="info-outline" size={18} color={COLORS.primary} />
+                  <MaterialIcons name="info-outline" size={18} color={DT.primary} />
                   <Text style={styles.impactText}>
                     El alumno seguirá existiendo en el sistema y podrá agregarse de nuevo.
                   </Text>
@@ -1007,7 +1029,7 @@ const DetalleGrupoScreen: React.FC = () => {
                             onPress={() => toggleStudentSelection(student.id)}
                           >
                             <View style={styles.studentAvatar}>
-                              <MaterialIcons name="person" size={16} color={COLORS.primary} />
+                              <MaterialIcons name="person" size={16} color={DT.primary} />
                             </View>
                             <View style={{ flex: 1 }}>
                               <Text
@@ -1018,7 +1040,7 @@ const DetalleGrupoScreen: React.FC = () => {
                             <MaterialIcons
                               name={selected ? "check-circle" : "radio-button-unchecked"}
                               size={22}
-                              color={selected ? COLORS.primary : "#A8B8CF"}
+                              color={selected ? DT.primary : "#A8B8CF"}
                             />
                           </Pressable>
                         );
@@ -1111,7 +1133,7 @@ const DetalleGrupoScreen: React.FC = () => {
           <View style={styles.modalBackdrop}>
             <View style={styles.successCard}>
               <View style={styles.successIcon}>
-                <MaterialIcons name="check" size={26} color={COLORS.surface} />
+                <MaterialIcons name="check" size={26} color={DT.surface} />
               </View>
               <Text style={styles.successTitle}>¡Todo listo!</Text>
               <Text style={styles.successText}>
@@ -1142,15 +1164,15 @@ const DetalleGrupoScreen: React.FC = () => {
 
               <View style={styles.impactCard}>
                 <View style={styles.impactRow}>
-                  <MaterialIcons name="group" size={18} color={COLORS.primary} />
+                  <MaterialIcons name="group" size={18} color={DT.primary} />
                   <Text style={styles.impactText}>Alumnos asociados: {cantidadAlumnos}</Text>
                 </View>
                 <View style={styles.impactRow}>
-                  <MaterialIcons name="assignment" size={18} color={COLORS.primary} />
+                  <MaterialIcons name="assignment" size={18} color={DT.primary} />
                   <Text style={styles.impactText}>Tareas asociadas: 12</Text>
                 </View>
                 <View style={styles.impactRow}>
-                  <MaterialIcons name="history" size={18} color={COLORS.primary} />
+                  <MaterialIcons name="history" size={18} color={DT.primary} />
                   <Text style={styles.impactText}>Registros relacionados: 8</Text>
                 </View>
               </View>
@@ -1164,9 +1186,7 @@ const DetalleGrupoScreen: React.FC = () => {
                 onPress={toggleDeleteConfirmed}
               >
                 <View style={[styles.checkbox, deleteConfirmed && styles.checkboxActive]}>
-                  {deleteConfirmed && (
-                    <MaterialIcons name="check" size={14} color={COLORS.surface} />
-                  )}
+                  {deleteConfirmed && <MaterialIcons name="check" size={14} color={DT.surface} />}
                 </View>
                 <Text style={styles.confirmText}>
                   Confirmo que entiendo que esta acción no se puede deshacer.
@@ -1194,9 +1214,9 @@ const DetalleGrupoScreen: React.FC = () => {
                   disabled={!deleteConfirmed || isDeleting}
                 >
                   {isDeleting ? (
-                    <ActivityIndicator size="small" color={COLORS.surface} />
+                    <ActivityIndicator size="small" color={DT.surface} />
                   ) : (
-                    <MaterialIcons name="delete-forever" size={16} color={COLORS.surface} />
+                    <MaterialIcons name="delete-forever" size={16} color={DT.surface} />
                   )}
                   <Text style={styles.deleteModalButtonText}>
                     {isDeleting ? "Eliminando..." : "Eliminar grupo definitivamente"}
@@ -1214,805 +1234,810 @@ const DetalleGrupoScreen: React.FC = () => {
 /**
  * Estilos del componente
  */
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.background,
-  },
-  safeArea: {
-    flex: 1,
-  },
-  header: {
-    backgroundColor: COLORS.surface,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    boxShadow: "0px 4px 12px rgba(0, 72, 132, 0.06)",
-  },
-  headerActions: {
-    flexDirection: "row",
-    gap: 8,
-    marginTop: 10,
-    flexWrap: "wrap",
-  },
-  grupoNombre: {
-    fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
-    color: COLORS.text,
-  },
-  grupoId: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textTertiary,
-    marginTop: 4,
-  },
-  editarButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    backgroundColor: COLORS.backgroundSoft,
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-  },
-  editarButtonText: {
-    color: COLORS.primary,
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  exportarButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    backgroundColor: "#F1FCF8",
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-  },
-  exportarButtonText: {
-    color: "#0E7A56",
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  eliminarButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-    backgroundColor: "#FFF5F6",
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 7,
-  },
-  eliminarButtonText: {
-    color: COLORS.error,
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  tabsContainer: {
-    backgroundColor: COLORS.surfaceContainerLow,
-  },
-  tabsContent: {
-    paddingHorizontal: 10,
-  },
-  tab: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 14,
-    paddingVertical: 10,
-    marginHorizontal: 4,
-    borderRadius: 14,
-  },
-  activeTab: {
-    backgroundColor: COLORS.surface,
-    boxShadow: "0px 4px 12px rgba(0, 72, 132, 0.06)",
-  },
-  tabLabel: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textSecondary,
-    marginLeft: 8,
-    fontWeight: "500",
-  },
-  activeTabLabel: {
-    color: COLORS.primary,
-    fontWeight: "bold",
-  },
-  content: {
-    flex: 1,
-  },
-  inlineState: {
-    marginHorizontal: 16,
-    marginTop: 10,
-    backgroundColor: COLORS.backgroundSoft,
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  inlineStateText: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.primaryDark,
-    fontWeight: "600",
-  },
-  inlineStateError: {
-    marginHorizontal: 16,
-    marginTop: 10,
-    backgroundColor: COLORS.errorTint,
-    borderRadius: 14,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  inlineStateErrorText: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.dangerDark,
-    fontWeight: "700",
-  },
-  tabContent: {
-    paddingHorizontal: 16,
-    paddingTop: 14,
-    paddingBottom: 110,
-  },
-  tabTitle: {
-    fontSize: FONT_SIZES.xlarge,
-    fontWeight: "bold",
-    color: COLORS.text,
-    marginBottom: 8,
-  },
-  tabDescription: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.textSecondary,
-    marginBottom: 20,
-  },
-  emptyText: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.textSecondary,
-    backgroundColor: COLORS.surfaceContainerLow,
-    borderRadius: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-  },
-  actionButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: COLORS.primary,
-    paddingVertical: 14,
-    paddingHorizontal: 20,
-    borderRadius: 14,
-    marginBottom: 20,
-    boxShadow: "0px 12px 24px rgba(22, 118, 210, 0.25)",
-  },
-  actionButtonText: {
-    color: "white",
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
-    marginLeft: 8,
-  },
-  listaContainer: {
-    marginTop: 10,
-  },
-  alumnoItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.surface,
-    padding: 14,
-    borderRadius: 16,
-    marginBottom: 10,
-    boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
-  },
-  alumnoNombre: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.text,
-    fontWeight: "700",
-  },
-  alumnoInfo: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  alumnoControl: {
-    color: COLORS.textTertiary,
-    fontSize: FONT_SIZES.small,
-    marginTop: 2,
-  },
-  removeAlumnoButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-    backgroundColor: "#FFF5F6",
-    borderRadius: 14,
-    paddingHorizontal: 10,
-    paddingVertical: 7,
-  },
-  removeAlumnoButtonText: {
-    color: COLORS.error,
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  statsContainer: {
-    flexDirection: "row",
-    justifyContent: "space-around",
-    marginTop: 10,
-  },
-  statCard: {
-    backgroundColor: COLORS.surface,
-    padding: 18,
-    borderRadius: 16,
-    alignItems: "center",
-    flex: 1,
-    marginHorizontal: 5,
-    boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
-  },
-  statNumber: {
-    fontSize: 32,
-    fontWeight: "bold",
-    color: COLORS.primary,
-    marginBottom: 5,
-  },
-  statLabel: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textSecondary,
-    textAlign: "center",
-  },
-  sectionTitle: {
-    fontSize: FONT_SIZES.large,
-    fontWeight: "bold",
-    color: COLORS.text,
-    marginBottom: 15,
-  },
-  comentarioItem: {
-    backgroundColor: COLORS.surface,
-    padding: 14,
-    borderRadius: 16,
-    marginBottom: 10,
-    boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
-  },
-  comentarioAlumno: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "bold",
-    color: COLORS.text,
-    marginBottom: 5,
-  },
-  comentarioTexto: {
-    fontSize: FONT_SIZES.medium,
-    color: COLORS.textSecondary,
-    marginBottom: 5,
-  },
-  comentarioFecha: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textSecondary,
-  },
-  statsHeaderRow: {
-    flexDirection: "row",
-    alignItems: "flex-start",
-    justifyContent: "space-between",
-    gap: 10,
-    marginBottom: 8,
-  },
-  updatedAtText: {
-    color: "#6C7D95",
-    fontSize: 12,
-    fontWeight: "600",
-    marginTop: 6,
-  },
-  statsCardsRow: {
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 10,
-  },
-  miniChartsSection: {
-    gap: 10,
-    marginBottom: 10,
-  },
-  insightCard: {
-    marginTop: 10,
-    marginBottom: 6,
-    backgroundColor: "#FFF9E8",
-    borderRadius: 16,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  insightText: {
-    flex: 1,
-    color: "#6A5823",
-    fontSize: 13,
-    fontWeight: "600",
-  },
-  openReportButtonContainer: {
-    marginTop: 10,
-  },
-  openReportButton: {
-    borderRadius: 10,
-    backgroundColor: COLORS.primaryDark,
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    gap: 8,
-  },
-  openReportButtonText: {
-    color: COLORS.surface,
-    fontWeight: "800",
-    fontSize: 14,
-  },
-  notesSuggestionCard: {
-    backgroundColor: COLORS.surface,
-    borderLeftWidth: 4,
-    borderLeftColor: COLORS.primary,
-    borderRadius: 16,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    flexDirection: "row",
-    gap: 10,
-    marginBottom: 14,
-    boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
-  },
-  notesSuggestionTitle: {
-    color: "#5D6E87",
-    fontSize: 14,
-    fontWeight: "700",
-    textTransform: "capitalize",
-  },
-  notesSuggestionText: {
-    color: "#24364E",
-    fontSize: 16,
-    fontWeight: "700",
-    marginTop: 3,
-    lineHeight: 23,
-  },
-  notesCard: {
-    backgroundColor: COLORS.surface,
-    borderRadius: 16,
-    padding: 16,
-    boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
-  },
-  notesHeaderRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "flex-start",
-    marginBottom: 12,
-    gap: 8,
-  },
-  notesPrivateRow: {
-    marginTop: 4,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 4,
-  },
-  notesPrivateText: {
-    color: COLORS.textTertiary,
-    fontSize: 14,
-    fontWeight: "600",
-  },
-  notesPrivateBadge: {
-    backgroundColor: "#EAF1FB",
-    borderRadius: 999,
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-  },
-  notesPrivateBadgeText: {
-    color: "#2E6EBB",
-    fontSize: 13,
-    fontWeight: "800",
-    textTransform: "uppercase",
-  },
-  notesInput: {
-    minHeight: 180,
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: "#DFE7F2",
-    backgroundColor: COLORS.surfaceHover,
-    paddingHorizontal: 14,
-    paddingVertical: 12,
-    color: "#2B3D57",
-    fontSize: 22,
-    lineHeight: 32,
-    fontWeight: "500",
-  },
-  notesMetaRow: {
-    marginTop: 12,
-    marginBottom: 8,
-    gap: 4,
-  },
-  notesStatusRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 7,
-  },
-  notesStatusDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 999,
-  },
-  notesStatusDotNeutral: {
-    backgroundColor: "#8EA0B7",
-  },
-  notesStatusDotWarning: {
-    backgroundColor: "#E2A400",
-  },
-  notesStatusDotSuccess: {
-    backgroundColor: "#15803D",
-  },
-  notesStatusDotError: {
-    backgroundColor: COLORS.error,
-  },
-  notesStatusText: {
-    color: "#334861",
-    fontSize: 15,
-    fontWeight: "700",
-  },
-  notesTimestamp: {
-    color: COLORS.textTertiary,
-    fontSize: 13,
-    fontWeight: "500",
-  },
-  notesErrorText: {
-    color: COLORS.dangerDark,
-    fontSize: 13,
-    fontWeight: "700",
-    marginBottom: 8,
-  },
-  notesActionsRow: {
-    marginTop: 8,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  notesDiscardButton: {
-    flex: 1,
-    borderWidth: 1,
-    borderColor: "#DAE4F2",
-    borderRadius: 12,
-    paddingVertical: 14,
-    alignItems: "center",
-    backgroundColor: COLORS.surface,
-  },
-  notesDiscardButtonText: {
-    color: COLORS.textSecondary,
-    fontSize: 19,
-    fontWeight: "700",
-  },
-  notesSaveButton: {
-    flex: 1,
-    borderRadius: 14,
-    paddingVertical: 14,
-    alignItems: "center",
-    backgroundColor: COLORS.primary,
-    boxShadow: "0px 12px 24px rgba(22, 118, 210, 0.25)",
-  },
-  notesSaveButtonDisabled: {
-    backgroundColor: "#8EBCE6",
-    boxShadow: "none",
-  },
-  notesSaveButtonText: {
-    color: COLORS.surface,
-    fontSize: 22,
-    fontWeight: "800",
-  },
-  notesFooterText: {
-    color: "#6C7D95",
-    fontSize: 18,
-    fontWeight: "500",
-    lineHeight: 25,
-    textAlign: "center",
-    marginTop: 14,
-  },
-  // Estilos para tareas
-  actionButtonsRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    gap: 10,
-    marginBottom: 20,
-  },
-  actionButtonHalf: {
-    flex: 1,
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-  },
-  actionButtonSecondary: {
-    backgroundColor: COLORS.purple,
-  },
-  tareaItem: {
-    backgroundColor: COLORS.surface,
-    padding: 14,
-    borderRadius: 16,
-    marginBottom: 12,
-    boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
-  },
-  tareaHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    marginBottom: 10,
-  },
-  tareaInfo: {
-    flex: 1,
-    marginLeft: 12,
-  },
-  tareaTitulo: {
-    fontSize: FONT_SIZES.medium,
-    fontWeight: "600",
-    color: COLORS.text,
-    marginBottom: 4,
-  },
-  tareaMetadata: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textSecondary,
-  },
-  tareaProgress: {
-    marginTop: 8,
-  },
-  progressBar: {
-    height: 6,
-    backgroundColor: COLORS.divider,
-    borderRadius: 3,
-    overflow: "hidden",
-    marginBottom: 6,
-  },
-  progressFill: {
-    height: "100%",
-    backgroundColor: COLORS.success,
-    borderRadius: 3,
-  },
-  progressText: {
-    fontSize: FONT_SIZES.small,
-    color: COLORS.textSecondary,
-  },
-  modalBackdrop: {
-    flex: 1,
-    backgroundColor: "rgba(14, 28, 52, 0.48)",
-    justifyContent: "flex-end",
-  },
-  modalCard: {
-    backgroundColor: COLORS.surface,
-    borderTopLeftRadius: 28,
-    borderTopRightRadius: 28,
-    paddingHorizontal: 18,
-    paddingTop: 18,
-    paddingBottom: 24,
-    gap: 12,
-  },
-  modalTitle: {
-    fontSize: 34,
-    fontWeight: "800",
-    color: COLORS.text,
-    letterSpacing: -0.4,
-  },
-  modalSubtitle: {
-    fontSize: 16,
-    color: COLORS.textDark,
-  },
-  searchBox: {
-    borderWidth: 1,
-    borderColor: "#D8E3F2",
-    borderRadius: 12,
-    paddingHorizontal: 12,
-    paddingVertical: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-    backgroundColor: "#F9FBFF",
-  },
-  searchInput: {
-    flex: 1,
-    color: COLORS.text,
-    fontSize: 14,
-  },
-  studentsList: {
-    maxHeight: 320,
-    gap: 8,
-  },
-  modalEmptyText: {
-    color: "#5B6D86",
-    textAlign: "center",
-    paddingVertical: 12,
-    fontSize: 14,
-  },
-  studentRow: {
-    borderWidth: 1,
-    borderColor: "#E2E9F4",
-    borderRadius: 12,
-    padding: 10,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-    backgroundColor: COLORS.surface,
-  },
-  studentRowSelected: {
-    borderColor: COLORS.primary,
-    backgroundColor: COLORS.backgroundSoft,
-  },
-  studentAvatar: {
-    width: 28,
-    height: 28,
-    borderRadius: 14,
-    backgroundColor: COLORS.border,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  studentName: {
-    color: COLORS.text,
-    fontSize: 14,
-    fontWeight: "700",
-  },
-  studentMeta: {
-    color: "#5B6D86",
-    fontSize: 12,
-    marginTop: 2,
-  },
-  createStudentCard: {
-    borderWidth: 1,
-    borderColor: "#DCE7F8",
-    borderRadius: 14,
-    padding: 12,
-    backgroundColor: COLORS.backgroundSoft,
-    gap: 8,
-  },
-  createInput: {
-    borderWidth: 1,
-    borderColor: "#D6E0F0",
-    borderRadius: 10,
-    backgroundColor: COLORS.surface,
-    paddingHorizontal: 10,
-    paddingVertical: 9,
-    fontSize: 14,
-    color: COLORS.text,
-  },
-  secondaryModalButton: {
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: "#C8D8EE",
-    backgroundColor: COLORS.backgroundSoft,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-  },
-  secondaryModalButtonText: {
-    color: "#245C9E",
-    fontWeight: "700",
-    fontSize: 14,
-  },
-  primaryModalButton: {
-    borderRadius: 999,
-    backgroundColor: COLORS.primary,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    paddingHorizontal: 14,
-  },
-  primaryModalButtonText: {
-    color: COLORS.surface,
-    fontWeight: "800",
-    fontSize: 14,
-  },
-  successCard: {
-    margin: 24,
-    marginBottom: 48,
-    borderRadius: 20,
-    backgroundColor: COLORS.surface,
-    padding: 18,
-    alignItems: "center",
-    gap: 10,
-  },
-  successIcon: {
-    width: 46,
-    height: 46,
-    borderRadius: 23,
-    backgroundColor: "#22A45D",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  successTitle: {
-    color: COLORS.text,
-    fontSize: 22,
-    fontWeight: "800",
-  },
-  successText: {
-    color: COLORS.textDark,
-    fontSize: 14,
-    textAlign: "center",
-    marginBottom: 4,
-  },
-  impactCard: {
-    borderWidth: 1,
-    borderColor: "#D8E6F8",
-    borderRadius: 14,
-    backgroundColor: COLORS.backgroundSoft,
-    padding: 12,
-    gap: 10,
-  },
-  impactRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 8,
-  },
-  impactText: {
-    fontSize: 16,
-    color: COLORS.text,
-    fontWeight: "700",
-  },
-  confirmRow: {
-    borderWidth: 1,
-    borderColor: "#E6EDF8",
-    backgroundColor: "#FBFDFF",
-    borderRadius: 12,
-    padding: 12,
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  confirmRowError: {
-    borderColor: "#E65151",
-    backgroundColor: "#FFF8F8",
-  },
-  checkbox: {
-    width: 20,
-    height: 20,
-    borderRadius: 6,
-    borderWidth: 1,
-    borderColor: "#B9C8DD",
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: COLORS.surface,
-  },
-  checkboxActive: {
-    borderColor: COLORS.primary,
-    backgroundColor: COLORS.primary,
-  },
-  confirmText: {
-    flex: 1,
-    color: "#42536D",
-    fontSize: 15,
-    lineHeight: 20,
-  },
-  deleteErrorText: {
-    color: COLORS.error,
-    fontWeight: "700",
-    fontSize: 13,
-  },
-  modalActions: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 10,
-  },
-  cancelModalButton: {
-    flex: 1,
-    borderRadius: 999,
-    borderWidth: 1,
-    borderColor: COLORS.borderLight,
-    backgroundColor: COLORS.surface,
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-  },
-  cancelModalButtonText: {
-    color: COLORS.textDark,
-    fontWeight: "700",
-    fontSize: 15,
-  },
-  deleteModalButton: {
-    flex: 1.4,
-    borderRadius: 999,
-    backgroundColor: "#D62828",
-    alignItems: "center",
-    justifyContent: "center",
-    paddingVertical: 12,
-    flexDirection: "row",
-    gap: 8,
-  },
-  deleteModalButtonDisabled: {
-    opacity: 0.65,
-  },
-  deleteModalButtonText: {
-    color: COLORS.surface,
-    fontWeight: "800",
-    fontSize: 14,
-  },
-});
+// Honra las cuatro preferencias que exige la spec de una pantalla migrada: tema y
+// daltonismo llegan en `colors`, la escala tipografica en `scaled` y el refuerzo de
+// contraste en `highContrast`. En escala media `scaled` es identidad, asi que la
+// presentacion por defecto no cambia.
+const getStyles = ({ colors: DT, scaled, highContrast }: ThemedStylesInput) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: DT.background,
+    },
+    safeArea: {
+      flex: 1,
+    },
+    header: {
+      backgroundColor: DT.surface,
+      paddingHorizontal: 16,
+      paddingVertical: 14,
+      boxShadow: "0px 4px 12px rgba(0, 72, 132, 0.06)",
+    },
+    headerActions: {
+      flexDirection: "row",
+      gap: 8,
+      marginTop: 10,
+      flexWrap: "wrap",
+    },
+    grupoNombre: {
+      fontSize: scaled(FONT_SIZES.large),
+      fontWeight: "bold",
+      color: DT.text,
+    },
+    grupoId: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: DT.textTertiary,
+      marginTop: 4,
+    },
+    editarButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      backgroundColor: DT.backgroundSoft,
+      borderRadius: 20,
+      paddingHorizontal: 12,
+      paddingVertical: 7,
+    },
+    editarButtonText: {
+      color: DT.primary,
+      fontSize: scaled(13),
+      fontWeight: "700",
+    },
+    exportarButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      backgroundColor: "#F1FCF8",
+      borderRadius: 20,
+      paddingHorizontal: 12,
+      paddingVertical: 7,
+    },
+    exportarButtonText: {
+      color: "#0E7A56",
+      fontSize: scaled(13),
+      fontWeight: "700",
+    },
+    eliminarButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+      backgroundColor: "#FFF5F6",
+      borderRadius: 20,
+      paddingHorizontal: 12,
+      paddingVertical: 7,
+    },
+    eliminarButtonText: {
+      color: DT.error,
+      fontSize: scaled(13),
+      fontWeight: "700",
+    },
+    tabsContainer: {
+      backgroundColor: DT.surfaceContainerLow,
+    },
+    tabsContent: {
+      paddingHorizontal: 10,
+    },
+    tab: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 14,
+      paddingVertical: 10,
+      marginHorizontal: 4,
+      borderRadius: 14,
+    },
+    activeTab: {
+      backgroundColor: DT.surface,
+      boxShadow: "0px 4px 12px rgba(0, 72, 132, 0.06)",
+    },
+    tabLabel: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
+      marginLeft: 8,
+      fontWeight: "500",
+    },
+    activeTabLabel: {
+      color: DT.primary,
+      fontWeight: "bold",
+    },
+    content: {
+      flex: 1,
+    },
+    inlineState: {
+      marginHorizontal: 16,
+      marginTop: 10,
+      backgroundColor: DT.backgroundSoft,
+      borderRadius: 14,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    },
+    inlineStateText: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: DT.primaryDark,
+      fontWeight: "600",
+    },
+    inlineStateError: {
+      marginHorizontal: 16,
+      marginTop: 10,
+      backgroundColor: DT.errorTint,
+      borderRadius: 14,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    },
+    inlineStateErrorText: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: DT.dangerDark,
+      fontWeight: "700",
+    },
+    tabContent: {
+      paddingHorizontal: 16,
+      paddingTop: 14,
+      paddingBottom: 110,
+    },
+    tabTitle: {
+      fontSize: scaled(FONT_SIZES.xlarge),
+      fontWeight: "bold",
+      color: DT.text,
+      marginBottom: 8,
+    },
+    tabDescription: {
+      fontSize: scaled(FONT_SIZES.medium),
+      color: highContrast ? DT.text : DT.textSecondary,
+      marginBottom: 20,
+    },
+    emptyText: {
+      fontSize: scaled(FONT_SIZES.medium),
+      color: highContrast ? DT.text : DT.textSecondary,
+      backgroundColor: DT.surfaceContainerLow,
+      borderRadius: 16,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+    },
+    actionButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      backgroundColor: DT.primary,
+      paddingVertical: 14,
+      paddingHorizontal: 20,
+      borderRadius: 14,
+      marginBottom: 20,
+      boxShadow: "0px 12px 24px rgba(22, 118, 210, 0.25)",
+    },
+    actionButtonText: {
+      color: "white",
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "bold",
+      marginLeft: 8,
+    },
+    listaContainer: {
+      marginTop: 10,
+    },
+    alumnoItem: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: DT.surface,
+      padding: 14,
+      borderRadius: 16,
+      marginBottom: 10,
+      boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
+    },
+    alumnoNombre: {
+      fontSize: scaled(FONT_SIZES.medium),
+      color: DT.text,
+      fontWeight: "700",
+    },
+    alumnoInfo: {
+      flex: 1,
+      marginLeft: 12,
+    },
+    alumnoControl: {
+      color: DT.textTertiary,
+      fontSize: scaled(FONT_SIZES.small),
+      marginTop: 2,
+    },
+    removeAlumnoButton: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+      backgroundColor: "#FFF5F6",
+      borderRadius: 14,
+      paddingHorizontal: 10,
+      paddingVertical: 7,
+    },
+    removeAlumnoButtonText: {
+      color: DT.error,
+      fontSize: scaled(13),
+      fontWeight: "700",
+    },
+    statsContainer: {
+      flexDirection: "row",
+      justifyContent: "space-around",
+      marginTop: 10,
+    },
+    statCard: {
+      backgroundColor: DT.surface,
+      padding: 18,
+      borderRadius: 16,
+      alignItems: "center",
+      flex: 1,
+      marginHorizontal: 5,
+      boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
+    },
+    statNumber: {
+      fontSize: scaled(32),
+      fontWeight: "bold",
+      color: DT.primary,
+      marginBottom: 5,
+    },
+    statLabel: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
+      textAlign: "center",
+    },
+    sectionTitle: {
+      fontSize: scaled(FONT_SIZES.large),
+      fontWeight: "bold",
+      color: DT.text,
+      marginBottom: 15,
+    },
+    comentarioItem: {
+      backgroundColor: DT.surface,
+      padding: 14,
+      borderRadius: 16,
+      marginBottom: 10,
+      boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
+    },
+    comentarioAlumno: {
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "bold",
+      color: DT.text,
+      marginBottom: 5,
+    },
+    comentarioTexto: {
+      fontSize: scaled(FONT_SIZES.medium),
+      color: highContrast ? DT.text : DT.textSecondary,
+      marginBottom: 5,
+    },
+    comentarioFecha: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
+    },
+    statsHeaderRow: {
+      flexDirection: "row",
+      alignItems: "flex-start",
+      justifyContent: "space-between",
+      gap: 10,
+      marginBottom: 8,
+    },
+    updatedAtText: {
+      color: "#6C7D95",
+      fontSize: scaled(12),
+      fontWeight: "600",
+      marginTop: 6,
+    },
+    statsCardsRow: {
+      flexDirection: "row",
+      gap: 10,
+      marginBottom: 10,
+    },
+    miniChartsSection: {
+      gap: 10,
+      marginBottom: 10,
+    },
+    insightCard: {
+      marginTop: 10,
+      marginBottom: 6,
+      backgroundColor: "#FFF9E8",
+      borderRadius: 16,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    },
+    insightText: {
+      flex: 1,
+      color: "#6A5823",
+      fontSize: scaled(13),
+      fontWeight: "600",
+    },
+    openReportButtonContainer: {
+      marginTop: 10,
+    },
+    openReportButton: {
+      borderRadius: 10,
+      backgroundColor: DT.primaryDark,
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+      flexDirection: "row",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: 8,
+    },
+    openReportButtonText: {
+      color: DT.surface,
+      fontWeight: "800",
+      fontSize: scaled(14),
+    },
+    notesSuggestionCard: {
+      backgroundColor: DT.surface,
+      borderLeftWidth: 4,
+      borderLeftColor: DT.primary,
+      borderRadius: 16,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      flexDirection: "row",
+      gap: 10,
+      marginBottom: 14,
+      boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
+    },
+    notesSuggestionTitle: {
+      color: "#5D6E87",
+      fontSize: scaled(14),
+      fontWeight: "700",
+      textTransform: "capitalize",
+    },
+    notesSuggestionText: {
+      color: "#24364E",
+      fontSize: scaled(16),
+      fontWeight: "700",
+      marginTop: 3,
+      lineHeight: scaled(23),
+    },
+    notesCard: {
+      backgroundColor: DT.surface,
+      borderRadius: 16,
+      padding: 16,
+      boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
+    },
+    notesHeaderRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "flex-start",
+      marginBottom: 12,
+      gap: 8,
+    },
+    notesPrivateRow: {
+      marginTop: 4,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 4,
+    },
+    notesPrivateText: {
+      color: DT.textTertiary,
+      fontSize: scaled(14),
+      fontWeight: "600",
+    },
+    notesPrivateBadge: {
+      backgroundColor: "#EAF1FB",
+      borderRadius: 999,
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+    },
+    notesPrivateBadgeText: {
+      color: "#2E6EBB",
+      fontSize: scaled(13),
+      fontWeight: "800",
+      textTransform: "uppercase",
+    },
+    notesInput: {
+      minHeight: 180,
+      borderRadius: 12,
+      borderWidth: 1,
+      borderColor: "#DFE7F2",
+      backgroundColor: DT.surfaceHover,
+      paddingHorizontal: 14,
+      paddingVertical: 12,
+      color: "#2B3D57",
+      fontSize: scaled(22),
+      lineHeight: scaled(32),
+      fontWeight: "500",
+    },
+    notesMetaRow: {
+      marginTop: 12,
+      marginBottom: 8,
+      gap: 4,
+    },
+    notesStatusRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 7,
+    },
+    notesStatusDot: {
+      width: 10,
+      height: 10,
+      borderRadius: 999,
+    },
+    notesStatusDotNeutral: {
+      backgroundColor: "#8EA0B7",
+    },
+    notesStatusDotWarning: {
+      backgroundColor: "#E2A400",
+    },
+    notesStatusDotSuccess: {
+      backgroundColor: "#15803D",
+    },
+    notesStatusDotError: {
+      backgroundColor: DT.error,
+    },
+    notesStatusText: {
+      color: "#334861",
+      fontSize: scaled(15),
+      fontWeight: "700",
+    },
+    notesTimestamp: {
+      color: DT.textTertiary,
+      fontSize: scaled(13),
+      fontWeight: "500",
+    },
+    notesErrorText: {
+      color: DT.dangerDark,
+      fontSize: scaled(13),
+      fontWeight: "700",
+      marginBottom: 8,
+    },
+    notesActionsRow: {
+      marginTop: 8,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+    },
+    notesDiscardButton: {
+      flex: 1,
+      borderWidth: 1,
+      borderColor: "#DAE4F2",
+      borderRadius: 12,
+      paddingVertical: 14,
+      alignItems: "center",
+      backgroundColor: DT.surface,
+    },
+    notesDiscardButtonText: {
+      color: highContrast ? DT.text : DT.textSecondary,
+      fontSize: scaled(19),
+      fontWeight: "700",
+    },
+    notesSaveButton: {
+      flex: 1,
+      borderRadius: 14,
+      paddingVertical: 14,
+      alignItems: "center",
+      backgroundColor: DT.primary,
+      boxShadow: "0px 12px 24px rgba(22, 118, 210, 0.25)",
+    },
+    notesSaveButtonDisabled: {
+      backgroundColor: "#8EBCE6",
+      boxShadow: "none",
+    },
+    notesSaveButtonText: {
+      color: DT.surface,
+      fontSize: scaled(22),
+      fontWeight: "800",
+    },
+    notesFooterText: {
+      color: "#6C7D95",
+      fontSize: scaled(18),
+      fontWeight: "500",
+      lineHeight: scaled(25),
+      textAlign: "center",
+      marginTop: 14,
+    },
+    // Estilos para tareas
+    actionButtonsRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      gap: 10,
+      marginBottom: 20,
+    },
+    actionButtonHalf: {
+      flex: 1,
+      paddingVertical: 12,
+      paddingHorizontal: 12,
+    },
+    actionButtonSecondary: {
+      backgroundColor: DT.purple,
+    },
+    tareaItem: {
+      backgroundColor: DT.surface,
+      padding: 14,
+      borderRadius: 16,
+      marginBottom: 12,
+      boxShadow: "0px 12px 24px rgba(0, 72, 132, 0.06)",
+    },
+    tareaHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      marginBottom: 10,
+    },
+    tareaInfo: {
+      flex: 1,
+      marginLeft: 12,
+    },
+    tareaTitulo: {
+      fontSize: scaled(FONT_SIZES.medium),
+      fontWeight: "600",
+      color: DT.text,
+      marginBottom: 4,
+    },
+    tareaMetadata: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
+    },
+    tareaProgress: {
+      marginTop: 8,
+    },
+    progressBar: {
+      height: 6,
+      backgroundColor: DT.divider,
+      borderRadius: 3,
+      overflow: "hidden",
+      marginBottom: 6,
+    },
+    progressFill: {
+      height: "100%",
+      backgroundColor: DT.success,
+      borderRadius: 3,
+    },
+    progressText: {
+      fontSize: scaled(FONT_SIZES.small),
+      color: highContrast ? DT.text : DT.textSecondary,
+    },
+    modalBackdrop: {
+      flex: 1,
+      backgroundColor: "rgba(14, 28, 52, 0.48)",
+      justifyContent: "flex-end",
+    },
+    modalCard: {
+      backgroundColor: DT.surface,
+      borderTopLeftRadius: 28,
+      borderTopRightRadius: 28,
+      paddingHorizontal: 18,
+      paddingTop: 18,
+      paddingBottom: 24,
+      gap: 12,
+    },
+    modalTitle: {
+      fontSize: scaled(34),
+      fontWeight: "800",
+      color: DT.text,
+      letterSpacing: -0.4,
+    },
+    modalSubtitle: {
+      fontSize: scaled(16),
+      color: DT.textDark,
+    },
+    searchBox: {
+      borderWidth: 1,
+      borderColor: "#D8E3F2",
+      borderRadius: 12,
+      paddingHorizontal: 12,
+      paddingVertical: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+      backgroundColor: "#F9FBFF",
+    },
+    searchInput: {
+      flex: 1,
+      color: DT.text,
+      fontSize: scaled(14),
+    },
+    studentsList: {
+      maxHeight: 320,
+      gap: 8,
+    },
+    modalEmptyText: {
+      color: "#5B6D86",
+      textAlign: "center",
+      paddingVertical: 12,
+      fontSize: scaled(14),
+    },
+    studentRow: {
+      borderWidth: 1,
+      borderColor: "#E2E9F4",
+      borderRadius: 12,
+      padding: 10,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+      backgroundColor: DT.surface,
+    },
+    studentRowSelected: {
+      borderColor: DT.primary,
+      backgroundColor: DT.backgroundSoft,
+    },
+    studentAvatar: {
+      width: 28,
+      height: 28,
+      borderRadius: 14,
+      backgroundColor: DT.border,
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    studentName: {
+      color: DT.text,
+      fontSize: scaled(14),
+      fontWeight: "700",
+    },
+    studentMeta: {
+      color: "#5B6D86",
+      fontSize: scaled(12),
+      marginTop: 2,
+    },
+    createStudentCard: {
+      borderWidth: 1,
+      borderColor: "#DCE7F8",
+      borderRadius: 14,
+      padding: 12,
+      backgroundColor: DT.backgroundSoft,
+      gap: 8,
+    },
+    createInput: {
+      borderWidth: 1,
+      borderColor: "#D6E0F0",
+      borderRadius: 10,
+      backgroundColor: DT.surface,
+      paddingHorizontal: 10,
+      paddingVertical: 9,
+      fontSize: scaled(14),
+      color: DT.text,
+    },
+    secondaryModalButton: {
+      borderRadius: 999,
+      borderWidth: 1,
+      borderColor: "#C8D8EE",
+      backgroundColor: DT.backgroundSoft,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+    },
+    secondaryModalButtonText: {
+      color: "#245C9E",
+      fontWeight: "700",
+      fontSize: scaled(14),
+    },
+    primaryModalButton: {
+      borderRadius: 999,
+      backgroundColor: DT.primary,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+      paddingHorizontal: 14,
+    },
+    primaryModalButtonText: {
+      color: DT.surface,
+      fontWeight: "800",
+      fontSize: scaled(14),
+    },
+    successCard: {
+      margin: 24,
+      marginBottom: 48,
+      borderRadius: 20,
+      backgroundColor: DT.surface,
+      padding: 18,
+      alignItems: "center",
+      gap: 10,
+    },
+    successIcon: {
+      width: 46,
+      height: 46,
+      borderRadius: 23,
+      backgroundColor: "#22A45D",
+      alignItems: "center",
+      justifyContent: "center",
+    },
+    successTitle: {
+      color: DT.text,
+      fontSize: scaled(22),
+      fontWeight: "800",
+    },
+    successText: {
+      color: DT.textDark,
+      fontSize: scaled(14),
+      textAlign: "center",
+      marginBottom: 4,
+    },
+    impactCard: {
+      borderWidth: 1,
+      borderColor: "#D8E6F8",
+      borderRadius: 14,
+      backgroundColor: DT.backgroundSoft,
+      padding: 12,
+      gap: 10,
+    },
+    impactRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 8,
+    },
+    impactText: {
+      fontSize: scaled(16),
+      color: DT.text,
+      fontWeight: "700",
+    },
+    confirmRow: {
+      borderWidth: 1,
+      borderColor: "#E6EDF8",
+      backgroundColor: "#FBFDFF",
+      borderRadius: 12,
+      padding: 12,
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+    },
+    confirmRowError: {
+      borderColor: "#E65151",
+      backgroundColor: "#FFF8F8",
+    },
+    checkbox: {
+      width: 20,
+      height: 20,
+      borderRadius: 6,
+      borderWidth: 1,
+      borderColor: "#B9C8DD",
+      justifyContent: "center",
+      alignItems: "center",
+      backgroundColor: DT.surface,
+    },
+    checkboxActive: {
+      borderColor: DT.primary,
+      backgroundColor: DT.primary,
+    },
+    confirmText: {
+      flex: 1,
+      color: "#42536D",
+      fontSize: scaled(15),
+      lineHeight: scaled(20),
+    },
+    deleteErrorText: {
+      color: DT.error,
+      fontWeight: "700",
+      fontSize: scaled(13),
+    },
+    modalActions: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 10,
+    },
+    cancelModalButton: {
+      flex: 1,
+      borderRadius: 999,
+      borderWidth: 1,
+      borderColor: highContrast ? DT.borderStrong : DT.borderLight,
+      backgroundColor: DT.surface,
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+    },
+    cancelModalButtonText: {
+      color: DT.textDark,
+      fontWeight: "700",
+      fontSize: scaled(15),
+    },
+    deleteModalButton: {
+      flex: 1.4,
+      borderRadius: 999,
+      backgroundColor: "#D62828",
+      alignItems: "center",
+      justifyContent: "center",
+      paddingVertical: 12,
+      flexDirection: "row",
+      gap: 8,
+    },
+    deleteModalButtonDisabled: {
+      opacity: 0.65,
+    },
+    deleteModalButtonText: {
+      color: DT.surface,
+      fontWeight: "800",
+      fontSize: scaled(14),
+    },
+  });
 
 export default DetalleGrupoScreen;

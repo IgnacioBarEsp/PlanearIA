@@ -85,12 +85,21 @@ module.exports = {
     {
       // LEGACY_COLORS_ROLLOUT: registro rastreable del rollout de theming (issue #78, H12a).
       //
-      // Esta lista ES el mecanismo de rastreo: su largo es el trabajo pendiente y CI lo
-      // verifica en cada PR. Solo puede encoger. Al migrar un archivo, quitalo de aqui;
-      // a partir de ese momento no puede reincidir en COLORS.
+      // Esta lista ES el mecanismo de rastreo: su largo es el trabajo pendiente. Solo
+      // puede encoger. Al migrar un archivo, quitalo de aqui; a partir de ese momento no
+      // puede reincidir en COLORS.
       //
-      // Pendiente: 61 archivos (2026-07-17). Origen: 64 archivos de produccion importaban
-      // COLORS; el lote de #78 migro los 3 de src/screens/cuenta/.
+      // La regla de arriba solo cubre la mitad del contrato: atrapa a quien importa COLORS
+      // sin estar listado, pero no puede ver una entrada muerta, porque esa es justamente
+      // la que ya no marca. Esa mitad la cubre scripts/checkThemingRollout.mjs, cableado
+      // como gate en src/__tests__/harness/themingRollout.test.ts: falla ante una entrada
+      // huerfana, una entrada ya migrada o un registro que crece. Su techo vive en el
+      // script y baja con cada migracion (#145).
+      //
+      // Pendiente: 50 archivos (2026-07-24). Origen: 64 archivos de produccion importaban
+      // COLORS; #78 migro los 3 de src/screens/cuenta/; #145 retiro 4 entradas invalidas
+      // (2 archivos borrados y 2 ya migrados), saco a ContenidoScreen por importar COLORS
+      // sin usarlo y migro 6 pantallas.
       files: [
         "src/components/alumnos/importar/ErrorStage.tsx",
         "src/components/alumnos/importar/ExitoStage.tsx",
@@ -101,19 +110,15 @@ module.exports = {
         "src/components/AnimatedTopPill.tsx",
         "src/components/CarreraSelector.tsx",
         "src/components/DeliveryDistributionMini.tsx",
-        "src/components/FloatingActionIcons.tsx",
         "src/components/grupos/ColaboradorListItem.tsx",
         "src/components/grupos/MenuContextualColaborador.tsx",
         "src/components/grupos/ModalInvitacionColaborador.tsx",
         "src/components/ScreenBackButton.tsx",
         "src/components/social/ModalSelectorContactos.tsx",
         "src/components/StatCard.tsx",
-        "src/components/SyncStatusBanner.tsx",
         "src/components/TrendMiniChart.tsx",
         "src/hooks/useListaPlantillasViewModel.ts",
         "src/hooks/useListaRecursosViewModel.ts",
-        "src/navigation/AppTabsNavigator.tsx",
-        "src/navigation/StackNavigator.tsx",
         "src/screens/alumnos/CrearAlumnoScreen.tsx",
         "src/screens/alumnos/DetalleAlumnoScreen.tsx",
         "src/screens/alumnos/ExportarAlumnosScreen.tsx",
@@ -129,22 +134,15 @@ module.exports = {
         "src/screens/biblioteca/CrearRecursoScreen.tsx",
         "src/screens/biblioteca/ListaRecursosScreen.tsx",
         "src/screens/biblioteca/RecursosDidacticosScreen.tsx",
-        "src/screens/calificaciones/CapturarCalificacionesScreen.tsx",
-        "src/screens/calificaciones/PromediosCalificacionesScreen.tsx",
         "src/screens/classroom/AgregarContenidoClassroomScreen.tsx",
         "src/screens/classroom/ClassroomGroupScreen.tsx",
-        "src/screens/classroom/ClassroomHomeScreen.tsx",
         "src/screens/classroom/DetalleActividadClassroomScreen.tsx",
         "src/screens/classroom/DetalleRecursoClassroomScreen.tsx",
-        "src/screens/contenido/ContenidoScreen.tsx",
         "src/screens/grupos/CrearGrupoScreen.tsx",
-        "src/screens/grupos/DetalleGrupoScreen.tsx",
         "src/screens/grupos/ImportarGruposScreen.tsx",
-        "src/screens/grupos/ListaGruposScreen.tsx",
         "src/screens/grupos/ReportesGrupoScreen.tsx",
         "src/screens/grupos/tareas/AsignarRecursoScreen.tsx",
         "src/screens/grupos/tareas/CalificarEntregasScreen.tsx",
-        "src/screens/grupos/tareas/CrearTareaGrupoScreen.tsx",
         "src/screens/grupos/tareas/DetalleTareaScreen.tsx",
         "src/screens/planeaciones/ExportarPlaneacionScreen.tsx",
         "src/screens/planeaciones/ImportarPlaneacionScreen.tsx",
