@@ -70,6 +70,13 @@ indistinguible del exito.
 - **WHEN** la verificacion se ejecuta contra un arbol donde los consumidores directos siguen presentes
 - **THEN** falla enumerandolos, y no reporta exito por no haber encontrado nada que mirar
 
+#### Scenario: La verificacion cubre la superficie de producto fuera del directorio principal
+
+- **WHEN** un archivo de producto que no vive bajo el directorio principal de codigo, como el punto de
+  arranque de la app, lee la primitiva de dimensiones
+- **THEN** la verificacion falla nombrandolo, porque su alcance es la superficie de producto declarada y
+  no un directorio
+
 ### Requirement: El rango de dispositivo y el umbral de contenido son conceptos distintos
 
 El sistema SHALL distinguir el **rango de dispositivo**, que clasifica la clase de pantalla y comparten
@@ -97,3 +104,34 @@ una decision de diseno y SHALL NOT ocurrir como efecto de una migracion de mecan
 
 - **WHEN** una superficie con umbral de contenido propio se migra al punto de consumo unico
 - **THEN** a igual ancho presenta el mismo layout que antes de la migracion
+
+## MODIFIED Requirements
+
+### Requirement: No quedan lecturas de dimensiones congeladas
+
+El sistema SHALL NOT depender de una lectura instantanea de dimensiones (`Dimensions.get()`) para
+calcular estilos o layout. Ningun estilo dependiente de ancho SHALL quedar fijado al valor presente en
+el momento de importar el modulo.
+
+Esta prohibicion SHALL estar respaldada por la misma verificacion ejecutable que vigila la fuente unica,
+y no por una auditoria manual. Una lectura instantanea SHALL fallar la validacion en cualquier archivo
+de producto, incluida la propia fuente autorizada: la autorizacion para envolver la primitiva reactiva
+SHALL NOT extenderse a la lectura congelada.
+
+#### Scenario: Estilo dependiente de ancho tras la migracion
+
+- **WHEN** una pantalla migrada calcula un tamano que depende del ancho
+- **THEN** ese tamano se evalua con el ancho reactivo vigente, no con una foto tomada al importar
+
+#### Scenario: El repositorio no reintroduce la lectura congelada
+
+- **WHEN** un archivo de producto introduce una lectura instantanea de dimensiones
+- **THEN** la verificacion ejecutable falla nombrando el archivo, sin depender de que alguien recuerde
+  auditarlo
+
+#### Scenario: La lectura congelada no puede usarse para eludir la fuente unica
+
+- **WHEN** un archivo obtiene un ancho mediante la lectura instantanea en vez de importar la primitiva
+  reactiva
+- **THEN** la verificacion falla igualmente, porque de lo contrario bastaria cambiar de primitiva para
+  reintroducir una segunda fuente de ancho sin que nada lo detecte

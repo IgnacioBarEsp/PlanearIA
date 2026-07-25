@@ -110,6 +110,21 @@ clasifica en vez de declarar "cero errores". Cero errores nuevos atribuibles al 
 3 advertencias, todas preexistentes: deprecaciones de RN Web (`shadow*` y `props.pointerEvents`) y la
 nota de `expo-notifications` sobre push en web.
 
+## Hallazgos de la revision adversarial y su correccion
+
+Detalle completo en `05-revision-adversarial.txt`. Dos Majors, ambos corregidos dentro del change:
+
+1. **La guardia dejaba `App.tsx` como punto ciego.** Solo escaneaba `src/`, pero `.eslintrc.cjs` declara
+   la superficie de producto como `["src/**/*.ts", "src/**/*.tsx", "App.tsx"]`. Corregido: el alcance es
+   la superficie declarada, no un directorio. Fixture `fuera-de-src`.
+2. **`Dimensions.get()` eludia la guardia por completo.** Reproducido: un archivo con
+   `Dimensions.get("window").width` pasaba en verde. Es la lectura congelada que la spec prohibe desde
+   #79 sin ningun verificador, y la evasion mas barata de la invariante principal. Corregido: invariante
+   `congelada`, fixture homonimo y requirement MODIFIED que exige verificacion ejecutable.
+
+Tras la correccion la guardia comprueba **cuatro** invariantes y cubre 264 archivos de produccion (263
+de `src/` mas `App.tsx`). El gate de Jest pasa de 8 a 10 casos.
+
 ## Limitaciones
 
 - **El umbral de contenido del Grupo B no se pudo observar en el navegador.**

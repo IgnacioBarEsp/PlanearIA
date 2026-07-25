@@ -64,6 +64,24 @@ describe("checkBreakpointSource", () => {
     expect(result.output).toContain("[no-autorizado] src/screens/Namespace.sample.tsx");
   });
 
+  // Los dos casos siguientes salieron de la revision adversarial: la guardia
+  // original solo miraba src/ y solo la primitiva, asi que dos vias de evasion
+  // pasaban en silencio.
+  it("detecta la lectura congelada, que no toca la primitiva y la spec ya prohibia", () => {
+    const result = runCheck(path.join(FIXTURES, "congelada"));
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("[congelada] src/screens/Congelada.sample.tsx");
+    expect(result.output).toContain("fija el ancho al importar");
+    // No se reporta como consumidor no autorizado: es otra invariante.
+    expect(result.output).not.toContain("[no-autorizado] src/screens/Congelada.sample.tsx");
+  });
+
+  it("cubre la superficie de produccion fuera de src/, como App.tsx", () => {
+    const result = runCheck(path.join(FIXTURES, "fuera-de-src"));
+    expect(result.status).toBe(1);
+    expect(result.output).toContain("[no-autorizado] App.tsx");
+  });
+
   it("detecta una entrada muerta: la fuente autorizada ya no lee la primitiva", () => {
     const result = runCheck(path.join(FIXTURES, "muerta"));
     expect(result.status).toBe(1);

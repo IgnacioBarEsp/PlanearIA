@@ -46,6 +46,15 @@ const PRODUCTION_ROOT = "src";
 const SOURCE_EXTENSIONS = new Set([".ts", ".tsx"]);
 
 /**
+ * Archivos de produccion que viven fuera de `src/`. La lista sale del propio
+ * `.eslintrc.cjs`, que declara la superficie de producto como
+ * `["src/**\/*.ts", "src/**\/*.tsx", "App.tsx"]`. Omitir `App.tsx` dejaba un
+ * punto ciego: es el arranque de la app y podia reintroducir la lectura directa
+ * sin que la guardia dijera nada.
+ */
+const EXTRA_PRODUCTION_FILES = ["App.tsx"];
+
+/**
  * Los tests quedan fuera por regla estructural, no por lista: necesitan nombrar
  * la primitiva para simular anchos (src/__tests__/hooks/useBreakpoint.test.tsx
  * ya lo hace) y no son superficie de producto. Al ser una regla y no una lista,
@@ -62,6 +71,21 @@ const NAMED_IMPORT = new RegExp(`import\\s*\\{[^}]*\\b${SYMBOL}\\b[^}]*\\}\\s*fr
 const CALL_SITE = new RegExp(`\\b${SYMBOL}\\s*\\(`);
 
 /**
+ * La otra forma de reintroducir una segunda fuente de ancho, y la peor: una
+ * lectura instantanea que congela el valor al importar el modulo. La spec
+ * `reactive-breakpoints` ya la prohibe desde #79 ("no aparece ninguna
+ * ocurrencia en src/"), pero ninguna verificacion lo comprobaba.
+ *
+ * Sin esto la guardia es evadible: basta escribir `Dimensions.get("window").width`
+ * en vez de `useWindowDimensions()` para obtener un ancho congelado sin que nada
+ * falle, que es exactamente el bug que #79 elimino.
+ *
+ * Ningun archivo esta autorizado: `useBreakpoint` tampoco la usa. Por eso no
+ * participa de la lista autorizada ni de su techo.
+ */
+const FROZEN_READ = /\bDimensions\s*\.\s*get\s*\(/;
+
+/**
  * Los comentarios se retiran antes de comparar: esta guardia describe
  * comportamiento, y una nota de diseno que nombre la primitiva no es un
  * consumidor. Sin esto, documentar la regla la violaria.
@@ -73,6 +97,10 @@ export function stripComments(source) {
 export function readsWindowDimensions(source) {
   const code = stripComments(source);
   return NAMED_IMPORT.test(code) || CALL_SITE.test(code);
+}
+
+export function readsFrozenDimensions(source) {
+  return FROZEN_READ.test(stripComments(source));
 }
 
 export function collectSourceFiles(root) {
@@ -106,23 +134,40 @@ export function checkBreakpointSource({
   const findings = [];
   const authorizedSet = new Set(authorized.map((entry) => entry.split(path.sep).join("/")));
 
-  // Invariante 1: ningun consumidor de produccion fuera de la lista.
+  // Invariantes 1 y 2 sobre toda la superficie de produccion: `src/` mas los
+  // archivos sueltos que `.eslintrc.cjs` tambien trata como producto.
   const productionRoot = path.join(root, PRODUCTION_ROOT);
+  const extras = EXTRA_PRODUCTION_FILES.map((entry) => path.resolve(root, entry)).filter(
+    (full) => existsSync(full) && statSync(full).isFile(),
+  );
   let scanned = 0;
-  for (const file of collectSourceFiles(productionRoot)) {
+  for (const file of [...collectSourceFiles(productionRoot), ...extras]) {
     const relative = path.relative(root, file).split(path.sep).join("/");
+    const source = readFileSync(file, "utf8");
     scanned += 1;
-    if (authorizedSet.has(relative)) continue;
-    if (readsWindowDimensions(readFileSync(file, "utf8"))) {
+
+    // Invariante 1: ningun consumidor de la primitiva fuera de la lista.
+    if (!authorizedSet.has(relative) && readsWindowDimensions(source)) {
       findings.push({
         kind: "no-autorizado",
         entry: relative,
         detail: `lee ${SYMBOL} directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango`,
       });
     }
+
+    // Invariante 2: ninguna lectura congelada, en ningun archivo, ni siquiera
+    // en la fuente autorizada. Es la via de evasion mas barata de la
+    // invariante 1 y la spec ya la prohibia sin verificador.
+    if (readsFrozenDimensions(source)) {
+      findings.push({
+        kind: "congelada",
+        entry: relative,
+        detail: "usa Dimensions.get(), que fija el ancho al importar el modulo; usa useBreakpoint(), que es reactivo",
+      });
+    }
   }
 
-  // Invariante 2: ninguna entrada muerta ni huerfana en la lista autorizada.
+  // Invariante 3: ninguna entrada muerta ni huerfana en la lista autorizada.
   for (const entry of authorized) {
     const full = path.resolve(root, entry);
     if (!existsSync(full) || !statSync(full).isFile()) {
@@ -138,7 +183,7 @@ export function checkBreakpointSource({
     }
   }
 
-  // Invariante 3: la lista no crece por encima de su techo.
+  // Invariante 4: la lista no crece por encima de su techo.
   if (authorized.length > ceiling) {
     findings.push({
       kind: "techo",

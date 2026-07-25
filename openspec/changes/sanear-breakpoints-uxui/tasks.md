@@ -75,9 +75,18 @@
 - [x] 8.3 Comprobar que el rango efectivo de una pantalla del Grupo A coincide con el del shell al cruzar 768.
 - [x] 8.4 Checklist Nielsen y anti-slop como no regresion sobre las pantallas migradas alcanzables.
 
-## 9. Cierre
+## 9. Correcciones de la revision adversarial
 
-- [ ] 9.1 Revision adversarial en contexto limpio; corregir Blockers y Majors dentro del change.
-- [ ] 9.2 Escribir el assessment y capturarlo con `debt:capture`, resolviendo `debt-3d3ea5ba87ac` y registrando la excepcion measure-first de `debt-5862d25288fa`.
-- [ ] 9.3 `npm run openspec:ready:archive -- --change sanear-breakpoints-uxui --run-local` en PASS.
-- [ ] 9.4 `npm run opsx:archive -- sanear-breakpoints-uxui` y `npm run opsx:finish`.
+La revision encontro dos vias por las que la guardia habria callado. Ambas se corrigieron dentro del
+change, con fixture y caso propios.
+
+- [x] 9.1 Major: la guardia solo escaneaba `src/`, pero `.eslintrc.cjs` declara la superficie de producto como `["src/**/*.ts", "src/**/*.tsx", "App.tsx"]`. `App.tsx` era un punto ciego. Se agrego `EXTRA_PRODUCTION_FILES` y el fixture `fuera-de-src`.
+- [x] 9.2 Major: `Dimensions.get()` eludia la guardia por completo. Es la lectura congelada que la spec prohibe desde #79 sin ningun verificador, y bastaba para reintroducir un ancho congelado. Se agrego la invariante `congelada`, el fixture homonimo y la requirement MODIFIED que exige verificacion ejecutable.
+- [x] 9.3 Verificar que ambas evasiones fallan la guardia y que el arbol real sigue en verde.
+
+## 10. Cierre
+
+- [ ] 10.1 Revision adversarial en contexto limpio; corregir Blockers y Majors dentro del change.
+- [ ] 10.2 Escribir el assessment y capturarlo con `debt:capture`, resolviendo `debt-3d3ea5ba87ac` y registrando la excepcion measure-first de `debt-5862d25288fa`.
+- [ ] 10.3 `npm run openspec:ready:archive -- --change sanear-breakpoints-uxui --run-local` en PASS.
+- [ ] 10.4 `npm run opsx:archive -- sanear-breakpoints-uxui` y `npm run opsx:finish`.

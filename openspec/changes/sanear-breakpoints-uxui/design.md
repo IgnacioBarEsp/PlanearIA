@@ -55,14 +55,28 @@ porque dejaria dos fuentes de verdad (la lista autorizada en `.eslintrc.cjs` y e
 porque la regla de ESLint sigue sin poder observar una entrada muerta, que es justo la que ya no marca.
 Un solo verificador con una sola lista es mas simple y estrictamente mas capaz.
 
-### Decision 2: la guardia comprueba tres invariantes, no una
+### Decision 2: la guardia comprueba cuatro invariantes, no una
 
-- **Consumidor no autorizado:** un archivo de `src/` fuera de la lista importa `useWindowDimensions`.
+- **Consumidor no autorizado:** un archivo de producto fuera de la lista importa `useWindowDimensions`.
+- **Lectura congelada:** cualquier archivo de producto usa `Dimensions.get()`. Ningun archivo esta
+  autorizado, ni siquiera `useBreakpoint`.
 - **Entrada muerta:** un archivo de la lista ya no lo importa, o no existe. Es la invariante que ninguna
   regla de lint puede cubrir, porque su silencio es indistinguible del exito.
 - **Techo:** la lista no crece por encima de su constante declarada. Con la lista en 1
   (`src/hooks/useBreakpoint.ts`), el techo hace que autorizar una segunda fuente exija editar el script,
   lo que un review ve, en vez de ser el default silencioso.
+
+La invariante de lectura congelada y el alcance de la superficie salieron de la revision adversarial:
+
+- **La guardia solo miraba `src/`.** Pero `.eslintrc.cjs` declara la superficie de producto como
+  `["src/**/*.ts", "src/**/*.tsx", "App.tsx"]`, asi que el punto de arranque de la app era un punto
+  ciego. Ahora el alcance es la superficie declarada, no un directorio.
+- **`Dimensions.get()` eludia la guardia por completo.** Escribir `Dimensions.get("window").width` daba
+  un ancho congelado sin tocar `useWindowDimensions`, o sea reintroducia exactamente el bug que #79
+  elimino, y nada fallaba. La spec `reactive-breakpoints` ya lo prohibia desde #79 ("no aparece ninguna
+  ocurrencia en `src/`") pero **ninguna verificacion lo comprobaba**: el mismo defecto que la Ola 2a
+  encontro en el registro de theming, en la requirement de al lado. Se cierra con la misma guardia y la
+  requirement pasa a exigir verificacion ejecutable.
 
 ### Decision 3: los tests quedan fuera del alcance de la guardia
 
