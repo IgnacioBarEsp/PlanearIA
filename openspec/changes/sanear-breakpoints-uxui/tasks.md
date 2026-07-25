@@ -86,7 +86,7 @@ change, con fixture y caso propios.
 
 ## 10. Cierre
 
-- [ ] 10.1 Revision adversarial en contexto limpio; corregir Blockers y Majors dentro del change.
-- [ ] 10.2 Escribir el assessment y capturarlo con `debt:capture`, resolviendo `debt-3d3ea5ba87ac` y registrando la excepcion measure-first de `debt-5862d25288fa`.
+- [x] 10.1 Revision adversarial en contexto limpio; corregir Blockers y Majors dentro del change.
+- [x] 10.2 Escribir el assessment y capturarlo con `debt:capture`, resolviendo `debt-3d3ea5ba87ac` y registrando la excepcion measure-first de `debt-5862d25288fa`.
 - [ ] 10.3 `npm run openspec:ready:archive -- --change sanear-breakpoints-uxui --run-local` en PASS.
 - [ ] 10.4 `npm run opsx:archive -- sanear-breakpoints-uxui` y `npm run opsx:finish`.
