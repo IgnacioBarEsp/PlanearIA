@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "issue": 145,
+  "change": "sanear-theming-runtime-uxui",
+  "surfaces": ["ui", "harness"],
+  "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
+  "evidence": [
+    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/145" },
+    { "id": "pr-link", "ref": "PENDIENTE: se completa al abrir el PR" },
+    { "id": "adversarial-review", "ref": "PENDIENTE: se completa tras la revision adversarial" },
+    { "id": "web-http-200", "ref": "PENDIENTE: expo start --web respondiendo HTTP 200 antes de navegar" },
+    { "id": "playwright-breakpoints", "ref": "PENDIENTE: capturas 375/768/1280 en tema claro y oscuro" },
+    { "id": "nielsen", "ref": "PENDIENTE: checklist Nielsen sin severidad >= 3" },
+    { "id": "fixtures", "ref": "PENDIENTE: fixtures positivo y negativos de la guardia del registro" }
+  ],
+  "rollback": {
+    "strategy": "Revertir el PR restaura las seis pantallas a COLORS estatico, devuelve sus entradas al registro de .eslintrc.cjs, restituye la importacion retirada de ContenidoScreen y elimina la guardia junto con sus pruebas. Si solo una pantalla regresa mal, se revierte ese archivo y se reinserta su entrada: las seis migraciones son independientes entre si y la guardia acepta un techo mas alto mientras la entrada este viva. El change no toca src/sync, AsyncStorage, claves @planearia:*, esquemas ni src/themes, asi que no hay migracion de datos ni de tokens que revertir.",
+    "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
+  },
+  "adversarialReview": {
+    "ref": "PENDIENTE: se completa tras la revision adversarial"
+  },
+  "exceptions": []
+}
