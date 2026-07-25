@@ -195,6 +195,10 @@ export function diagnose(options) {
 
 const REINDEX_ARGS = ['analyze', '--index-only', '--name', 'PlanearIA', '.'];
 const REPAIR_FTS_ARGS = ['analyze', '--repair-fts', '--index-only', '--name', 'PlanearIA', '.'];
+// Borrar el indice es el unico remedio verificado contra un grafo fresco cuyos nodos perdieron su UID
+// (#149). `analyze --force` seria mas barato, pero ese estado no se pudo reproducir para medirlo, y una
+// escalada no se construye sobre un peldano supuesto.
+const CLEAN_ARGS = ['clean', '--force'];
 
 function attempt(args, options, runner) {
   try {
@@ -234,6 +238,27 @@ export function repair(options = {}, runner = runGitNexus) {
   const statusOutput = runner(['status'], options);
   if (classifyIndexFreshness(statusOutput) !== FRESH) {
     throw new Error('GitNexus repair finished but the index is still not fresh. Review npm run gitnexus:diagnose.');
+  }
+
+  // La frescura sola no es evidencia de recuperacion. En #149 el indice quedo fresco con 2272 de 2298
+  // nodos Function sin UID: conservaban sus aristas, pero el impact por UID ya no los encontraba. Sobre
+  // ese estado `analyze --index-only` responde "Already up to date" y no cambia nada, de modo que la
+  // recuperacion declaraba exito dejando rota la ruta estructural. Se reutiliza la verificacion
+  // compartida en vez de reimplementarla para que no existan dos definiciones de "estructuralmente sano".
+  let structural = runStructuralVerification(options, runner);
+  if (!structural.ok) {
+    // Reconstruir desde cero es lo que restauro los UID en el estado observado. El reindex posterior
+    // conserva --index-only: es la bandera que impide que analyze escriba en los archivos de agente.
+    attempt(CLEAN_ARGS, options, runner);
+    const rebuild = attempt(REINDEX_ARGS, options, runner);
+    if (!rebuild.ok) {
+      throw new Error(`GitNexus repair could not rebuild the index after a failed structural verification.\n${rebuild.output}`);
+    }
+    structural = runStructuralVerification(options, runner);
+    if (!structural.ok) {
+      throw new Error(`GitNexus repair rebuilt the index but the structural verification still fails: ${structural.reason}`);
+    }
+    execution = rebuild;
   }
 
   process.stdout.write(execution.output);
