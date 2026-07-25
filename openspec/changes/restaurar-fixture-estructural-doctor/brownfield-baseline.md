@@ -46,8 +46,8 @@ dos `gitnexus:repair` consecutivos no cambiaron el resultado.
 
 Estado degradado medido: el nodo `Function` del simbolo del fixture conservaba sus 2 aristas entrantes
 pero tenia la propiedad `id` vacia, de modo que `impact --uid Function:...` respondia `not found`;
-`impact` por nombre devolvia dos candidatos, uno con `uid` vacio y 28 impactados y otro `Const:` con 0.
-El dano alcanzaba 2272 de 2298 nodos `Function` (solo 26 con `id` utilizable) mas 1014 nodos `Section`.
+`impact` por nombre devolvia dos candidatos, uno con `uid` vacio y 202 impactados y otro `Const:` con 0.
+El dano alcanzaba 2272 de 2298 nodos `Function` (solo 26 con `id` utilizable) mas 973 nodos `Section`.
 
 `npm run harness:doctor` reportaba `FAIL gitnexus: El indice esta fresco pero la verificacion
 estructural no resolvio su fixture`, sin ruta de recuperacion documentada que lo resolviera.
@@ -55,9 +55,11 @@ estructural no resolvio su fixture`, sin ruta de recuperacion documentada que lo
 ## Comportamiento objetivo
 
 `repair` mide su exito por frescura **y** por resolucion estructural. Tras restaurar la frescura ejecuta
-`runStructuralVerification`; si falla, escala a un rebuild completo (`clean --force` seguido de
-`analyze --index-only --name PlanearIA .`) y vuelve a verificar. Si tras ese rebuild la verificacion
-sigue fallando, lanza nombrando el fixture sin resolver, en vez de declarar exito por frescura.
+`runStructuralVerification`; si falla, o si no puede siquiera producir un veredicto porque el CLI muere,
+escala a un rebuild completo (`clean --force` seguido de `analyze --index-only --name PlanearIA .`). El
+rebuild se somete a las mismas post-condiciones que el reindex inicial: sin diagnostico FTS, indice
+fresco y fixture resuelto. Si alguna sigue incumplida, o si el borrado o el reindex no se pueden
+ejecutar, lanza nombrando ese paso, en vez de declarar exito por frescura.
 
 `FIXTURE_UID` no cambia. La desambiguacion por UID y `epistemic === 'exact'` se conservan, y ningun FAIL
 se degrada a WARN.

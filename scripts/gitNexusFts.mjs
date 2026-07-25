@@ -208,6 +208,32 @@ function attempt(args, options, runner) {
   }
 }
 
+// `runStructuralVerification` clasifica sus desenlaces previstos, pero el runner lanza cuando el CLI
+// sale con codigo distinto de cero. Sin envolverlo, un CLI que muere salia de `repair` por excepcion y
+// se saltaba la escalada entera: el modo de fallo mas ruidoso era el unico sin recuperacion.
+function structuralOutcome(options, runner) {
+  try {
+    return runStructuralVerification(options, runner);
+  } catch (error) {
+    return { ok: false, reason: `GitNexus structural verification could not run: ${error.message}` };
+  }
+}
+
+// Post-condiciones que debe cumplir un reindex para contar como recuperacion: sin diagnostico FTS,
+// indice fresco y fixture estructural resuelto. Existen como funcion porque el rebuild escalado tiene
+// que superar exactamente las mismas: comprobarlas solo en el primer reindex dejaba un camino de exito
+// que no verificaba lo que prometia, que es el defecto que este change corrige.
+function recoveryFailure(execution, options, runner) {
+  if (hasFtsDiagnostic(execution.output)) {
+    return 'GitNexus repair completed with an FTS diagnostic.';
+  }
+  if (classifyIndexFreshness(runner(['status'], options)) !== FRESH) {
+    return 'GitNexus repair finished but the index is still not fresh. Review npm run gitnexus:diagnose.';
+  }
+  const structural = structuralOutcome(options, runner);
+  return structural.ok ? null : structural.reason;
+}
+
 // Runner inyectable por el mismo motivo que en runStructuralVerification: la escalada solo se puede
 // comprobar afirmando que secuencia de subcomandos emite.
 export function repair(options = {}, runner = runGitNexus) {
@@ -245,20 +271,27 @@ export function repair(options = {}, runner = runGitNexus) {
   // ese estado `analyze --index-only` responde "Already up to date" y no cambia nada, de modo que la
   // recuperacion declaraba exito dejando rota la ruta estructural. Se reutiliza la verificacion
   // compartida en vez de reimplementarla para que no existan dos definiciones de "estructuralmente sano".
-  let structural = runStructuralVerification(options, runner);
+  const structural = structuralOutcome(options, runner);
   if (!structural.ok) {
     // Reconstruir desde cero es lo que restauro los UID en el estado observado. El reindex posterior
     // conserva --index-only: es la bandera que impide que analyze escriba en los archivos de agente.
-    attempt(CLEAN_ARGS, options, runner);
+    // Si el borrado falla, se nombra: si no, el error final culparia al fixture de un indice bloqueado.
+    const cleaned = attempt(CLEAN_ARGS, options, runner);
+    if (!cleaned.ok) {
+      throw new Error(`GitNexus repair could not delete the index to rebuild it after: ${structural.reason}\n${cleaned.output}`);
+    }
     const rebuild = attempt(REINDEX_ARGS, options, runner);
     if (!rebuild.ok) {
       throw new Error(`GitNexus repair could not rebuild the index after a failed structural verification.\n${rebuild.output}`);
     }
-    structural = runStructuralVerification(options, runner);
-    if (!structural.ok) {
-      throw new Error(`GitNexus repair rebuilt the index but the structural verification still fails: ${structural.reason}`);
-    }
     execution = rebuild;
+
+    // El rebuild se somete a las mismas post-condiciones que el reindex inicial, frescura y FTS
+    // incluidas: un rebuild que resolviera el fixture dejando el indice stale no es una recuperacion.
+    const failure = recoveryFailure(execution, options, runner);
+    if (failure) {
+      throw new Error(`GitNexus repair rebuilt the index but the recovery still fails: ${failure}`);
+    }
   }
 
   process.stdout.write(execution.output);

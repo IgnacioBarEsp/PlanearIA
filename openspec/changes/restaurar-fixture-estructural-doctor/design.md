@@ -15,7 +15,7 @@ corre la query MVVM y un `impact` por UID exigiendo `target.id === FIXTURE_UID` 
 | El simbolo no cambio | `src/hooks/useCrearPlaneacionViewModel.ts` sin modificaciones desde `2e5acfb` (#81) |
 | El parser emite **dos** nodos | `Function:` y `Const:` para el mismo simbolo, ambos en la linea 367, ambos con relaciones |
 | El nodo `Function` tenia el `id` vacio | `cypher` devolvia `Function` con `id` en blanco y 2 aristas entrantes; `Const` con `id` valido y 1 |
-| El dano era masivo | 2272 de 2298 nodos `Function` sin `id` (solo 26 utilizables), mas 1014 nodos `Section` |
+| El dano era masivo | 2272 de 2298 nodos `Function` sin `id` (solo 26 utilizables), mas 973 nodos `Section` |
 | El rebuild completo lo repara | Tras `clean --force` + `analyze --index-only`: 2298/2298 con `id`, y el fixture resuelve `epistemic: exact` con 1 dependiente directo |
 
 Ese ultimo resultado coincide exactamente con la evidencia del 2026-07-14
@@ -86,7 +86,20 @@ unica definicion compartida de "estructuralmente sano" para que los consumidores
 ### D3. La escalada tiene un solo peldano nuevo, y es el verificado
 
 **Decision:** ante un fallo estructural con indice fresco, `repair` ejecuta `clean --force` seguido de
-`analyze --index-only --name PlanearIA .` y vuelve a verificar. Si sigue fallando, lanza.
+`analyze --index-only --name PlanearIA .` y somete el resultado a las **mismas** post-condiciones que el
+reindex inicial: sin diagnostico FTS, indice fresco y fixture resuelto. Si alguna sigue incumplida, o si
+el borrado o el reindex no se pueden ejecutar, lanza nombrando el paso concreto.
+
+**Por que las mismas y no solo la estructural.** La revision adversarial encontro que comprobar en el
+camino escalado unicamente el fixture reproducia en pequeno el defecto que este change corrige: un
+rebuild que resolviera el fixture dejando el indice stale habria terminado en 0. Las post-condiciones
+viven en una funcion compartida (`recoveryFailure`) precisamente para que ningun camino de exito pueda
+saltarse una.
+
+**Un verificador que no puede correr cuenta como no resuelto.** `runStructuralVerification` clasifica
+sus desenlaces previstos, pero el runner lanza si el CLI sale con codigo distinto de cero. Sin envolver
+esa llamada, el modo de fallo mas ruidoso era el unico que salia de `repair` por excepcion, saltandose
+la escalada entera. Es la misma leccion de #112: la ausencia de un veredicto no es un veredicto.
 
 **Por que exactamente ese peldano.** Es el unico remedio comprobado end to end contra el estado
 observado en esta sesion. `analyze --force` esta documentado como "force full re-index even if up to

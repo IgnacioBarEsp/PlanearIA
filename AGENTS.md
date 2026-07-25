@@ -167,9 +167,11 @@ sin deliberar ni pedir permiso ni releer archivos a mano; asi no se gastan token
   secuencia, no hay un segundo comando. La version queda fijada dentro del wrapper y la reparacion
   reindexa con `--index-only`, bandera que impide inyectar archivos de agente, y rechaza su propio
   resultado si el indice sigue sin quedar fresco o si el grafo no resuelve la verificacion estructural.
-  Ante un indice fresco que no resuelve su fixture, la reparacion reconstruye el indice completo y vuelve
-  a verificar; si tampoco asi resuelve, falla nombrando el fixture en vez de aprobar por frescura. No
-  ejecutes un `clean` manual: la reconstruccion vive dentro de `gitnexus:repair`. `npm run harness:doctor` no repara ni reindexa: solo
+  Ante un indice fresco que no resuelve su fixture, la reparacion reconstruye el indice completo y le
+  exige las mismas condiciones que al reindex inicial; si tampoco asi se recupera, falla nombrando la
+  condicion incumplida en vez de aprobar por frescura. No lances un `clean` manual en lugar de
+  `gitnexus:repair`: la reconstruccion ya vive dentro de el. Si `repair` mismo falla, sigue el
+  procedimiento de limpieza documentado. `npm run harness:doctor` no repara ni reindexa: solo
   clasifica la frescura y ejecuta la verificacion estructural, y reporta FAIL en cuanto una de las dos
   falla. CodeGraph entra como fallback si este contrato falla o no entrega el contexto requerido.
 - CodeGraph: FALLBACK cuando GitNexus no da el detalle exacto de UN archivo o simbolo especifico

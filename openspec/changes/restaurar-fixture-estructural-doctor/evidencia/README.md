@@ -7,8 +7,8 @@ Levantada sobre `development@b967275` y la rama `feat/restaurar-fixture-estructu
 
 | Archivo | Que prueba |
 | --- | --- |
-| `01-indice-degradado.txt` | Estado del indice que producia el FAIL: `impact --uid Function:` responde `not found`, `impact` por nombre devuelve dos candidatos y el que tiene 28 impactados llega con `uid` vacio |
-| `02-grafo-degradado.txt` | El grafo en ese estado: el nodo `Function` del fixture con `id` vacio y 2 aristas entrantes; 2272 de 2298 nodos `Function` sin `id`, mas 1014 `Section` |
+| `01-indice-degradado.txt` | Estado del indice que producia el FAIL: `impact --uid Function:` responde `not found`, `impact` por nombre devuelve dos candidatos y el que tiene 202 impactados llega con `uid` vacio |
+| `02-grafo-degradado.txt` | El grafo en ese estado: el nodo `Function` del fixture con `id` vacio y 2 aristas entrantes; 2272 de 2298 nodos `Function` sin `id`, mas 973 `Section` |
 | `03-grafo-tras-rebuild.txt` | Tras `clean --force` + `analyze --index-only`: 2298/2298 nodos `Function` con `id` y el fixture resolviendo `epistemic: exact` con 1 dependiente directo |
 | `04-no-vacuidad-mutacion.txt` | Las dos mutaciones que la regresion nueva debe detectar, con el exit real de la suite |
 | `05-version-fijada.txt` | Refutacion de la hipotesis de version, y el hallazgo lateral del rango caret de `npx` |
