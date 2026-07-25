@@ -9,8 +9,8 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
@@ -25,7 +25,7 @@ type Nav = StackNavigationProp<AppRoutesParamList, "ListaAlumnos">;
 
 const ListaAlumnosScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const isDesktopWeb = Platform.OS === "web" && width >= 1080;
 
   const { alumnos, isLoading, eliminarAlumno } = useAlumnos();

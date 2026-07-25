@@ -7,8 +7,8 @@ import {
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../hooks/useBreakpoint";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 
 export interface StatDetail {
@@ -34,8 +34,10 @@ interface ExpandedStatsModalProps {
 }
 
 const ExpandedStatsModal: React.FC<ExpandedStatsModalProps> = ({ visible, data, onClose }) => {
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= 768;
+  // El umbral era 768, que es exactamente el limite movil/tablet del shell:
+  // se expresa por rango para que ambos conmuten en el mismo punto.
+  const { isMobile } = useBreakpoint();
+  const isDesktop = !isMobile;
 
   if (!data) return null;
 

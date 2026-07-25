@@ -8,8 +8,8 @@ import {
   StyleSheet,
   ViewToken,
   Platform,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView } from "react-native-safe-area-context";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -86,7 +86,7 @@ const OnboardingScreen: React.FC = () => {
   const { loginComoInvitado } = useAuth();
   const flatListRef = useRef<FlatList<Slide>>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
-  const { width: windowWidth } = useWindowDimensions();
+  const { width: windowWidth } = useBreakpoint();
 
   const isDesktop = windowWidth >= DESKTOP_BREAKPOINT;
   const slideWidth = isDesktop ? Math.min(MAX_CONTAINER_WIDTH, windowWidth) : windowWidth;

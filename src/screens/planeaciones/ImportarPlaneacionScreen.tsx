@@ -8,8 +8,8 @@ import {
   ScrollView,
   Alert,
   Platform,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import * as DocumentPicker from "expo-document-picker";
@@ -29,7 +29,7 @@ type Nav = StackNavigationProp<AppRoutesParamList, "ImportarPlaneacion">;
 const ImportarPlaneacionScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
   const { agregarPlaneacion, forceSync } = usePlaneaciones();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
 
   const [selectedFileName, setSelectedFileName] = React.useState<string | null>(null);
   const [selectedFileType, setSelectedFileType] = React.useState<string | null>(null);

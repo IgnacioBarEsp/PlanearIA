@@ -9,8 +9,8 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -31,7 +31,7 @@ type SaveViewState = "form" | "success" | "sync-error";
 const CrearAlumnoScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
   const route = useRoute<Route>();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const { obtenerAlumno } = useAlumnos();
   const modo = route.params?.modo || "crear";
   const alumnoId = route.params?.alumnoId;

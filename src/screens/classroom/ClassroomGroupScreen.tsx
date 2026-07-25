@@ -11,8 +11,8 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import type { RouteProp } from "@react-navigation/native";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -64,7 +64,7 @@ const formatAiProgress = (response: ClassroomAiResponse<ResumirProgresoResultado
 const ClassroomGroupScreen: React.FC = () => {
   const navigation = useNavigation<Navigation>();
   const route = useRoute<Route>();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const { grupoId, grupoNombre } = route.params;
   const {
     model,

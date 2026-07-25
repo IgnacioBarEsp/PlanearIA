@@ -6,12 +6,12 @@ import {
   FlatList,
   ScrollView,
   StyleSheet,
-  useWindowDimensions,
   Platform,
   Modal,
   Pressable,
   Alert,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { StackNavigationProp } from "@react-navigation/stack";
@@ -330,9 +330,15 @@ const ContentItemCard: React.FC<{
 // ─── Main Screen ───
 
 const ContenidoScreen: React.FC = () => {
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= 1280;
-  const isTablet = width >= 768;
+  // Unico archivo con los dos limites canonicos, y conserva `width` porque los
+  // esqueletos de carga lo usan en pixeles (`width - 32`).
+  //
+  // Ojo: el `isTablet` local NO es el `isTablet` del hook. Aqui significaba
+  // "768 o mas", que incluye escritorio; el del hook es el rango 768-1279 y
+  // excluye escritorio. Usarlo cambiaria el layout por encima de 1280, asi que
+  // se deriva de `!isMobile`.
+  const { width, isDesktop, isMobile } = useBreakpoint();
+  const isTablet = !isMobile;
   const isWeb = Platform.OS === "web";
   const navigation = useNavigation<Nav>();
   const route = useRoute<any>();

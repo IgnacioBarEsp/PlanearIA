@@ -11,8 +11,8 @@ import {
   Alert,
   Linking,
   Platform,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation, useRoute } from "@react-navigation/native";
@@ -62,7 +62,7 @@ const stripHtml = (html?: string | null): string => {
 const ExportarPlaneacionScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
   const route = useRoute<ExportarRoute>();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const wideLayout = width >= 980;
 
   const { documentos, obtenerDocumento } = usePlaneaciones();

@@ -8,8 +8,8 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import WebScrollView from "../../components/WebScrollView";
@@ -53,7 +53,7 @@ const formatDate = (date: Date): string => {
 };
 
 const NotasAlumnoScreen: React.FC = () => {
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const isDesktop = width >= 1100;
 
   const {

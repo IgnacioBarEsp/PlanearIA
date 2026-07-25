@@ -10,8 +10,8 @@ import {
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import * as DocumentPicker from "expo-document-picker";
@@ -221,7 +221,7 @@ const sectionIdToCopiloto = (sectionId: DocSectionId): string => {
 
 const DocEditorScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
-  const { width: viewportWidth } = useWindowDimensions();
+  const { width: viewportWidth } = useBreakpoint();
   const { colors } = useTheme();
   const editorMode = useEditorMode();
   const vm = useDocEditorViewModel();

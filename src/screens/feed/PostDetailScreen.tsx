@@ -8,9 +8,9 @@ import {
   FlatList,
   TextInput,
   Platform,
-  useWindowDimensions,
   KeyboardAvoidingView,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -41,7 +41,8 @@ const MOCK_COMMENTS: PostComment[] = [];
 
 const PostDetailScreen: React.FC = () => {
   const { colors } = useTheme();
-  const { width } = useWindowDimensions();
+  // El umbral era 768, el limite movil/tablet del shell.
+  const { isMobile } = useBreakpoint();
   const navigation = useNavigation<any>();
   const route = useRoute<PostDetailRouteProp>();
   const { posts, toggleLike, toggleSave } = usePosts();
@@ -52,7 +53,7 @@ const PostDetailScreen: React.FC = () => {
 
   const [commentText, setCommentText] = useState("");
 
-  const isDesktop = width >= 768;
+  const isDesktop = !isMobile;
 
   if (!post) {
     return (

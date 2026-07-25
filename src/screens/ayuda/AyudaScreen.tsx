@@ -7,8 +7,8 @@ import {
   ScrollView,
   Platform,
   StatusBar,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
@@ -81,8 +81,9 @@ const FAQS = [
 ];
 
 export const AyudaScreen: React.FC = () => {
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= 768;
+  // El umbral era 768, el limite movil/tablet del shell.
+  const { isMobile } = useBreakpoint();
+  const isDesktop = !isMobile;
   const navigation = useNavigation<any>();
   const { colors, isDark } = useTheme();
   const styles = getStyles(colors, isDark);

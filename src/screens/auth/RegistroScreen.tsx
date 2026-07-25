@@ -7,8 +7,8 @@ import {
   StyleSheet,
   KeyboardAvoidingView,
   Platform,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
@@ -20,8 +20,10 @@ const RegistroScreen: React.FC = () => {
   const { formData, isLoading, errors, updateField, handleRegistro, handleIrALogin } =
     useRegistroViewModel();
   const navigation = useNavigation();
-  const { width } = useWindowDimensions();
-  const isWideWeb = Platform.OS === "web" && width >= 768;
+  // El umbral era 768, el limite movil/tablet del shell. `isWeb` sigue siendo
+  // plataforma y no ancho: la condicion combina ambos como antes.
+  const { isMobile } = useBreakpoint();
+  const isWideWeb = Platform.OS === "web" && !isMobile;
 
   return (
     <SafeAreaView style={styles.safeArea}>

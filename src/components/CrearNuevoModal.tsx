@@ -5,10 +5,10 @@ import {
   Modal,
   Pressable,
   StyleSheet,
-  useWindowDimensions,
   Platform,
   ScrollView,
 } from "react-native";
+import { useBreakpoint } from "../hooks/useBreakpoint";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
 
@@ -41,7 +41,7 @@ export const CrearNuevoModal: React.FC<CrearNuevoModalProps> = ({
   onClose,
   onNavigate,
 }) => {
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const isDesktop = width >= 900;
 
   const handleClose = useCallback(() => {

@@ -1,0 +1,24 @@
+{
+  "schemaVersion": 1,
+  "issue": 106,
+  "change": "sanear-breakpoints-uxui",
+  "surfaces": ["ui", "harness"],
+  "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
+  "evidence": [
+    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/106" },
+    { "id": "pr-link", "ref": "PENDIENTE: se completa al abrir el PR con opsx:finish." },
+    { "id": "adversarial-review", "ref": "PENDIENTE: se completa tras la revision adversarial." },
+    { "id": "web-http-200", "ref": "PENDIENTE: se completa tras levantar expo start --web." },
+    { "id": "playwright-breakpoints", "ref": "PENDIENTE: se completa tras la QA visual." },
+    { "id": "nielsen", "ref": "PENDIENTE: se completa tras el checklist Nielsen." },
+    { "id": "fixtures", "ref": "PENDIENTE: se completa con los fixtures de la guardia." }
+  ],
+  "rollback": {
+    "strategy": "Revertir el PR restaura los 27 consumidores directos de useWindowDimensions y elimina la guardia junto con sus pruebas y fixtures. La migracion es mecanica y por archivo, asi que una regresion aislada se revierte sola: se devuelve el import de ese archivo y se reinserta su entrada en la lista autorizada de la guardia, que acepta un techo mas alto mientras la entrada este viva. El change no toca src/hooks/useBreakpoint.ts, los rangos 768/1280, el AppShell, src/sync, AsyncStorage, claves @planearia:*, esquemas ni backend, asi que no hay migracion de datos que revertir. Si la guardia molestara, ampliar su lista autorizada o subir su techo desbloquea sin revertir codigo. El assessment y el registro de deuda no se borran al revertir: el item resuelto volveria a abrirse mediante un flujo de saneamiento nuevo, no editando el registro.",
+    "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
+  },
+  "adversarialReview": {
+    "ref": "PENDIENTE: se completa tras la revision adversarial."
+  },
+  "exceptions": []
+}

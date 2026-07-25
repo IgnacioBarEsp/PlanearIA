@@ -7,8 +7,8 @@ import {
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
@@ -41,7 +41,7 @@ const estadoLabel: Record<string, string> = {
 };
 
 const ReportesAlumnoScreen: React.FC = () => {
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const isDesktop = width >= 1080;
   const chartWidth = Math.max(300, Math.min(width - 56, 680));
 

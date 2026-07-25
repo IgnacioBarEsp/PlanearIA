@@ -1,4 +1,5 @@
-import { Platform, useWindowDimensions } from "react-native";
+import { Platform } from "react-native";
+import { useBreakpoint } from "./useBreakpoint";
 
 export type EditorMode = "standard" | "mobile";
 
@@ -17,7 +18,7 @@ export interface EditorModeResult {
 const DEFAULT_BREAKPOINT = 768;
 
 export const useEditorMode = (options: UseEditorModeOptions = {}): EditorModeResult => {
-  const { width, height } = useWindowDimensions();
+  const { width, height } = useBreakpoint();
   const breakpoint = options.breakpoint ?? DEFAULT_BREAKPOINT;
   const platformData = Platform as typeof Platform & { isPad?: boolean };
   const isPad = Platform.OS === "ios" && platformData.isPad === true;

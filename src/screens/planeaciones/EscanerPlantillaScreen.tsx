@@ -7,9 +7,9 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  useWindowDimensions,
   View,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { useTheme } from "../../context/ThemeContext";
@@ -25,7 +25,7 @@ const NIVELES = [
 
 const EscanerPlantillaScreen: React.FC = () => {
   const { colors } = useTheme();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const vm = useEscanerPlantillaViewModel();
   const isWide = width >= 960;
   const isWeb = Platform.OS === "web";

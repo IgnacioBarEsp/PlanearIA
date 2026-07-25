@@ -11,8 +11,8 @@ import {
   TextInput,
   Alert,
   Platform,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { FONT_SIZES } from "../../../types";
@@ -673,7 +673,7 @@ const TabContent: React.FC<{
 const DetalleGrupoScreen: React.FC = () => {
   const { colors: DT, highContrast } = useAppTheme();
   const styles = useThemedStyles();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const chartWidth = Math.max(280, Math.min(width - 56, 620));
 
   const {
