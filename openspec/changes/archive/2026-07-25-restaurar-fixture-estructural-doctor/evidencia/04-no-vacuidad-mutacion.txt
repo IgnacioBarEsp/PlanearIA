@@ -1,0 +1,58 @@
+Prueba de no vacuidad por mutacion
+fecha: 2026-07-25   commit base: 46588df
+
+Arnes efimero en scratchpad: muta scripts/gitNexusFts.mjs, corre la suite y exige que FALLE.
+Reporta 'mutacion aplicada' para que un reemplazo que no muta nada no se confunda con una guardia
+que detecta, y vuelve a correr limpio al final para no fiarse de un arnes roto.
+
+Nota de metodo: la primera version del arnes invocaba npm.cmd con spawnSync y devolvia exit null
+en TODAS las corridas, incluida la limpia (EINVAL de .cmd en Windows). Con status null toda mutacion
+parecia detectada. Lo delato la corrida limpia, que tambien daba null. Se corrigio invocando node
+directamente sobre el script de pruebas.
+
+=== M1: quitar la puerta estructural de repair (volver a medir solo la frescura) ===
+mutacion aplicada: true
+exit de node scripts/testGitNexusFts.mjs: 1 (esperado: distinto de 0)
+veredicto: DETECTADA
+
+=== M2: cambiar FIXTURE_UID a Const: (el atajo descartado en design D1) ===
+mutacion aplicada: true
+exit de node scripts/testGitNexusFts.mjs: 1 (esperado: distinto de 0)
+AssertionError [ERR_ASSERTION]: Expected "actual" to be strictly unequal to:
+veredicto: DETECTADA
+
+=== M3: no reaplicar las post-condiciones al rebuild (revisar solo el fixture) ===
+mutacion aplicada: true
+exit de node scripts/testGitNexusFts.mjs: 1 (esperado: distinto de 0)
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+veredicto: DETECTADA
+
+=== M4: dejar que un CLI que muere salga por excepcion en vez de escalar ===
+mutacion aplicada: true
+exit de node scripts/testGitNexusFts.mjs: 1 (esperado: distinto de 0)
+veredicto: DETECTADA
+
+=== M5: quitar --index-only del reindex (la bandera que impide escribir archivos de agente) ===
+mutacion aplicada: true
+exit de node scripts/testGitNexusFts.mjs: 1 (esperado: distinto de 0)
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+veredicto: DETECTADA
+
+=== M6: ignorar el fallo de clean y seguir al reindex ===
+mutacion aplicada: true
+exit de node scripts/testGitNexusFts.mjs: 1 (esperado: distinto de 0)
+AssertionError [ERR_ASSERTION]: The input did not match the regular expression /could not delete the index/i. Input:
+veredicto: DETECTADA
+
+=== M7: aceptar el rebuild a ciegas (no volver a verificar nada tras reconstruir) ===
+mutacion aplicada: true
+exit de node scripts/testGitNexusFts.mjs: 1 (esperado: distinto de 0)
+AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+veredicto: DETECTADA
+
+=== codigo restaurado ===
+exit: 0 (esperado: 0)
+git status --porcelain scripts/gitNexusFts.mjs: (limpio)
+
+mutaciones: 7 | sobrevivientes: 0
+exit del arnes = 0

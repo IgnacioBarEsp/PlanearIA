@@ -1,0 +1,69 @@
+Validacion tecnica - restaurar-fixture-estructural-doctor
+fecha: 2026-07-25
+
+=== npm run test:gitnexus ===
+
+> planearia@1.0.0 test:gitnexus
+> node scripts/testGitNexusFts.mjs
+
+Repository indexed successfullyRepository indexed successfullyRepository indexed successfullyRepository indexed successfullyGitNexus FTS verifier unit smoke passed.
+exit=0
+
+=== npm run test:harness:doctor ===
+
+> planearia@1.0.0 test:harness:doctor
+> node scripts/testHarnessDoctor.mjs
+
+Harness doctor tests passed.
+exit=0
+
+=== npm run typecheck ===
+
+> planearia@1.0.0 typecheck
+> tsc --noEmit
+exit=0
+
+=== npm run lint -- --quiet ===
+
+> planearia@1.0.0 lint
+> eslint . --ext .ts,.tsx,.js,.jsx --quiet
+exit=0
+
+=== npm run agent:harness:check ===
+
+> planearia@1.0.0 agent:harness:check
+> node scripts/syncAgentHarness.mjs --check
+
+agent-harness: OK (36 mirrors in parity)
+exit=0
+
+=== npm run openspec:validate ===
+✓ spec/theming-runtime-propagation
+✓ spec/third-party-software-attribution
+✓ spec/ux-ihc-chronology
+✓ spec/uxui-plan-audit
+Totals: 52 passed, 0 failed (52 items)
+openspec-tldr: OK (todos los changes activos tienen TLDR.md en su raiz)
+exit=0
+
+=== npm run test:project-os-contract ===
+Nota: el brief pedia 'npm run test:debt-control', que no existe en package.json. El smoke
+consumidor del motor de deuda es 'test:project-os-contract' (runbook CONTROL_DEUDA_TECNICA.md).
+
+> planearia@1.0.0 test:project-os-contract
+> node scripts/testProjectEngineeringOsConsumer.mjs
+
+Project OS consumer contract PASS: 0.1.4, bins, exports, bootstrap, idempotencia, sync/check, doctor, debt y 10 issues neutrales.
+exit=0
+
+=== npm test -- --runInBand ===
+
+Test Suites: 1 failed, 127 passed, 128 total
+Tests:       1 failed, 884 passed, 885 total
+Snapshots:   0 total
+Time:        74.134 s
+Ran all test suites.
+
+El unico fallo es src/__tests__/harness/spreadsheetDependency.test.ts, falla local conocida de
+Windows por el tarball vendorizado de SheetJS (de #133/#126): pasa en CI y es ajena a este change,
+que no toca dependencias ni el vendorizado. 884 de 885 pruebas en verde.

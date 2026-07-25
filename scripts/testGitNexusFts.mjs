@@ -113,14 +113,59 @@ const badImpactResult = runStructuralVerification({}, badImpact.runner);
 assert.equal(badImpactResult.ok, false);
 assert.match(badImpactResult.reason, /must be exact/i);
 
+// Las dos cargas utiles del indice degradado de #149, distintas y ambas reales.
+// La primera es la que devolvia el impact POR EL UID DEL FIXTURE: el nodo Function porta las aristas
+// pero perdio su UID, asi que dejo de existir para la busqueda.
+const IMPACT_UID_NO_ENCONTRADO = JSON.stringify({
+  error: "Target 'Function:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel' not found",
+  target: {},
+  direction: 'upstream',
+  impactedCount: 0,
+  risk: 'UNKNOWN',
+});
+// La segunda la devolvia el mismo indice al preguntar por el UID del nodo Const, que si conservo el
+// suyo: resuelve exacto y con 0 impactados. Es el atajo que se descarto, y hace no vacuas las pruebas
+// de abajo: si la verificacion la aceptara, el doctor pasaria en verde apuntando a un nodo sin aristas.
+const IMPACT_UID_DEGRADADO = JSON.stringify({
+  target: { id: 'Const:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel' },
+  epistemic: 'exact',
+});
+assert.throws(
+  () => verifyImpactResult(JSON.parse(IMPACT_UID_NO_ENCONTRADO)),
+  /did not resolve the expected ViewModel UID/i,
+  'el impact sin target debe ser rechazado',
+);
+assert.notEqual(IMPACT_UID_DEGRADADO, IMPACT_OK);
+assert.throws(
+  () => verifyImpactResult(JSON.parse(IMPACT_UID_DEGRADADO)),
+  /did not resolve the expected ViewModel UID/i,
+  'el UID degradado debe ser rechazado; si pasara, la verificacion seria vacua',
+);
+
 // La recuperacion escala por los estados observados en #112: un analyze interrumpido deja el indice
 // mid-incremental-recovery (donde --repair-fts se niega a correr y pide un analyze previo) y un FTS
 // inconsistente hace fallar el reindex. Un solo intento no recupera ninguno de los dos.
-function repairRunner(outcomes) {
+// `structuralVerdicts` modela rondas sucesivas de verificacion estructural: 'ok' resuelve el fixture,
+// 'uid-degradado' reproduce #149 (la query responde, el impact resuelve otro nodo).
+function repairRunner(outcomes, structuralVerdicts = [], statuses = []) {
   const issued = [];
+  let verdict = 'ok';
   const runner = (args) => {
     issued.push(args.join(' '));
-    if (args[0] === 'status') return FRESH_STATUS;
+    if (args[0] === 'status') return statuses.length > 0 ? statuses.shift() : FRESH_STATUS;
+    if (args[0] === 'query') {
+      verdict = structuralVerdicts.length > 0 ? structuralVerdicts.shift() : 'ok';
+      // Un CLI que muere no entrega veredicto: la verificacion no puede clasificar y debe contar como
+      // no resuelta, nunca como ausencia de fallo conocido.
+      if (verdict === 'cli-muere') throw new Error('npx gitnexus query failed with exit 1.');
+      return QUERY_OK;
+    }
+    if (args[0] === 'impact') {
+      if (verdict === 'ok') return IMPACT_OK;
+      return verdict === 'uid-no-encontrado' ? IMPACT_UID_NO_ENCONTRADO : IMPACT_UID_DEGRADADO;
+    }
+    // `clean` no consume la cola de desenlaces: esa cola modela los reindex, que son los que fallan.
+    if (args[0] === 'clean') return 'Deleted index';
     const outcome = outcomes.shift();
     if (outcome instanceof Error) throw outcome;
     return outcome ?? 'Repository indexed successfully';
@@ -128,9 +173,15 @@ function repairRunner(outcomes) {
   return { issued, runner };
 }
 
+const subcomandos = (issued) => issued.map((entry) => entry.split(' ')[0]);
+
 const firstTry = repairRunner([]);
 repair({}, firstTry.runner);
-assert.deepEqual(firstTry.issued, ['analyze --index-only --name PlanearIA .', 'status']);
+assert.deepEqual(firstTry.issued.slice(0, 2), ['analyze --index-only --name PlanearIA .', 'status']);
+// La frescura ya no cierra la recuperacion por si sola: despues comprueba que el grafo resuelva.
+assert.deepEqual(subcomandos(firstTry.issued), ['analyze', 'status', 'query', 'impact']);
+// Un indice que resuelve a la primera no se reconstruye: la escalada cuesta un rebuild completo.
+assert.equal(firstTry.issued.some((entry) => entry.startsWith('clean')), false);
 
 // Segundo intento: el reindex recupera el estado sucio que dejo un analyze interrumpido.
 const retry = repairRunner([new Error('mid-incremental-recovery')]);
@@ -146,13 +197,14 @@ const escalated = repairRunner([
   new Error("FTS index 'file_fts' is inconsistent"),
 ]);
 repair({}, escalated.runner);
-assert.deepEqual(escalated.issued, [
+assert.deepEqual(escalated.issued.slice(0, 5), [
   'analyze --index-only --name PlanearIA .',
   'analyze --index-only --name PlanearIA .',
   'analyze --repair-fts --index-only --name PlanearIA .',
   'analyze --index-only --name PlanearIA .',
   'status',
 ]);
+assert.deepEqual(subcomandos(escalated.issued).slice(5), ['query', 'impact']);
 
 // Si nada recupera, falla en vez de declarar exito.
 const hopeless = repairRunner([new Error('boom'), new Error('boom'), new Error('boom'), new Error('boom')]);
@@ -164,6 +216,73 @@ const stillStale = {
   runner: (args) => (args[0] === 'status' ? STALE_STATUS : 'Repository indexed successfully'),
 };
 assert.throws(() => repair({}, stillStale.runner), /still not fresh/i);
+
+// #149: el indice queda fresco pero el fixture estructural no resuelve. Sobre ese estado el reindex es
+// un no-op ("Already up to date"), asi que medir el exito solo por frescura declaraba recuperada una
+// ruta estructural rota. La recuperacion escala a un rebuild completo y vuelve a verificar.
+const degradado = repairRunner([], ['uid-degradado', 'ok']);
+repair({}, degradado.runner);
+// El `status` posterior al rebuild no es decorativo: es la post-condicion de frescura aplicada tambien
+// al camino escalado.
+assert.deepEqual(subcomandos(degradado.issued), [
+  'analyze', 'status', 'query', 'impact', 'clean', 'analyze', 'status', 'query', 'impact',
+]);
+assert.equal(degradado.issued[4], 'clean --force');
+// El reindex del rebuild conserva --index-only: es lo que impide que analyze escriba archivos de agente.
+assert.equal(degradado.issued[5], 'analyze --index-only --name PlanearIA .');
+
+// Si el rebuild tampoco restaura el fixture, la recuperacion falla nombrando la causa en vez de
+// aprobar por frescura.
+const irrecuperable = repairRunner([], ['uid-degradado', 'uid-degradado']);
+assert.throws(
+  () => repair({}, irrecuperable.runner),
+  /recovery still fails.*did not resolve the expected ViewModel UID/is,
+);
+assert.equal(irrecuperable.issued.filter((entry) => entry.startsWith('clean')).length, 1);
+
+// El rebuild tampoco puede declarar exito si su propio reindex falla. El primer reindex si funciona:
+// la cola entrega exito y despues el error, para que el fallo caiga en el reindex del rebuild.
+const rebuildRoto = repairRunner([null, new Error('rebuild boom')], ['uid-degradado']);
+assert.throws(
+  () => repair({}, rebuildRoto.runner),
+  /could not rebuild the index after a failed structural verification/i,
+);
+
+// La carga util que realmente devolvia el indice de #149 al preguntar por el UID del fixture tambien
+// dispara la escalada: el nodo existia con sus aristas, pero sin UID no habia nada que encontrar.
+const uidPerdido = repairRunner([], ['uid-no-encontrado', 'ok']);
+repair({}, uidPerdido.runner);
+assert.equal(uidPerdido.issued.some((entry) => entry === 'clean --force'), true);
+
+// Un CLI que muere no puede saltarse la escalada: antes salia por excepcion desde la verificacion y
+// dejaba sin recuperacion justo al modo de fallo mas ruidoso.
+const cliMuere = repairRunner([], ['cli-muere', 'ok']);
+repair({}, cliMuere.runner);
+assert.deepEqual(subcomandos(cliMuere.issued), ['analyze', 'status', 'query', 'clean', 'analyze', 'status', 'query', 'impact']);
+
+// El rebuild se somete a las mismas post-condiciones que el reindex inicial. Un rebuild que resuelve el
+// fixture pero deja el indice stale no es una recuperacion: sin esto, el camino escalado repetiria en
+// pequeno el defecto que este change corrige.
+const rebuildStale = repairRunner([], ['uid-degradado', 'ok'], [FRESH_STATUS, STALE_STATUS]);
+assert.throws(() => repair({}, rebuildStale.runner), /recovery still fails/i);
+assert.throws(() => repair({}, repairRunner([], ['uid-degradado', 'ok'], [FRESH_STATUS, STALE_STATUS]).runner), /still not fresh/i);
+
+// Lo mismo con un diagnostico FTS en la salida del rebuild.
+const rebuildFts = repairRunner([null, 'FTS indexes missing'], ['uid-degradado']);
+assert.throws(() => repair({}, rebuildFts.runner), /recovery still fails.*FTS diagnostic/is);
+
+// Si el borrado falla, el error nombra ese paso en vez de culpar al fixture que intentaba restaurar.
+const cleanRoto = {
+  issued: [],
+  runner: (args) => {
+    if (args[0] === 'status') return FRESH_STATUS;
+    if (args[0] === 'query') return QUERY_OK;
+    if (args[0] === 'impact') return IMPACT_UID_DEGRADADO;
+    if (args[0] === 'clean') throw new Error('EBUSY: index is locked');
+    return 'Repository indexed successfully';
+  },
+};
+assert.throws(() => repair({}, cleanRoto.runner), /could not delete the index/i);
 
 const unexpected = findUnexpectedAgentChanges(
   ' M AGENTS.md\n M .agents/instructions/core.md\n M src/hooks/example.ts',

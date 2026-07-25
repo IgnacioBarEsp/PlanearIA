@@ -1,0 +1,31 @@
+{
+  "schemaVersion": 1,
+  "issue": 149,
+  "change": "restaurar-fixture-estructural-doctor",
+  "surfaces": ["harness", "docs"],
+  "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
+  "evidence": [
+    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/149" },
+    { "id": "pr-link", "ref": "https://github.com/RitualBoat/PlanearIA/pull/150" },
+    {
+      "id": "adversarial-review",
+      "ref": "Veredicto inicial FAIL (0 Blockers; 2 Majors; 6 Minors) en revision independiente sobre el PR #150. Ambos Majors corregidos dentro del change: (1) el camino de exito escalado no reaplicaba las post-condiciones de frescura y diagnostico FTS, de modo que un rebuild podia terminar en 0 dejando el indice stale; (2) un fallo duro del CLI hacia que runStructuralVerification lanzara en vez de clasificar, saltandose la escalada entera, mientras la documentacion nueva retiraba el remedio manual. Minors atendidos: cifras corregidas a las de la evidencia capturada (973 nodos Section y 202 impactados, no 1014 y 28), payload real not-found anadido a la regresion, fallo de clean nombrado en vez de culpar al fixture, transcripcion del peldano escalado en evidencia/09, y refutacion comentada en el issue (https://github.com/RitualBoat/PlanearIA/issues/149#issuecomment-5080245617). El Minor de la guardia hasFtsDiagnostic quedo cubierto al reaplicar las post-condiciones."
+    },
+    {
+      "id": "fixtures",
+      "ref": "scripts/testGitNexusFts.mjs cubre la escalada completa: indice fresco que no resuelve el fixture, verificador que no puede emitir veredicto porque el CLI muere, rebuild que deja el indice stale, rebuild con diagnostico FTS, fallo del borrado, fallo del reindex del rebuild, y el caso sano que NO debe reconstruir. Usa las dos cargas utiles reales del indice degradado de #149: el not-found por el UID del fixture y el Const: que resolvia exacto con 0 impactados. No vacuidad probada por mutacion: 7 mutaciones del codigo de produccion, 0 supervivientes, con exit real de la suite y sin residuo en el arbol (evidencia/04-no-vacuidad-mutacion.txt). El propio arnes de mutacion se corrigio tras detectar que devolvia exit null en todas las corridas por invocar npm.cmd con spawnSync en Windows."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "Los tres estados corregidos del backlog de Ola 0 se verificaron contra openspec/changes/archive/ y contra el readiness.json de cada change archivado, no de memoria: theming-runtime issue 78, breakpoints-reactivos issue 79, tokens-completos issue 80, mas los rollouts sanear-theming-runtime-uxui issue 145 y sanear-breakpoints-uxui issue 106. El barrido programatico del documento completo (23 bloques Estado) reporta 0 changes que declaren pendiente estando archivados y confirma que los 16 pendientes restantes no existen en archive, por lo que se dejaron intactos. Registro en evidencia/06-verificacion-documental.txt. La descripcion de la recuperacion en .agents/instructions/core.md y sus espejos CLAUDE.md/AGENTS.md quedo alineada con el comportamiento real y conserva el procedimiento de limpieza documentado para el caso en que la propia recuperacion falle; npm run agent:harness:check OK con 36 espejos."
+    }
+  ],
+  "rollback": {
+    "strategy": "Revertir el PR restaura `repair` a su forma anterior, que medía su exito solo por la frescura, y elimina la regresion nueva junto con el delta de spec. El fixture no cambia en ninguna direccion porque este change no lo toca: FIXTURE_UID sigue siendo el mismo antes y despues, asi que revertir no puede romper la verificacion estructural. El indice local .gitnexus/ es estado generado e ignorado por git; se reconstruye con la misma secuencia documentada y no hay migracion de datos que revertir. El change no toca codigo de producto, AsyncStorage, claves @planearia:*, src/sync, esquemas, backend ni proyecto nativo, de modo que no hay perdida de datos posible. Si la escalada resultara molesta por costo (un rebuild de ~30 s), se puede revertir solo el bloque de escalada conservando la comprobacion estructural, que ya bastaria para convertir el falso exito en un fallo visible. Los cambios de documentacion son independientes y reversibles por separado. El assessment y el registro de deuda no se borran al revertir.",
+    "qaVisualJourneys": []
+  },
+  "adversarialReview": {
+    "ref": "Veredicto inicial FAIL con 2 Majors, ambos corregidos dentro del change y cubiertos por regresion nueva (mutaciones M3, M4 y M7 de evidencia/04-no-vacuidad-mutacion.txt). Detalle en el campo evidence.adversarial-review."
+  },
+  "exceptions": []
+}

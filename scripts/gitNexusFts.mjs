@@ -195,6 +195,10 @@ export function diagnose(options) {
 
 const REINDEX_ARGS = ['analyze', '--index-only', '--name', 'PlanearIA', '.'];
 const REPAIR_FTS_ARGS = ['analyze', '--repair-fts', '--index-only', '--name', 'PlanearIA', '.'];
+// Borrar el indice es el unico remedio verificado contra un grafo fresco cuyos nodos perdieron su UID
+// (#149). `analyze --force` seria mas barato, pero ese estado no se pudo reproducir para medirlo, y una
+// escalada no se construye sobre un peldano supuesto.
+const CLEAN_ARGS = ['clean', '--force'];
 
 function attempt(args, options, runner) {
   try {
@@ -202,6 +206,32 @@ function attempt(args, options, runner) {
   } catch (error) {
     return { ok: false, output: error.message };
   }
+}
+
+// `runStructuralVerification` clasifica sus desenlaces previstos, pero el runner lanza cuando el CLI
+// sale con codigo distinto de cero. Sin envolverlo, un CLI que muere salia de `repair` por excepcion y
+// se saltaba la escalada entera: el modo de fallo mas ruidoso era el unico sin recuperacion.
+function structuralOutcome(options, runner) {
+  try {
+    return runStructuralVerification(options, runner);
+  } catch (error) {
+    return { ok: false, reason: `GitNexus structural verification could not run: ${error.message}` };
+  }
+}
+
+// Post-condiciones que debe cumplir un reindex para contar como recuperacion: sin diagnostico FTS,
+// indice fresco y fixture estructural resuelto. Existen como funcion porque el rebuild escalado tiene
+// que superar exactamente las mismas: comprobarlas solo en el primer reindex dejaba un camino de exito
+// que no verificaba lo que prometia, que es el defecto que este change corrige.
+function recoveryFailure(execution, options, runner) {
+  if (hasFtsDiagnostic(execution.output)) {
+    return 'GitNexus repair completed with an FTS diagnostic.';
+  }
+  if (classifyIndexFreshness(runner(['status'], options)) !== FRESH) {
+    return 'GitNexus repair finished but the index is still not fresh. Review npm run gitnexus:diagnose.';
+  }
+  const structural = structuralOutcome(options, runner);
+  return structural.ok ? null : structural.reason;
 }
 
 // Runner inyectable por el mismo motivo que en runStructuralVerification: la escalada solo se puede
@@ -234,6 +264,34 @@ export function repair(options = {}, runner = runGitNexus) {
   const statusOutput = runner(['status'], options);
   if (classifyIndexFreshness(statusOutput) !== FRESH) {
     throw new Error('GitNexus repair finished but the index is still not fresh. Review npm run gitnexus:diagnose.');
+  }
+
+  // La frescura sola no es evidencia de recuperacion. En #149 el indice quedo fresco con 2272 de 2298
+  // nodos Function sin UID: conservaban sus aristas, pero el impact por UID ya no los encontraba. Sobre
+  // ese estado `analyze --index-only` responde "Already up to date" y no cambia nada, de modo que la
+  // recuperacion declaraba exito dejando rota la ruta estructural. Se reutiliza la verificacion
+  // compartida en vez de reimplementarla para que no existan dos definiciones de "estructuralmente sano".
+  const structural = structuralOutcome(options, runner);
+  if (!structural.ok) {
+    // Reconstruir desde cero es lo que restauro los UID en el estado observado. El reindex posterior
+    // conserva --index-only: es la bandera que impide que analyze escriba en los archivos de agente.
+    // Si el borrado falla, se nombra: si no, el error final culparia al fixture de un indice bloqueado.
+    const cleaned = attempt(CLEAN_ARGS, options, runner);
+    if (!cleaned.ok) {
+      throw new Error(`GitNexus repair could not delete the index to rebuild it after: ${structural.reason}\n${cleaned.output}`);
+    }
+    const rebuild = attempt(REINDEX_ARGS, options, runner);
+    if (!rebuild.ok) {
+      throw new Error(`GitNexus repair could not rebuild the index after a failed structural verification.\n${rebuild.output}`);
+    }
+    execution = rebuild;
+
+    // El rebuild se somete a las mismas post-condiciones que el reindex inicial, frescura y FTS
+    // incluidas: un rebuild que resolviera el fixture dejando el indice stale no es una recuperacion.
+    const failure = recoveryFailure(execution, options, runner);
+    if (failure) {
+      throw new Error(`GitNexus repair rebuilt the index but the recovery still fails: ${failure}`);
+    }
   }
 
   process.stdout.write(execution.output);

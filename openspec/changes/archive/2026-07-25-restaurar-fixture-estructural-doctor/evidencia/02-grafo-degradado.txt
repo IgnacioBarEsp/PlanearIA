@@ -1,0 +1,25 @@
+### nodos del simbolo fixture (indice incremental, commit b967275)
+{
+  "markdown": "| lbl | id | fp | line |\n| --- | --- | --- | --- |\n| Const | Const:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel | src/hooks/useCrearPlaneacionViewModel.ts | 367 |\n| Function |  | src/hooks/useCrearPlaneacionViewModel.ts | 367 |",
+  "row_count": 2
+}
+
+### grado entrante por nodo
+{
+  "markdown": "| lbl | id | entrantes |\n| --- | --- | --- |\n| Const | Const:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel | 1 |\n| Function |  | 2 |",
+  "row_count": 2
+}
+
+### alcance del id vacio
+{
+  "markdown": "| lbl | total |\n| --- | --- |\n| Section | 973 |\n| Function | 2272 |",
+  "row_count": 2
+}
+{
+  "markdown": "| total_function |\n| --- |\n| 2298 |",
+  "row_count": 1
+}
+{
+  "markdown": "| function_con_id |\n| --- |\n| 26 |",
+  "row_count": 1
+}

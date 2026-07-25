@@ -1,0 +1,56 @@
+### tras clean + analyze --index-only (rebuild completo)
+{
+  "markdown": "| lbl | id | line |\n| --- | --- | --- |\n| Function | Function:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel | 367 |\n| Const | Const:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel | 367 |",
+  "row_count": 2
+}
+{
+  "markdown": "| total_function |\n| --- |\n| 2298 |",
+  "row_count": 1
+}
+{
+  "markdown": "| function_con_id |\n| --- |\n| 2298 |",
+  "row_count": 1
+}
+
+### impact --uid Function: (fixture vigente)
+{
+  "target": {
+    "id": "Function:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel",
+    "name": "useCrearPlaneacionViewModel",
+    "type": "Function",
+    "filePath": "src/hooks/useCrearPlaneacionViewModel.ts"
+  },
+  "direction": "upstream",
+  "impactedCount": 1,
+  "risk": "LOW",
+  "epistemic": "exact",
+  "summary": {
+    "direct": 1,
+    "processes_affected": 0,
+    "modules_affected": 1
+  },
+  "byDepthCounts": {
+    "1": 1
+  },
+  "affected_processes": [],
+  "affected_modules": [
+    {
+      "name": "Hooks",
+      "hits": 1,
+      "impact": "direct"
+    }
+  ],
+  "byDepth": {
+    "1": [
+      {
+        "depth": 1,
+        "id": "Function:src/screens/planeaciones/CrearPlaneacionScreen.tsx:CrearPlaneacionScreen",
+        "name": "CrearPlaneacionScreen",
+        "filePath": "src/screens/planeaciones/CrearPlaneacionScreen.tsx",
+        "relationType": "CALLS",
+        "confidence": 0.85,
+        "processes": []
+      }
+    ]
+  }
+}

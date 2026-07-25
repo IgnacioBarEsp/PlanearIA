@@ -480,6 +480,10 @@
         {
           "flow": "sanear-theming-runtime-uxui",
           "date": "2026-07-25"
+        },
+        {
+          "flow": "restaurar-fixture-estructural-doctor",
+          "date": "2026-07-25"
         }
       ],
       "issue": null,
@@ -490,6 +494,92 @@
         "approvedBy": "RitualBoat",
         "expiresOn": "2027-07-24",
         "recovery": "Al ampliar los tokens en design-tokens (#80), migrar las 111 referencias de la paleta local a tokens y verificar el repintado por breakpoint en ambos temas. Si al vencer la excepcion los tokens siguen sin cubrir la paleta, reevaluar con nueva aprobacion o devolver la pantalla al registro del rollout mediante un PR normal."
+      },
+      "createdAt": "2026-07-25",
+      "updatedAt": "2026-07-25",
+      "resolution": null
+    },
+    {
+      "id": "debt-c17e54bcccf7",
+      "title": "npx no fija de forma exacta la version de GitNexus que el wrapper declara pineada",
+      "description": "npx no fija de forma exacta la version de GitNexus que el wrapper declara pineada",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "preparacion-operativa-sdd-harness",
+      "artifact": "scripts/gitNexusFts.mjs",
+      "consequence": "GITNEXUS_VERSION promete un binario fijo, pero npx escribe un rango caret en el manifiesto de su directorio efimero. Mientras sobreviva el lockfile de esa cache el binario es el declarado; si la cache se limpia, la resolucion puede traer un build distinto sin que ningun comando lo advierta, y con el la clasificacion del grafo de la que depende el fixture estructural del doctor.",
+      "remediation": "Fijar la resolucion de forma verificable: comprobar la version efectiva antes de usarla, o resolver el binario por una ruta que no dependa del manifiesto que escribe npx. No se aborda en este change porque excede el alcance del issue y exigiria tocar la invocacion del wrapper, que sus no objetivos protegen.",
+      "evidence": [
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/05-version-fijada.txt - el manifiesto efimero de npx declara {\"gitnexus\":\"^1.6.10-rc.23\"}; semver.satisfies confirma que ese rango admite 1.6.10-rc.109, 1.6.10 final y 1.7.0",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "comando",
+          "ref": "Mismo archivo: la integridad del tarball resuelto hoy coincide con dist.integrity del registro para 1.6.10-rc.23, de modo que el riesgo es latente y no esta materializado",
+          "date": "2026-07-25"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "restaurar-fixture-estructural-doctor",
+          "date": "2026-07-25"
+        }
+      ],
+      "issue": null,
+      "status": "accepted-exception",
+      "exception": {
+        "reason": "El riesgo es real pero latente y no tiene costo actual: el binario que se ejecuta hoy es 1.6.10-rc.23 y la integridad de su tarball coincide con dist.integrity del registro, asi que ningun resultado vigente depende de una resolucion incorrecta. Cerrarlo dentro de este change exigiria tocar la invocacion de npx en el wrapper, que los no objetivos de #149 protegen expresamente para no convertir una correccion de higiene en un refactor del harness. Se acepta con fecha de revision corta en vez de dejarlo abierto sin plazo, porque es accionable por nosotros y no depende de terceros: la revision debe ocurrir antes de que una limpieza de la cache de npx pueda materializarlo.",
+        "owner": "RitualBoat",
+        "approvedBy": "RitualBoat",
+        "expiresOn": "2026-10-31",
+        "recovery": "Fijar la resolucion de forma verificable en scripts/gitNexusFts.mjs mediante un change propio: comprobar la version efectiva del binario antes de usarlo y fallar si no coincide con GITNEXUS_VERSION, o resolver el binario por una ruta que no dependa del manifiesto que escribe npx. Al vencer sin correccion, la excepcion caduca y el motor vuelve a contarlo, que es el disparo previsto para forzar la decision."
+      },
+      "createdAt": "2026-07-25",
+      "updatedAt": "2026-07-25",
+      "resolution": null
+    },
+    {
+      "id": "debt-03ac97e64797",
+      "title": "El indice local de GitNexus se degrada en silencio por un mecanismo no reproducido",
+      "description": "El indice local de GitNexus se degrada en silencio por un mecanismo no reproducido",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "preparacion-operativa-sdd-harness",
+      "artifact": ".gitnexus/",
+      "consequence": "El indice puede quedar fresco y a la vez inutil para consultas por UID: 2272 de 2298 nodos Function perdieron su identificador conservando sus aristas, lo que deja sin ruta estructural primaria a todo agente que dependa de GitNexus. Este change lo detecta y lo repara, pero no lo previene, porque la secuencia que lo provoca sigue sin conocerse.",
+      "remediation": "Si el estado reaparece, capturar la secuencia de operaciones que lo produce y escalarlo al proveedor del CLI. Mientras tanto la recuperacion lo absorbe: gitnexus:repair lo detecta por comprobacion observable del resultado y reconstruye el indice.",
+      "evidence": [
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/02-grafo-degradado.txt - 2272 de 2298 nodos Function con id vacio (26 utilizables) y 973 nodos Section, sobre un indice clasificado como fresco",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/03-grafo-tras-rebuild.txt - tras clean --force mas analyze --index-only los 2298 recuperan su id y el fixture resuelve epistemic exact",
+          "date": "2026-07-25"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "restaurar-fixture-estructural-doctor",
+          "date": "2026-07-25"
+        }
+      ],
+      "issue": null,
+      "status": "accepted-exception",
+      "exception": {
+        "reason": "El defecto vive en el CLI de un tercero y no se pudo reproducir: un commit seguido de analyze --index-only sobre el indice sano dejo los 2298 nodos Function con su id intacto, de modo que no hay secuencia conocida que reportar al proveedor ni condicion que prevenir en nuestro codigo. Este change ya absorbe la consecuencia operativa: gitnexus:repair detecta el estado por comprobacion observable del resultado y reconstruye el indice, asi que un docente o un agente no queda bloqueado. Aceptarlo con plazo largo refleja que su cierre depende del proveedor y no de trabajo nuestro, igual que debt-770acc1e9d53.",
+        "owner": "RitualBoat",
+        "approvedBy": "RitualBoat",
+        "expiresOn": "2027-07-24",
+        "recovery": "Si el estado reaparece, capturar la secuencia de operaciones que lo produce con las consultas cypher de la evidencia de #149 y escalarlo al proveedor del CLI con esa reproduccion. Si reaparece en tres flujos, el contador de recurrencia del motor lo convierte en disparador de saneamiento por si solo. Al vencer sin recurrencia, cerrarlo como false-positive con la evidencia de que no volvio a observarse; si reaparecio, renovar con nueva aprobacion o fijar la version del CLI a una que no lo presente."
       },
       "createdAt": "2026-07-25",
       "updatedAt": "2026-07-25",
