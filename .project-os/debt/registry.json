@@ -530,8 +530,14 @@
         }
       ],
       "issue": null,
-      "status": "open",
-      "exception": null,
+      "status": "accepted-exception",
+      "exception": {
+        "reason": "El riesgo es real pero latente y no tiene costo actual: el binario que se ejecuta hoy es 1.6.10-rc.23 y la integridad de su tarball coincide con dist.integrity del registro, asi que ningun resultado vigente depende de una resolucion incorrecta. Cerrarlo dentro de este change exigiria tocar la invocacion de npx en el wrapper, que los no objetivos de #149 protegen expresamente para no convertir una correccion de higiene en un refactor del harness. Se acepta con fecha de revision corta en vez de dejarlo abierto sin plazo, porque es accionable por nosotros y no depende de terceros: la revision debe ocurrir antes de que una limpieza de la cache de npx pueda materializarlo.",
+        "owner": "RitualBoat",
+        "approvedBy": "RitualBoat",
+        "expiresOn": "2026-10-31",
+        "recovery": "Fijar la resolucion de forma verificable en scripts/gitNexusFts.mjs mediante un change propio: comprobar la version efectiva del binario antes de usarlo y fallar si no coincide con GITNEXUS_VERSION, o resolver el binario por una ruta que no dependa del manifiesto que escribe npx. Al vencer sin correccion, la excepcion caduca y el motor vuelve a contarlo, que es el disparo previsto para forzar la decision."
+      },
       "createdAt": "2026-07-25",
       "updatedAt": "2026-07-25",
       "resolution": null
@@ -567,8 +573,14 @@
         }
       ],
       "issue": null,
-      "status": "open",
-      "exception": null,
+      "status": "accepted-exception",
+      "exception": {
+        "reason": "El defecto vive en el CLI de un tercero y no se pudo reproducir: un commit seguido de analyze --index-only sobre el indice sano dejo los 2298 nodos Function con su id intacto, de modo que no hay secuencia conocida que reportar al proveedor ni condicion que prevenir en nuestro codigo. Este change ya absorbe la consecuencia operativa: gitnexus:repair detecta el estado por comprobacion observable del resultado y reconstruye el indice, asi que un docente o un agente no queda bloqueado. Aceptarlo con plazo largo refleja que su cierre depende del proveedor y no de trabajo nuestro, igual que debt-770acc1e9d53.",
+        "owner": "RitualBoat",
+        "approvedBy": "RitualBoat",
+        "expiresOn": "2027-07-24",
+        "recovery": "Si el estado reaparece, capturar la secuencia de operaciones que lo produce con las consultas cypher de la evidencia de #149 y escalarlo al proveedor del CLI con esa reproduccion. Si reaparece en tres flujos, el contador de recurrencia del motor lo convierte en disparador de saneamiento por si solo. Al vencer sin recurrencia, cerrarlo como false-positive con la evidencia de que no volvio a observarse; si reaparecio, renovar con nueva aprobacion o fijar la version del CLI a una que no lo presente."
+      },
       "createdAt": "2026-07-25",
       "updatedAt": "2026-07-25",
       "resolution": null

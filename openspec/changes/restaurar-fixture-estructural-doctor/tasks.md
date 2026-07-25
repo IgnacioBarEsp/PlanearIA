@@ -39,7 +39,7 @@
 ## 6. Cierre
 
 - [x] 6.1 Crear `TLDR.md` y `brownfield-baseline.md` con sus ocho secciones.
-- [ ] 6.2 Crear `readiness.json` con superficies `harness` y `docs`.
-- [ ] 6.3 Revision adversarial en contexto limpio; corregir Blockers y Majors.
-- [ ] 6.4 Capturar el assessment de deuda con el duplicado de #148 y el `external-risk` del rango caret.
-- [ ] 6.5 `npm run openspec:ready:archive -- --change restaurar-fixture-estructural-doctor --run-local` en PASS.
+- [x] 6.2 Crear `readiness.json` con superficies `harness` y `docs`.
+- [x] 6.3 Revision adversarial en contexto limpio; corregir Blockers y Majors.
+- [x] 6.4 Capturar el assessment de deuda con el duplicado de #148 y los dos `external-risk` (rango caret de npx y degradacion del indice), mas el flujo de aceptacion con sus excepciones aprobadas.
+- [x] 6.5 `npm run openspec:ready:archive -- --change restaurar-fixture-estructural-doctor --run-local` en PASS.
