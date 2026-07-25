@@ -6,9 +6,9 @@ import {
   StyleSheet,
   FlatList,
   RefreshControl,
-  useWindowDimensions,
   Platform,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import Animated, { useSharedValue, withRepeat, withTiming, useAnimatedStyle, interpolateColor } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
@@ -95,12 +95,13 @@ const SkeletonPostCard: React.FC = () => {
 
 const FeedScreen: React.FC = () => {
   const { colors } = useTheme();
-  const { width } = useWindowDimensions();
+  // El umbral era 768, el limite movil/tablet del shell.
+  const { isMobile } = useBreakpoint();
   const vm = useFeedViewModel();
   const navigation = useNavigation<any>();
   const route = useRoute<any>();
 
-  const isDesktop = width >= 768;
+  const isDesktop = !isMobile;
 
   const refreshControl = useMemo(
     () => (

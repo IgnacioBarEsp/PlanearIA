@@ -1,0 +1,51 @@
+REVISION ADVERSARIAL: HALLAZGOS Y CORRECCION
+Change: sanear-breakpoints-uxui (Ola 2b, issue #106)
+Fecha: 2026-07-25
+
+Se intento refutar seis afirmaciones del change. Dos cayeron.
+
+MAJOR 1 - La guardia dejaba App.tsx como punto ciego
+  .eslintrc.cjs declara la superficie de producto como
+  ["src/**/*.ts", "src/**/*.tsx", "App.tsx"], pero PRODUCTION_ROOT era solo
+  "src". Un useWindowDimensions en el arranque de la app no habria fallado.
+  Corregido con EXTRA_PRODUCTION_FILES y el fixture fuera-de-src.
+
+MAJOR 2 - Dimensions.get() eludia la guardia por completo
+  Reproducido: un archivo con Dimensions.get("window").width pasaba en verde.
+  Es la lectura congelada que la spec reactive-breakpoints prohibe desde #79
+  ("no aparece ninguna ocurrencia en src/") y que NINGUNA verificacion
+  comprobaba: el mismo defecto que la Ola 2a hallo en el registro de theming,
+  en la requirement de al lado. Ademas es la evasion mas barata de la
+  invariante 1: basta cambiar de primitiva.
+  Corregido con la invariante congelada, el fixture homonimo y una
+  requirement MODIFIED que exige verificacion ejecutable.
+
+REPRODUCCION ANTES DE CORREGIR (arbol de prueba con las dos evasiones)
+  Fuente de dimensiones invalida: 1 hallazgo(s).
+    [no-autorizado] src/screens/EvasionUrl.tsx: ...
+  exit=1
+  -> Evasion.tsx (Dimensions.get) NO aparecia.
+
+DESPUES DE CORREGIR
+  Fuente de dimensiones invalida: 2 hallazgo(s).
+    [congelada] src/screens/Evasion.tsx: usa Dimensions.get(), que fija el ancho al importar el modulo; usa useBreakpoint(), que es reactivo
+    [no-autorizado] src/screens/EvasionUrl.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  exit=1
+
+  Y el arbol real sigue en verde:
+  Fuente de dimensiones valida: 264 archivo(s) de produccion revisados, 1 autorizado(s), techo 1.
+  exit=0  (264 archivos: 263 de src/ mas App.tsx)
+
+AFIRMACIONES QUE RESISTIERON
+  - Equivalencia exacta de predicados. isMobile === width < 768 por
+    construccion de getBreakpoint, asi que !isMobile === width >= 768 y el
+    isDesktop del hook === width >= 1280. Las 11 sustituciones del Grupo A
+    son exactas, no aproximadas.
+  - ContenidoScreen: su isTablet local significaba "768 o mas" e incluia
+    escritorio; el isTablet del hook es 768-1279 y lo excluye. Se derivo de
+    !isMobile. Usar el flag del hook habria cambiado el layout sobre 1280.
+  - Ningun binding colgado: typecheck en exit 0 cubre los 27 archivos.
+  - Hooks llamados antes de todo return temprano en ambos modales.
+  - Accesibilidad, tema, fuente y daltonismo: el diff no toca src/themes ni
+    ningun estilo; check:theming-rollout sigue en 50 entradas y techo 50.
+  - Deuda nueva: react-doctor identico al baseline.

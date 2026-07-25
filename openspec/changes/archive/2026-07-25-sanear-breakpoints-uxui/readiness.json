@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "issue": 106,
+  "change": "sanear-breakpoints-uxui",
+  "surfaces": ["ui", "harness"],
+  "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
+  "evidence": [
+    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/106" },
+    { "id": "pr-link", "ref": "https://github.com/RitualBoat/PlanearIA/pull/147" },
+    {
+      "id": "adversarial-review",
+      "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors corregidos dentro del change: alcance de la guardia fuera de src/ y evasion por Dimensions.get; 3 Minors rastreados) en https://github.com/RitualBoat/PlanearIA/issues/106#issuecomment-5077493057"
+    },
+    {
+      "id": "web-http-200",
+      "ref": "expo start --web (npm run web) en http://localhost:8081; curl devolvio HTTP 200 ANTES de navegar. Registro en openspec/changes/sanear-breakpoints-uxui/evidencia/04-entorno-web.txt."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "Playwright MCP (no el panel Browser, cuyo resize es CDP crudo y no despacha el evento DOM resize). Capturas del journey GJ0 en 375/768/1280 mas los dos pares de limite en evidencia/capturas/, todas con md5 distinto. Alineacion de rango medida en runtime en los dos limites canonicos: en 768 el shell pasa de barra inferior a rail y NotificacionesScreen pasa de sin capar a capada en 720; en 1280 el shell pasa de rail (68px) a sidebar (199px) y ContenidoScreen pasa de sin capar a capada en 600. Limite declarado en evidencia/README.md: el umbral de contenido del Grupo B no es observable en el navegador con sesion de invitado y queda cubierto por el test de componente probado por mutacion."
+    },
+    {
+      "id": "nielsen",
+      "ref": "Severidad Nielsen maxima 0, bajo el umbral de bloqueo 3. Checklist Nielsen y anti-slop completos en evidencia/README.md, aplicados como no regresion porque el change no introduce superficie nueva; npm run qa:visual:check -- --change sanear-breakpoints-uxui --nivel N1 en PASS."
+    },
+    {
+      "id": "fixtures",
+      "ref": "src/__tests__/harness/fixtures/breakpoint-source/ con fixture positivo (arbol sano) y negativos (consumidor no autorizado, elusion por import de namespace, lectura congelada con Dimensions.get, infractor fuera de src/ en App.tsx, entrada muerta, entrada huerfana). src/__tests__/harness/breakpointSource.test.ts cubre los 10 casos y falla si la guardia no los detecta. No vacuidad: contra el arbol sin migrar la guardia enumera los 27 consumidores y sale 1 (evidencia/01-guardia-no-vacua.txt)."
+    }
+  ],
+  "rollback": {
+    "strategy": "Revertir el PR restaura los 27 consumidores directos de useWindowDimensions y elimina la guardia junto con sus pruebas y fixtures. La migracion es mecanica y por archivo, asi que una regresion aislada se revierte sola: se devuelve el import de ese archivo y se reinserta su entrada en la lista autorizada de la guardia, que acepta un techo mas alto mientras la entrada este viva. El change no toca src/hooks/useBreakpoint.ts, los rangos 768/1280, el AppShell, src/themes, src/sync, AsyncStorage, claves @planearia:*, esquemas ni backend, asi que no hay migracion de datos que revertir. Si la guardia molestara, ampliar su lista autorizada o subir su techo desbloquea sin revertir codigo. El assessment y el registro de deuda no se borran al revertir: el item resuelto volveria a abrirse mediante un flujo de saneamiento nuevo, no editando el registro.",
+    "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
+  },
+  "adversarialReview": {
+    "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors corregidos dentro del change) en https://github.com/RitualBoat/PlanearIA/issues/106#issuecomment-5077493057"
+  },
+  "exceptions": []
+}

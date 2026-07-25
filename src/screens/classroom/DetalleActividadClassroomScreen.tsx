@@ -9,8 +9,8 @@ import {
   Text,
   TextInput,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import type { RouteProp } from "@react-navigation/native";
@@ -51,7 +51,7 @@ const parseEntregas = (raw: string | null): EntregaTarea[] => {
 const DetalleActividadClassroomScreen: React.FC = () => {
   const navigation = useNavigation<Navigation>();
   const route = useRoute<Route>();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const { grupoId, tareaId } = route.params;
   const { alumnos } = useAlumnos();
   const { obtenerEntregablePorId, actualizarEntregable } = useEntregables();

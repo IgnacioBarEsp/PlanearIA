@@ -10,8 +10,8 @@ import {
   ScrollView,
   ActivityIndicator,
   Alert,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useNavigation } from "@react-navigation/native";
@@ -39,7 +39,8 @@ const EditarPerfilScreen: React.FC = () => {
   const navigation = useNavigation();
   const { usuario } = useAuth();
   const { colors } = useTheme();
-  const { width } = useWindowDimensions();
+  // El umbral era 768, el limite movil/tablet del shell.
+  const { isMobile } = useBreakpoint();
 
   const [showPhotoPicker, setShowPhotoPicker] = useState(false);
   const [showDiscardDialog, setShowDiscardDialog] = useState(false);
@@ -125,7 +126,7 @@ const EditarPerfilScreen: React.FC = () => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
-          <View style={[styles.card, { maxWidth: width >= 768 ? 560 : 500 }]}>
+          <View style={[styles.card, { maxWidth: isMobile ? 500 : 560 }]}>
             {/* Cover photo */}
             <View style={styles.coverSection}>
               <LinearGradient

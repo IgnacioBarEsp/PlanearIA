@@ -1,0 +1,20 @@
+ENTORNO WEB PARA QA VISUAL
+Change: sanear-breakpoints-uxui (Ola 2b, issue #106)
+Fecha: 2026-07-25
+
+Comando: npm run web  (expo start --web)
+
+HTTP 200 confirmado ANTES de navegar, como exige la regla del repo:
+
+$ curl -s -o /dev/null -w '%{http_code}' http://localhost:8081
+200
+
+$ curl -sI http://localhost:8081 | head -1
+HTTP/1.1 200 OK
+
+Herramienta de QA: Playwright MCP, no el panel Browser.
+Motivo (memoria qa-web-cdp-resize-no-dom-event, corregida en #85): las
+capturas del panel expiran a los 30 s de forma consistente, y su
+resize_window es CDP crudo que no emite el evento DOM resize. browser_resize
+de Playwright usa page.setViewportSize y si lo emite, que es justo lo que
+esta ola necesita medir.

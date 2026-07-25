@@ -1,0 +1,29 @@
+Fuente de dimensiones invalida: 27 hallazgo(s).
+  [no-autorizado] src/components/CrearNuevoModal.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/components/ExpandedStatsModal.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/hooks/useEditorMode.ts: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/alumnos/CrearAlumnoScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/alumnos/ListaAlumnosScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/alumnos/NotasAlumnoScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/alumnos/ReportesAlumnoScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/auth/RegistroScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/ayuda/AyudaScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/classroom/ClassroomGroupScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/classroom/DetalleActividadClassroomScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/contenido/ContenidoScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/cuenta/EditarPerfilScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/feed/FeedScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/feed/PostDetailScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/grupos/DetalleGrupoScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/grupos/ReportesGrupoScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/notificaciones/NotificacionesScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/onboarding/OnboardingScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/perfil/PerfilScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/planeaciones/DocEditorScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/planeaciones/EscanerPlantillaScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/planeaciones/ExportarPlaneacionScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/planeaciones/ImportarPlaneacionScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/plantillas/BibliotecaPlantillasScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/social/BuscadorPerfilesScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/screens/social/SocialScreen.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+exit=1

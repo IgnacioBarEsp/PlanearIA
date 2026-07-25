@@ -8,8 +8,8 @@ import {
   StyleSheet,
   Text,
   View,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LineChart, ProgressChart } from "react-native-chart-kit";
@@ -36,7 +36,7 @@ const chartConfig = {
 const periodos: PeriodoReporte[] = ["Semana", "Mes", "Bimestre", "Personalizado"];
 
 const ReportesGrupoScreen: React.FC = () => {
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const isDesktop = width >= 980;
   const chartWidth = Math.max(300, Math.min(width - 56, 680));
 

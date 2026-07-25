@@ -1,0 +1,42 @@
+REACT DOCTOR: COMPARACION CONTRA EL BASELINE
+Change: sanear-breakpoints-uxui (Ola 2b, issue #106)
+Fecha: 2026-07-25
+
+METODO. Medido con node_modules real en la misma maquina, no por inferencia:
+  1. npx react-doctor@latest --verbose sobre el arbol migrado
+  2. git stash push -u  ->  working tree en 25be40d (el commit base)
+  3. npx react-doctor@latest --verbose sobre el baseline
+  4. git stash pop
+
+Se comparan los hallazgos localizados (regla + archivo + linea), no los
+conteos del resumen: el resumen varia entre corridas de la misma version
+cuando el chequeo de dead-code falla (se observo 191/94, 196/97 y score
+no disponible en corridas consecutivas del mismo arbol).
+
+RESULTADO
+  baseline (25be40d): 189 hallazgos localizados
+  arbol migrado:      189 hallazgos localizados
+  Bugs 90 / Maintainability 67 / Performance 32 en ambos.
+  0 errores en ambos.
+
+Ignorando el numero de linea, los conjuntos son IDENTICOS: mismos hallazgos
+en los mismos archivos. Los 6 pares que aparecen como nuevo/resuelto son el
+mismo hallazgo desplazado por los comentarios que agrega el change:
+  RegistroScreen.tsx        233 -> 235
+  ContenidoScreen.tsx       422 -> 428, 771 -> 777, 352 -> 358
+  NotificacionesScreen.tsx   58 -> 59
+  FeedScreen.tsx            105 -> 106
+
+HALLAZGO CORREGIDO DENTRO DEL CHANGE
+La primera medicion si introdujo un diagnostico nuevo:
+  Maintainability: Large component is hard to read and change
+    src/screens/social/SocialScreen.tsx:473
+SocialScreen estaba una linea por debajo del umbral de tamano de la regla y
+el comentario de una linea que agregaba el change la cruzo. No es un defecto
+de la migracion, pero si un diagnostico nuevo, y la regla del epic es no
+generar mas deuda. Se corrigio volviendo el comentario a la misma linea de
+la declaracion, con lo que el cuerpo del componente queda en su tamano
+original y el diagnostico desaparece. Verificado reejecutando la comparacion
+completa.
+
+No se uso react-doctor --fix en ningun momento.

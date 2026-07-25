@@ -1,0 +1,42 @@
+PRUEBA DE NO VACUIDAD POR MUTACION
+Change: sanear-breakpoints-uxui (Ola 2b, issue #106)
+Fecha: 2026-07-25
+
+Los 3 consumidores probados se revirtieron a su estado previo al change
+(useWindowDimensions directo) con:
+  git checkout HEAD -- src/components/ExpandedStatsModal.tsx \
+                       src/components/CrearNuevoModal.tsx \
+                       src/hooks/useEditorMode.ts
+
+Los tests mockean useBreakpoint (la fuente unica) y NO useWindowDimensions.
+Un consumidor sin migrar ignora ese mock y lee el ancho constante del
+entorno de pruebas, asi que produce la misma salida a los dos anchos.
+Cada caso de reactividad afirma AMBOS lados de su limite en la misma
+prueba, por lo que una mitad falla siempre bajo mutacion.
+
+Se espera que TODOS los casos de reactividad fallen. El unico que debe
+seguir pasando es el ancla de rango, que afirma sobre getBreakpoint y no
+sobre un componente.
+
+--- npx jest src/__tests__/hooks/consumidoresBreakpoint.test.tsx ---
+FAIL src/__tests__/hooks/consumidoresBreakpoint.test.tsx
+  Grupo A: el umbral canonico conmuta en el mismo punto que el shell
+    × conmuta exactamente en 768: movil en 767, escritorio en 768 (597 ms)
+    √ el punto de corte es el mismo que clasifica el shell
+  Grupo B: el umbral de contenido propio se conserva
+    × conmuta exactamente en 900: angosta en 899, ancha en 900 (11 ms)
+    × en 768 sigue angosta: su umbral es 900 y la migracion no lo normalizo (9 ms)
+  Grupo C: las dimensiones crudas provienen de la fuente unica
+    × entrega el ancho y el alto vigentes sin clasificarlos en un rango (1 ms)
+    × sigue al ancho cuando cambia, con su umbral configurable intacto
+
+  ● Grupo A: el umbral canonico conmuta en el mismo punto que el shell › conmuta exactamente en 768: movil en 767, escritorio en 768
+
+    expect(received).toContain(expected) // indexOf
+
+--- guardia contra el arbol mutado ---
+Fuente de dimensiones invalida: 3 hallazgo(s).
+  [no-autorizado] src/components/CrearNuevoModal.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/components/ExpandedStatsModal.tsx: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+  [no-autorizado] src/hooks/useEditorMode.ts: lee useWindowDimensions directo; usa useBreakpoint() de src/hooks/useBreakpoint, que ya expone width, height, fontScale y el rango
+exit=1

@@ -5,10 +5,10 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  useWindowDimensions,
   Platform,
   Share,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import Animated, { useSharedValue, withRepeat, withTiming, useAnimatedStyle, interpolateColor } from "react-native-reanimated";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
@@ -64,7 +64,8 @@ const PerfilScreen: React.FC = () => {
   const { grupos } = useGruposContext();
   const { recursos } = useRecursos();
   const { colors } = useTheme();
-  const { width } = useWindowDimensions();
+  // El umbral era 768, el limite movil/tablet del shell.
+  const { isMobile } = useBreakpoint();
 
   const [isLoading, setIsLoading] = useState(true);
   const [hasError, setHasError] = useState(false);
@@ -77,7 +78,7 @@ const PerfilScreen: React.FC = () => {
     return () => clearTimeout(t);
   }, []);
 
-  const isDesktop = width >= 768;
+  const isDesktop = !isMobile;
   const userName = usuario
     ? `${usuario.nombre}${usuario.apellidos ? ` ${usuario.apellidos}` : ""}`
     : "Usuario";

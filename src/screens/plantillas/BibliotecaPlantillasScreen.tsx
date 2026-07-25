@@ -4,13 +4,13 @@ import {
   Text,
   StyleSheet,
   ScrollView,
-  useWindowDimensions,
   FlatList,
   TextInput,
   Modal,
   Pressable,
   Platform,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -110,7 +110,7 @@ const TIPO_LABELS: Record<string, string> = {
 const BibliotecaPlantillasScreen: React.FC = () => {
   const navigation = useNavigation<Nav>();
   const { plantillas, isLoading, eliminarPlantilla } = usePlantillas();
-  const { width } = useWindowDimensions();
+  const { width } = useBreakpoint();
   const isDesktop = width >= 900;
 
   const [categoriaActiva, setCategoriaActiva] = useState<CategoriaFilter>("todas");

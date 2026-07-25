@@ -11,8 +11,8 @@ import {
   Modal,
   Platform,
   StatusBar,
-  useWindowDimensions,
 } from "react-native";
+import { useBreakpoint } from "../../hooks/useBreakpoint";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { LinearGradient } from "expo-linear-gradient";
@@ -474,8 +474,8 @@ const SocialScreen: React.FC = () => {
   const { colors, isDark } = useTheme();
   const DT = getThemeTokens(colors);
   const styles = getStyles(DT, isDark);
-  const { width } = useWindowDimensions();
-  const isDesktop = width >= 768;
+  const { isMobile } = useBreakpoint(); // 768 era el limite movil/tablet del shell
+  const isDesktop = !isMobile;
   const navigation = useNavigation<any>();
   const vm = useSocialViewModel();
 
