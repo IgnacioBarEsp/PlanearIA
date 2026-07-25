@@ -43,11 +43,11 @@
 
 - [x] 6.1 Correr `npm run typecheck`, `npm run lint -- --quiet` y `npm test -- --runInBand` en verde (salvo la falla local conocida de `spreadsheetDependency` en Windows, que se documenta).
 - [x] 6.2 Correr `npm run test:project-os-contract`, `npm run agent:harness:check`, `npm run agent:opsx:patch:check` y `npm run openspec:validate` en verde.
-- [ ] 6.3 Levantar `expo start --web`, confirmar HTTP 200 antes de navegar y capturar por breakpoint (375/768/1280) en tema claro y oscuro las pantallas migradas alcanzables, alternando el tema desde `CuentaScreen` sin recargar.
-- [ ] 6.4 Verificar que las capturas clara y oscura difieren de verdad, y que la comparacion antes/despues en tema claro no muestra cambios: evidencia no vacua en ambos sentidos.
-- [ ] 6.5 Verificar daltonismo, escala de fuente y alto contraste sobre al menos una pantalla migrada.
-- [ ] 6.6 Correr `npm run qa:visual:check` y completar el checklist Nielsen y el anti-slop sin severidad mayor o igual a 3.
-- [ ] 6.7 Correr React Doctor sobre las rutas tocadas y confirmar cero errores nuevos respecto al baseline de 0 errores y 190 warnings.
+- [x] 6.3 Levantar `expo start --web`, confirmar HTTP 200 antes de navegar y capturar por breakpoint (375/768/1280) en tema claro y oscuro las pantallas migradas alcanzables, alternando el tema desde `CuentaScreen` sin recargar.
+- [x] 6.4 Verificar que las capturas clara y oscura difieren de verdad, y que la comparacion antes/despues en tema claro no muestra cambios: evidencia no vacua en ambos sentidos.
+- [x] 6.5 Verificar daltonismo, escala de fuente y alto contraste sobre al menos una pantalla migrada.
+- [x] 6.6 Correr `npm run qa:visual:check` y completar el checklist Nielsen y el anti-slop sin severidad mayor o igual a 3.
+- [x] 6.7 Correr React Doctor sobre las rutas tocadas y confirmar cero errores nuevos respecto al baseline de 0 errores y 190 warnings.
 
 ## 7. Cierre
 

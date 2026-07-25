@@ -31,12 +31,18 @@ try {
  * Pantalla para crear un nuevo entregable (View)
  * Diseño basado en Stitch screenshots — coincide con el diseño de Figma
  */
+// El hook vive fuera del componente a proposito: componer el tema dentro sumaba
+// lineas a un componente que ya rozaba el umbral de tamano de React Doctor, y la
+// migracion no deberia empeorar ese diagnostico. Conserva la memoizacion porque
+// la identidad del objeto de useAppTheme solo cambia con una preferencia.
+function useThemedStyles() {
+  const theme = useAppTheme();
+  return useMemo(() => getStyles(theme), [theme]);
+}
+
 const CrearTareaGrupoScreen: React.FC = () => {
-  const { colors: DT, isDark, scaled, highContrast } = useAppTheme();
-  const styles = useMemo(
-    () => getStyles({ colors: DT, isDark, scaled, highContrast }),
-    [DT, isDark, scaled, highContrast]
-  );
+  const { colors: DT } = useAppTheme();
+  const styles = useThemedStyles();
 
   const route = useRoute<RouteProp<AppRoutesParamList, "CrearTareaGrupo">>();
   const navigation = useNavigation();

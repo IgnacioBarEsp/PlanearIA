@@ -1,0 +1,10 @@
+Entorno de QA visual (Ola 2a, change sanear-theming-runtime-uxui)
+=================================================================
+Fecha: 2026-07-25
+Rama: feat/sanear-theming-runtime-uxui
+Commit: c032453
+Servidor: expo start --web (npm run web) en http://localhost:8081
+Gate HTTP 200 confirmado ANTES de navegar:
+  curl http://localhost:8081 => HTTP 200
+Herramienta de medicion: Playwright MCP (no el panel Browser), por la convencion
+de QA del proyecto: el panel no despacha el evento resize del DOM al redimensionar.
