@@ -51,7 +51,7 @@
 
 ## 7. Cierre
 
-- [ ] 7.1 Escribir `TLDR.md`, `brownfield-baseline.md` y `readiness.json` en la raiz del change.
-- [ ] 7.2 Ejecutar la revision adversarial en contexto limpio y corregir todos los Blockers y Majors.
-- [ ] 7.3 Capturar el assessment con `resolves` de `debt-b279f64f815b` y la excepcion del fork `DT` de ContenidoScreen.
+- [x] 7.1 Escribir `TLDR.md`, `brownfield-baseline.md` y `readiness.json` en la raiz del change.
+- [x] 7.2 Ejecutar la revision adversarial en contexto limpio y corregir todos los Blockers y Majors.
+- [x] 7.3 Capturar el assessment con `resolves` de `debt-b279f64f815b` y la excepcion del fork `DT` de ContenidoScreen.
 - [ ] 7.4 Correr `npm run openspec:ready:archive -- --change sanear-theming-runtime-uxui --run-local` en PASS.

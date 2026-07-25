@@ -6,19 +6,34 @@
   "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
   "evidence": [
     { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/145" },
-    { "id": "pr-link", "ref": "PENDIENTE: se completa al abrir el PR" },
-    { "id": "adversarial-review", "ref": "PENDIENTE: se completa tras la revision adversarial" },
-    { "id": "web-http-200", "ref": "PENDIENTE: expo start --web respondiendo HTTP 200 antes de navegar" },
-    { "id": "playwright-breakpoints", "ref": "PENDIENTE: capturas 375/768/1280 en tema claro y oscuro" },
-    { "id": "nielsen", "ref": "PENDIENTE: checklist Nielsen sin severidad >= 3" },
-    { "id": "fixtures", "ref": "PENDIENTE: fixtures positivo y negativos de la guardia del registro" }
+    { "id": "pr-link", "ref": "https://github.com/RitualBoat/PlanearIA/pull/146" },
+    {
+      "id": "adversarial-review",
+      "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors y 3 Minors corregidos dentro del change; 3 Minors rastreados) en https://github.com/RitualBoat/PlanearIA/issues/145#issuecomment-5076743302"
+    },
+    {
+      "id": "web-http-200",
+      "ref": "expo start --web (npm run web) en http://localhost:8081; curl devolvio HTTP 200 ANTES de navegar. Registro en openspec/changes/sanear-theming-runtime-uxui/evidencia/02-entorno-web.txt."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "Playwright MCP (no el panel Browser, que no despacha el evento resize del DOM). Capturas del journey GJ0 en 375/768/1280 mas el par claro/oscuro de ClassroomHome en los tres anchos, en evidencia/capturas/. Las capturas clara y oscura difieren en los tres anchos (md5 distinto). Medicion por region: el contenido de ClassroomHome cambia 1.59% de sus pixeles y el shell, ya migrado antes de esta ola, 100%; la atribucion se declara explicitamente en evidencia/README.md."
+    },
+    {
+      "id": "nielsen",
+      "ref": "Severidad Nielsen maxima 1 (cosmetica), bajo el umbral de bloqueo 3. Checklist Nielsen y anti-slop completos en evidencia/README.md; npm run qa:visual:check -- --change sanear-theming-runtime-uxui --nivel N1 en PASS."
+    },
+    {
+      "id": "fixtures",
+      "ref": "src/__tests__/harness/fixtures/theming-rollout/ con fixture positivo (registro sano) y negativos (entrada huerfana, entrada muerta, registro crecido, configuracion ilegible). src/__tests__/harness/themingRollout.test.ts cubre los 7 casos y falla si la guardia no los detecta. No vacuidad: contra el registro sin sanear la guardia reporta las 4 entradas invalidas y sale 1 (evidencia/01-guardia-no-vacua.txt)."
+    }
   ],
   "rollback": {
-    "strategy": "Revertir el PR restaura las seis pantallas a COLORS estatico, devuelve sus entradas al registro de .eslintrc.cjs, restituye la importacion retirada de ContenidoScreen y elimina la guardia junto con sus pruebas. Si solo una pantalla regresa mal, se revierte ese archivo y se reinserta su entrada: las seis migraciones son independientes entre si y la guardia acepta un techo mas alto mientras la entrada este viva. El change no toca src/sync, AsyncStorage, claves @planearia:*, esquemas ni src/themes, asi que no hay migracion de datos ni de tokens que revertir.",
+    "strategy": "Revertir el PR restaura las seis pantallas a COLORS estatico, devuelve sus entradas al registro de .eslintrc.cjs, restituye la importacion retirada de ContenidoScreen y elimina la guardia junto con sus pruebas y fixtures. Si solo una pantalla regresa mal, se revierte ese archivo y se reinserta su entrada: las seis migraciones son independientes entre si y la guardia acepta un techo mas alto mientras la entrada este viva. El change no toca src/sync, AsyncStorage, claves @planearia:*, esquemas ni src/themes, asi que no hay migracion de datos ni de tokens que revertir. El assessment y el registro de deuda no se borran al revertir: el item resuelto volveria a abrirse mediante un flujo de saneamiento nuevo, no editando el registro.",
     "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
   },
   "adversarialReview": {
-    "ref": "PENDIENTE: se completa tras la revision adversarial"
+    "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors y 3 Minors corregidos dentro del change) en https://github.com/RitualBoat/PlanearIA/issues/145#issuecomment-5076743302"
   },
   "exceptions": []
 }
