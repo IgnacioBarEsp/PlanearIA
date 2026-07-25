@@ -22,6 +22,7 @@
     "test:planeaciones": "node scripts/runJest.mjs src/__tests__/planeaciones --runInBand",
     "test:sync": "node scripts/runJest.mjs src/__tests__/sync --runInBand",
     "lint": "eslint . --ext .ts,.tsx,.js,.jsx",
+    "check:theming-rollout": "node scripts/checkThemingRollout.mjs",
     "format": "prettier --write \"src/**/*.{ts,tsx,js,jsx}\" \"types/**/*.{ts,json}\"",
     "backend:install": "npm --prefix backend install",
     "backend:dev": "npm --prefix backend start",

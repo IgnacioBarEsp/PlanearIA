@@ -8,7 +8,8 @@ import WebScrollView from "../../components/WebScrollView";
 import { useAlumnos } from "../../context/AlumnosContext";
 import { useCalificaciones } from "../../context/CalificacionesContext";
 import { useGrupos } from "../../hooks/useGrupos";
-import { COLORS } from "../../../types";
+import { useAppTheme } from "../../themes/useAppTheme";
+import type { ThemedStylesInput } from "../../themes/types";
 import type { AppRoutesParamList } from "../../navigation/StackNavigator";
 import {
   calcularPromediosAlumnos,
@@ -54,6 +55,12 @@ const estadoConfig = {
 };
 
 const PromediosCalificacionesScreen: React.FC<Props> = ({ navigation, route }) => {
+  const { colors: DT, isDark, scaled, highContrast } = useAppTheme();
+  const styles = useMemo(
+    () => getStyles({ colors: DT, isDark, scaled, highContrast }),
+    [DT, isDark, scaled, highContrast]
+  );
+
   const { grupoId } = route.params;
   const { grupos } = useGrupos();
   const { alumnos } = useAlumnos();
@@ -99,7 +106,7 @@ const PromediosCalificacionesScreen: React.FC<Props> = ({ navigation, route }) =
 
   return (
     <SafeAreaView style={styles.safeArea}>
-      <StatusBar barStyle="light-content" backgroundColor={COLORS.primary} />
+      <StatusBar barStyle="light-content" backgroundColor={DT.primary} />
 
       {/* Header */}
       <View style={styles.header}>
@@ -133,7 +140,7 @@ const PromediosCalificacionesScreen: React.FC<Props> = ({ navigation, route }) =
 
         {/* Stats Cards */}
         <View style={styles.statsRow}>
-          <View style={[styles.statCard, { borderLeftColor: COLORS.primary }]}>
+          <View style={[styles.statCard, { borderLeftColor: DT.primary }]}>
             <Text style={styles.statValue}>{stats.promedioGeneral || "--"}</Text>
             <Text style={styles.statLabel}>Promedio General</Text>
           </View>
@@ -177,7 +184,7 @@ const PromediosCalificacionesScreen: React.FC<Props> = ({ navigation, route }) =
         {/* Student Promedios List */}
         {promediosFiltrados.length === 0 ? (
           <View style={styles.emptyState}>
-            <MaterialIcons name="school" size={48} color={COLORS.textSecondary} />
+            <MaterialIcons name="school" size={48} color={DT.textSecondary} />
             <Text style={styles.emptyTitle}>Sin calificaciones registradas</Text>
             <Text style={styles.emptySubtitle}>
               Registra calificaciones para ver los promedios del grupo
@@ -243,7 +250,7 @@ const PromediosCalificacionesScreen: React.FC<Props> = ({ navigation, route }) =
                               ? "#27AE60"
                               : p.estado === "reprobado"
                                 ? "#E74C3C"
-                                : COLORS.text,
+                                : DT.text,
                         },
                       ]}
                     >
@@ -262,289 +269,290 @@ const PromediosCalificacionesScreen: React.FC<Props> = ({ navigation, route }) =
   );
 };
 
-const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: COLORS.primary,
-  },
-  header: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: COLORS.primary,
-    paddingHorizontal: 16,
-    paddingVertical: 14,
-    paddingTop: Platform.OS === "android" ? (StatusBar.currentHeight ?? 0) + 8 : 14,
-  },
-  backButton: {
-    padding: 4,
-    marginRight: 12,
-  },
-  headerTitle: {
-    flex: 1,
-    color: "white",
-    fontSize: 20,
-    fontWeight: "700",
-  },
-  scrollView: {
-    flex: 1,
-    backgroundColor: "#F5F7FA",
-  },
-  // Group Card
-  grupoCard: {
-    marginHorizontal: 16,
-    marginTop: 16,
-    borderRadius: 16,
-    padding: 20,
-    backgroundColor: COLORS.primary,
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 4 },
-        shadowOpacity: 0.15,
-        shadowRadius: 8,
-      },
-      android: { elevation: 4 },
-    }),
-  },
-  grupoLabelBadge: {
-    backgroundColor: "rgba(255,255,255,0.2)",
-    paddingHorizontal: 10,
-    paddingVertical: 3,
-    borderRadius: 12,
-    alignSelf: "flex-start",
-    marginBottom: 8,
-  },
-  grupoLabelText: {
-    color: "white",
-    fontSize: 10,
-    fontWeight: "700",
-    letterSpacing: 1,
-  },
-  grupoNombre: {
-    color: "white",
-    fontSize: 18,
-    fontWeight: "700",
-    marginBottom: 6,
-  },
-  grupoMeta: {
-    flexDirection: "row",
-    alignItems: "center",
-    gap: 6,
-  },
-  grupoMetaText: {
-    color: "rgba(255,255,255,0.8)",
-    fontSize: 12,
-    marginRight: 10,
-  },
-  // Stats
-  statsRow: {
-    flexDirection: "row",
-    marginHorizontal: 16,
-    marginTop: 16,
-    gap: 12,
-  },
-  statCard: {
-    flex: 1,
-    backgroundColor: "white",
-    borderRadius: 12,
-    padding: 16,
-    borderLeftWidth: 4,
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.06,
-        shadowRadius: 6,
-      },
-      android: { elevation: 2 },
-    }),
-  },
-  statValue: {
-    fontSize: 28,
-    fontWeight: "800",
-    color: COLORS.text,
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 12,
-    color: COLORS.textSecondary,
-    fontWeight: "500",
-  },
-  // Parcial Row
-  parcialRow: {
-    flexDirection: "row",
-    marginHorizontal: 16,
-    marginTop: 12,
-    gap: 8,
-  },
-  parcialCard: {
-    flex: 1,
-    backgroundColor: "white",
-    borderRadius: 10,
-    padding: 12,
-    alignItems: "center",
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 1 },
-        shadowOpacity: 0.05,
-        shadowRadius: 4,
-      },
-      android: { elevation: 1 },
-    }),
-  },
-  parcialCardTitle: {
-    fontSize: 11,
-    color: COLORS.textSecondary,
-    fontWeight: "600",
-    marginBottom: 4,
-  },
-  parcialCardValue: {
-    fontSize: 20,
-    fontWeight: "700",
-    color: COLORS.primary,
-  },
-  // Filter
-  filterRow: {
-    flexDirection: "row",
-    marginHorizontal: 16,
-    marginTop: 16,
-    gap: 8,
-    flexWrap: "wrap",
-  },
-  filterPill: {
-    paddingHorizontal: 14,
-    paddingVertical: 8,
-    borderRadius: 20,
-    backgroundColor: "#E8EDF2",
-  },
-  filterPillActive: {
-    backgroundColor: COLORS.primary,
-  },
-  filterPillText: {
-    fontSize: 12,
-    fontWeight: "600",
-    color: COLORS.textSecondary,
-  },
-  filterPillTextActive: {
-    color: "white",
-  },
-  // Empty State
-  emptyState: {
-    alignItems: "center",
-    paddingVertical: 60,
-    paddingHorizontal: 32,
-  },
-  emptyTitle: {
-    fontSize: 18,
-    fontWeight: "700",
-    color: COLORS.text,
-    marginTop: 16,
-    marginBottom: 8,
-  },
-  emptySubtitle: {
-    fontSize: 14,
-    color: COLORS.textSecondary,
-    textAlign: "center",
-    lineHeight: 20,
-  },
-  // List
-  listContainer: {
-    marginHorizontal: 16,
-    marginTop: 16,
-    backgroundColor: "white",
-    borderRadius: 16,
-    overflow: "hidden",
-    ...Platform.select({
-      ios: {
-        shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.06,
-        shadowRadius: 8,
-      },
-      android: { elevation: 2 },
-    }),
-  },
-  tableHeader: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 10,
-    backgroundColor: "#F8F9FB",
-    borderBottomWidth: 1,
-    borderBottomColor: "#E8EDF2",
-  },
-  tableHeaderText: {
-    fontSize: 11,
-    fontWeight: "700",
-    color: COLORS.textSecondary,
-    textTransform: "uppercase",
-    letterSpacing: 0.5,
-  },
-  parcialCol: {
-    width: 36,
-    textAlign: "center",
-  },
-  promedioCol: {
-    width: 50,
-    textAlign: "center",
-  },
-  studentRow: {
-    flexDirection: "row",
-    alignItems: "center",
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    borderBottomWidth: 1,
-    borderBottomColor: "#F0F2F5",
-  },
-  avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: 18,
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: 10,
-  },
-  avatarText: {
-    color: "white",
-    fontSize: 13,
-    fontWeight: "700",
-  },
-  studentInfo: {
-    flex: 1,
-    marginRight: 8,
-  },
-  studentName: {
-    fontSize: 14,
-    fontWeight: "600",
-    color: COLORS.text,
-    marginBottom: 3,
-  },
-  estadoBadge: {
-    alignSelf: "flex-start",
-    paddingHorizontal: 8,
-    paddingVertical: 2,
-    borderRadius: 8,
-  },
-  estadoBadgeText: {
-    fontSize: 10,
-    fontWeight: "600",
-  },
-  parcialValue: {
-    fontSize: 13,
-    fontWeight: "600",
-    color: COLORS.text,
-  },
-  promedioBadge: {
-    width: 50,
-    paddingVertical: 6,
-    borderRadius: 8,
-    alignItems: "center",
-  },
-  promedioValue: {
-    fontSize: 15,
-    fontWeight: "800",
-  },
-});
+const getStyles = ({ colors: DT, isDark, scaled, highContrast }: ThemedStylesInput) =>
+  StyleSheet.create({
+    safeArea: {
+      flex: 1,
+      backgroundColor: DT.primary,
+    },
+    header: {
+      flexDirection: "row",
+      alignItems: "center",
+      backgroundColor: DT.primary,
+      paddingHorizontal: 16,
+      paddingVertical: 14,
+      paddingTop: Platform.OS === "android" ? (StatusBar.currentHeight ?? 0) + 8 : 14,
+    },
+    backButton: {
+      padding: 4,
+      marginRight: 12,
+    },
+    headerTitle: {
+      flex: 1,
+      color: "white",
+      fontSize: 20,
+      fontWeight: "700",
+    },
+    scrollView: {
+      flex: 1,
+      backgroundColor: "#F5F7FA",
+    },
+    // Group Card
+    grupoCard: {
+      marginHorizontal: 16,
+      marginTop: 16,
+      borderRadius: 16,
+      padding: 20,
+      backgroundColor: DT.primary,
+      ...Platform.select({
+        ios: {
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 4 },
+          shadowOpacity: 0.15,
+          shadowRadius: 8,
+        },
+        android: { elevation: 4 },
+      }),
+    },
+    grupoLabelBadge: {
+      backgroundColor: "rgba(255,255,255,0.2)",
+      paddingHorizontal: 10,
+      paddingVertical: 3,
+      borderRadius: 12,
+      alignSelf: "flex-start",
+      marginBottom: 8,
+    },
+    grupoLabelText: {
+      color: "white",
+      fontSize: 10,
+      fontWeight: "700",
+      letterSpacing: 1,
+    },
+    grupoNombre: {
+      color: "white",
+      fontSize: 18,
+      fontWeight: "700",
+      marginBottom: 6,
+    },
+    grupoMeta: {
+      flexDirection: "row",
+      alignItems: "center",
+      gap: 6,
+    },
+    grupoMetaText: {
+      color: "rgba(255,255,255,0.8)",
+      fontSize: 12,
+      marginRight: 10,
+    },
+    // Stats
+    statsRow: {
+      flexDirection: "row",
+      marginHorizontal: 16,
+      marginTop: 16,
+      gap: 12,
+    },
+    statCard: {
+      flex: 1,
+      backgroundColor: "white",
+      borderRadius: 12,
+      padding: 16,
+      borderLeftWidth: 4,
+      ...Platform.select({
+        ios: {
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.06,
+          shadowRadius: 6,
+        },
+        android: { elevation: 2 },
+      }),
+    },
+    statValue: {
+      fontSize: 28,
+      fontWeight: "800",
+      color: DT.text,
+      marginBottom: 4,
+    },
+    statLabel: {
+      fontSize: 12,
+      color: DT.textSecondary,
+      fontWeight: "500",
+    },
+    // Parcial Row
+    parcialRow: {
+      flexDirection: "row",
+      marginHorizontal: 16,
+      marginTop: 12,
+      gap: 8,
+    },
+    parcialCard: {
+      flex: 1,
+      backgroundColor: "white",
+      borderRadius: 10,
+      padding: 12,
+      alignItems: "center",
+      ...Platform.select({
+        ios: {
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 1 },
+          shadowOpacity: 0.05,
+          shadowRadius: 4,
+        },
+        android: { elevation: 1 },
+      }),
+    },
+    parcialCardTitle: {
+      fontSize: 11,
+      color: DT.textSecondary,
+      fontWeight: "600",
+      marginBottom: 4,
+    },
+    parcialCardValue: {
+      fontSize: 20,
+      fontWeight: "700",
+      color: DT.primary,
+    },
+    // Filter
+    filterRow: {
+      flexDirection: "row",
+      marginHorizontal: 16,
+      marginTop: 16,
+      gap: 8,
+      flexWrap: "wrap",
+    },
+    filterPill: {
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      borderRadius: 20,
+      backgroundColor: "#E8EDF2",
+    },
+    filterPillActive: {
+      backgroundColor: DT.primary,
+    },
+    filterPillText: {
+      fontSize: 12,
+      fontWeight: "600",
+      color: DT.textSecondary,
+    },
+    filterPillTextActive: {
+      color: "white",
+    },
+    // Empty State
+    emptyState: {
+      alignItems: "center",
+      paddingVertical: 60,
+      paddingHorizontal: 32,
+    },
+    emptyTitle: {
+      fontSize: 18,
+      fontWeight: "700",
+      color: DT.text,
+      marginTop: 16,
+      marginBottom: 8,
+    },
+    emptySubtitle: {
+      fontSize: 14,
+      color: DT.textSecondary,
+      textAlign: "center",
+      lineHeight: 20,
+    },
+    // List
+    listContainer: {
+      marginHorizontal: 16,
+      marginTop: 16,
+      backgroundColor: "white",
+      borderRadius: 16,
+      overflow: "hidden",
+      ...Platform.select({
+        ios: {
+          shadowColor: "#000",
+          shadowOffset: { width: 0, height: 2 },
+          shadowOpacity: 0.06,
+          shadowRadius: 8,
+        },
+        android: { elevation: 2 },
+      }),
+    },
+    tableHeader: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 16,
+      paddingVertical: 10,
+      backgroundColor: "#F8F9FB",
+      borderBottomWidth: 1,
+      borderBottomColor: "#E8EDF2",
+    },
+    tableHeaderText: {
+      fontSize: 11,
+      fontWeight: "700",
+      color: DT.textSecondary,
+      textTransform: "uppercase",
+      letterSpacing: 0.5,
+    },
+    parcialCol: {
+      width: 36,
+      textAlign: "center",
+    },
+    promedioCol: {
+      width: 50,
+      textAlign: "center",
+    },
+    studentRow: {
+      flexDirection: "row",
+      alignItems: "center",
+      paddingHorizontal: 16,
+      paddingVertical: 12,
+      borderBottomWidth: 1,
+      borderBottomColor: "#F0F2F5",
+    },
+    avatar: {
+      width: 36,
+      height: 36,
+      borderRadius: 18,
+      justifyContent: "center",
+      alignItems: "center",
+      marginRight: 10,
+    },
+    avatarText: {
+      color: "white",
+      fontSize: 13,
+      fontWeight: "700",
+    },
+    studentInfo: {
+      flex: 1,
+      marginRight: 8,
+    },
+    studentName: {
+      fontSize: 14,
+      fontWeight: "600",
+      color: DT.text,
+      marginBottom: 3,
+    },
+    estadoBadge: {
+      alignSelf: "flex-start",
+      paddingHorizontal: 8,
+      paddingVertical: 2,
+      borderRadius: 8,
+    },
+    estadoBadgeText: {
+      fontSize: 10,
+      fontWeight: "600",
+    },
+    parcialValue: {
+      fontSize: 13,
+      fontWeight: "600",
+      color: DT.text,
+    },
+    promedioBadge: {
+      width: 50,
+      paddingVertical: 6,
+      borderRadius: 8,
+      alignItems: "center",
+    },
+    promedioValue: {
+      fontSize: 15,
+      fontWeight: "800",
+    },
+  });
 
 export default PromediosCalificacionesScreen;
