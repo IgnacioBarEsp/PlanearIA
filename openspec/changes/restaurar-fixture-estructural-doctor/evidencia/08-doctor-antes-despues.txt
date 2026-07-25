@@ -16,15 +16,14 @@ Y la causa capturada de primera mano en esta sesion, misma cadena que emite ese 
 
 El detalle del grafo en ese estado esta en 01-indice-degradado.txt y 02-grafo-degradado.txt.
 
-=== DESPUES (tras el rebuild completo, mismo commit) ===
-Harness doctor: FAIL
+=== DESPUES (rama del change, indice fresco tras gitnexus:repair) ===
+Harness doctor: PASS
 PASS node-npm: Node v26.4.0; npm 11.17.0.
 WARN git-worktree: Repositorio Git valido con cambios locales.
       Recuperacion: Clasifica o aisla los cambios antes de iniciar otro change.
 PASS openspec: OpenSpec local y artefactos validos.
 PASS github-projects: Project PlanearIA Product OS visible.
-FAIL gitnexus: El indice de GitNexus esta stale frente al checkout actual; la ruta estructural primaria decidiria con un grafo atrasado.
-      Recuperacion: Ejecuta npm run gitnexus:repair y despues npm run gitnexus:verify. El doctor no repara ni reindexa por si mismo.
+PASS gitnexus: GitNexus responde con indice fresco y verificacion estructural resuelta.
 PASS codegraph: CodeGraph MCP responde como fallback lineado.
 PASS harness-parity: Los espejos del harness estan en paridad.
 PASS mcp-parity: Los MCP activos estan en paridad.
@@ -32,7 +31,12 @@ WARN mcp-smoke: MCP activo responde; expo requiere consentimiento OAuth interact
       Recuperacion: Autoriza expo en una sesion MCP interactiva si una tarea lo necesita; el smoke conserva ok:false hasta entonces.
 PASS expo-compatibility: Las dependencias Expo son compatibles con la version instalada.
 SKIP graphify: Graphify retirado/manual; no forma parte del harness activo.
-exit=1
+exit=0
 
+El check gitnexus vuelve a PASS con la verificacion estructural resuelta, que era el objetivo.
 El unico WARN es mcp-smoke por OAuth interactivo de expo/figma: preexistente, ajeno a este change
 y sin efecto sobre el veredicto agregado.
+
+=== La recuperacion nueva se ejercito de verdad en esta rama ===
+Tras commitear, el indice quedo stale y 'npm run gitnexus:repair' lo reindexo (26.7s) y despues
+comprobo la estructura; 'npm run gitnexus:verify' confirmo el contrato completo.
