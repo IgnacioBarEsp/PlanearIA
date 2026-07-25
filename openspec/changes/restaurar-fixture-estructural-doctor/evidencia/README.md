@@ -10,11 +10,12 @@ Levantada sobre `development@b967275` y la rama `feat/restaurar-fixture-estructu
 | `01-indice-degradado.txt` | Estado del indice que producia el FAIL: `impact --uid Function:` responde `not found`, `impact` por nombre devuelve dos candidatos y el que tiene 202 impactados llega con `uid` vacio |
 | `02-grafo-degradado.txt` | El grafo en ese estado: el nodo `Function` del fixture con `id` vacio y 2 aristas entrantes; 2272 de 2298 nodos `Function` sin `id`, mas 973 `Section` |
 | `03-grafo-tras-rebuild.txt` | Tras `clean --force` + `analyze --index-only`: 2298/2298 nodos `Function` con `id` y el fixture resolviendo `epistemic: exact` con 1 dependiente directo |
-| `04-no-vacuidad-mutacion.txt` | Las dos mutaciones que la regresion nueva debe detectar, con el exit real de la suite |
+| `04-no-vacuidad-mutacion.txt` | 7 mutaciones del codigo de produccion, 0 supervivientes, con el exit real de la suite |
 | `05-version-fijada.txt` | Refutacion de la hipotesis de version, y el hallazgo lateral del rango caret de `npx` |
 | `06-verificacion-documental.txt` | Contraste programatico de cada `**Estado:**` del plan UX/UI contra `openspec/changes/archive/` |
 | `07-validacion.txt` | Suite de validacion tecnica |
 | `08-doctor-antes-despues.txt` | `harness:doctor` antes y despues |
+| `09-peldano-escalado.txt` | Los dos subcomandos del peldano escalado (`clean --force` y el reindex) contra el CLI real, y el indice sano resultante |
 
 ## Conclusion de la investigacion
 
@@ -35,6 +36,14 @@ resolucion estructural y escala a un rebuild completo antes de rendirse.
   del resultado.
 - **El peldano `analyze --force` se omitio a proposito.** Seria mas barato que `clean`, pero no se pudo
   medir contra el estado danado porque no se reprodujo. No se anade a la escalada un peldano supuesto.
+- **La rama de escalada esta probada por unidad, no end to end.** Las 7 mutaciones de `04` cubren su
+  logica; `09` comprueba que sus dos subcomandos existen y funcionan contra el CLI real. Falta el
+  ensayo completo porque exigiria reproducir el estado degradado.
+- **El arnes de mutacion tuvo que corregirse a si mismo.** Su primera version invocaba `npm.cmd` con
+  `spawnSync` y devolvia `exit null` en todas las corridas, incluida la limpia: con eso toda mutacion
+  parecia detectada. Lo delato la corrida limpia, que tambien daba `null`. Se deja anotado porque es el
+  mismo modo de fallo que este change corrige: un verificador que no puede emitir veredicto no esta
+  emitiendo un veredicto favorable.
 - **El `harness:doctor` en FAIL no se capturo de primera mano** en esta sesion: la degradacion se
   diagnostico directamente sobre la verificacion estructural, que es la cadena que produce ese FAIL. El
   texto del FAIL se cita del issue #149 y la causa esta capturada en `01` y `02`.

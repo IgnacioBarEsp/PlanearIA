@@ -1,0 +1,40 @@
+Los dos comandos del peldano escalado, contra el CLI real
+fecha: 2026-07-25   rama: feat/restaurar-fixture-estructural-doctor
+
+Limite declarado: la rama de escalada esta probada por unidad (7 mutaciones, ver 04). No se pudo
+ejercitar end to end porque el estado degradado no se reprodujo. Lo que si se comprueba aqui es que
+los dos subcomandos que emite ese peldano existen, aceptan sus banderas y dejan el indice sano.
+
+=== gitnexus clean --help (alcance y bandera) ===
+Usage: gitnexus clean [options]
+
+Delete GitNexus index for current repo
+
+Options:
+  -f, --force      Skip confirmation prompt
+  --all            Clean all indexed repos
+  --branch <name>  Delete only the named branch index (not the workspace index)
+
+=== clean --force ===
+Deleted: C:\Users\RitualBoatLaptop\Documents\Projects\PlanearIA\.gitnexus
+exit=0
+
+=== analyze --index-only (el reindex del rebuild, via npm run gitnexus:repair) ===
+
+
+  Repository indexed successfully (29.6s)
+
+  11,867 nodes | 19,047 edges | 334 clusters | 300 flows
+  C:\Users\RitualBoatLaptop\Documents\Projects\PlanearIA
+exit=0
+
+=== estado resultante ===
+
+GitNexus FTS verification passed.
+exit=0
+  "markdown": "| function_con_id |\n| --- |\n| 2301 |",
+  "markdown": "| total_function |\n| --- |\n| 2301 |",
+
+=== git status --porcelain (clean no toca archivos versionados) ===
+ M openspec/changes/restaurar-fixture-estructural-doctor/evidencia/04-no-vacuidad-mutacion.txt
+?? openspec/changes/restaurar-fixture-estructural-doctor/evidencia/09-peldano-escalado.txt

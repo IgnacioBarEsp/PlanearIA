@@ -480,6 +480,10 @@
         {
           "flow": "sanear-theming-runtime-uxui",
           "date": "2026-07-25"
+        },
+        {
+          "flow": "restaurar-fixture-estructural-doctor",
+          "date": "2026-07-25"
         }
       ],
       "issue": null,
@@ -491,6 +495,80 @@
         "expiresOn": "2027-07-24",
         "recovery": "Al ampliar los tokens en design-tokens (#80), migrar las 111 referencias de la paleta local a tokens y verificar el repintado por breakpoint en ambos temas. Si al vencer la excepcion los tokens siguen sin cubrir la paleta, reevaluar con nueva aprobacion o devolver la pantalla al registro del rollout mediante un PR normal."
       },
+      "createdAt": "2026-07-25",
+      "updatedAt": "2026-07-25",
+      "resolution": null
+    },
+    {
+      "id": "debt-c17e54bcccf7",
+      "title": "npx no fija de forma exacta la version de GitNexus que el wrapper declara pineada",
+      "description": "npx no fija de forma exacta la version de GitNexus que el wrapper declara pineada",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "preparacion-operativa-sdd-harness",
+      "artifact": "scripts/gitNexusFts.mjs",
+      "consequence": "GITNEXUS_VERSION promete un binario fijo, pero npx escribe un rango caret en el manifiesto de su directorio efimero. Mientras sobreviva el lockfile de esa cache el binario es el declarado; si la cache se limpia, la resolucion puede traer un build distinto sin que ningun comando lo advierta, y con el la clasificacion del grafo de la que depende el fixture estructural del doctor.",
+      "remediation": "Fijar la resolucion de forma verificable: comprobar la version efectiva antes de usarla, o resolver el binario por una ruta que no dependa del manifiesto que escribe npx. No se aborda en este change porque excede el alcance del issue y exigiria tocar la invocacion del wrapper, que sus no objetivos protegen.",
+      "evidence": [
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/05-version-fijada.txt - el manifiesto efimero de npx declara {\"gitnexus\":\"^1.6.10-rc.23\"}; semver.satisfies confirma que ese rango admite 1.6.10-rc.109, 1.6.10 final y 1.7.0",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "comando",
+          "ref": "Mismo archivo: la integridad del tarball resuelto hoy coincide con dist.integrity del registro para 1.6.10-rc.23, de modo que el riesgo es latente y no esta materializado",
+          "date": "2026-07-25"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "restaurar-fixture-estructural-doctor",
+          "date": "2026-07-25"
+        }
+      ],
+      "issue": null,
+      "status": "open",
+      "exception": null,
+      "createdAt": "2026-07-25",
+      "updatedAt": "2026-07-25",
+      "resolution": null
+    },
+    {
+      "id": "debt-03ac97e64797",
+      "title": "El indice local de GitNexus se degrada en silencio por un mecanismo no reproducido",
+      "description": "El indice local de GitNexus se degrada en silencio por un mecanismo no reproducido",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "preparacion-operativa-sdd-harness",
+      "artifact": ".gitnexus/",
+      "consequence": "El indice puede quedar fresco y a la vez inutil para consultas por UID: 2272 de 2298 nodos Function perdieron su identificador conservando sus aristas, lo que deja sin ruta estructural primaria a todo agente que dependa de GitNexus. Este change lo detecta y lo repara, pero no lo previene, porque la secuencia que lo provoca sigue sin conocerse.",
+      "remediation": "Si el estado reaparece, capturar la secuencia de operaciones que lo produce y escalarlo al proveedor del CLI. Mientras tanto la recuperacion lo absorbe: gitnexus:repair lo detecta por comprobacion observable del resultado y reconstruye el indice.",
+      "evidence": [
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/02-grafo-degradado.txt - 2272 de 2298 nodos Function con id vacio (26 utilizables) y 973 nodos Section, sobre un indice clasificado como fresco",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/03-grafo-tras-rebuild.txt - tras clean --force mas analyze --index-only los 2298 recuperan su id y el fixture resuelve epistemic exact",
+          "date": "2026-07-25"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "restaurar-fixture-estructural-doctor",
+          "date": "2026-07-25"
+        }
+      ],
+      "issue": null,
+      "status": "open",
+      "exception": null,
       "createdAt": "2026-07-25",
       "updatedAt": "2026-07-25",
       "resolution": null

@@ -1,0 +1,104 @@
+{
+  "schemaVersion": 1,
+  "flow": "restaurar-fixture-estructural-doctor",
+  "date": "2026-07-25",
+  "kind": "remediation",
+  "result": "debt",
+  "candidates": [
+    {
+      "title": "Literales de color de ClassroomHome sin equivalente en la paleta de tokens (#148)",
+      "artifact": "src/screens/classroom/ClassroomHomeScreen.tsx",
+      "source": "Verificacion de higiene al cerrar el epic de saneamiento #141 (Ola 2b, #106); rastreado en el issue #148",
+      "category": "duplicate",
+      "duplicateOf": "debt-f7ff020d5dee",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "En tema oscuro la pantalla sigue mostrando tarjetas claras: el contenido solo cambia 1.59% de sus pixeles al alternar tema, frente al 100% de la barra lateral y el 99.86% del encabezado, que si estan migrados.",
+      "remediation": "Ampliar la paleta de tokens o consolidar en roles semanticos, y aplicar la estrategia elegida a la pantalla. Es la misma recuperacion que ya tiene registrada debt-f7ff020d5dee; se cierra por la misma via.",
+      "evidence": [
+        {
+          "type": "issue",
+          "ref": "https://github.com/RitualBoat/PlanearIA/issues/148 - 55 de 67 puntos de color son literales hexadecimales (82.1%); 22 valores unicos, varios de superficies claras que no se invierten en tema oscuro",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "medicion",
+          "ref": "openspec/changes/archive/2026-07-25-sanear-theming-runtime-uxui/evidencia/ - delta de pixeles por region al alternar tema: contenido 1.59%, barra lateral 100%, encabezado 99.86%",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "registro",
+          "ref": "debt-f7ff020d5dee 'ContenidoScreen pinta desde una paleta local forkeada en vez de tokens', technical-debt minor, accepted-exception hasta 2027-07-24, plan uxui-navegacion-global",
+          "date": "2026-07-25"
+        }
+      ],
+      "verification": {
+        "method": "Contraste de causa raiz y recuperacion contra el item existente en .project-os/debt/registry.json, leido con node. debt-f7ff020d5dee describe una pantalla que pinta desde colores sin equivalente en la paleta de tokens y se recupera ampliando tokens; #148 describe exactamente lo mismo sobre otra pantalla, con la misma salida y la misma fecha de revision. El propio #148 declara que un item nuevo seria un duplicate en el vocabulario del motor y que lo que faltaba era trazabilidad, no contabilidad.",
+        "result": "Confirmado como duplicate de debt-f7ff020d5dee: misma causa raiz (colores sin equivalente en la paleta) y misma recuperacion (ampliar o consolidar tokens). No crea item propio ni consume presupuesto; suma una occurrence al item existente, que es lo que preserva el contador de recurrencia como disparador de saneamiento. El issue #148 queda ABIERTO: es trabajo de producto pendiente y solo gano trazabilidad en el registro.",
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "title": "npx no fija de forma exacta la version de GitNexus que el wrapper declara pineada",
+      "artifact": "scripts/gitNexusFts.mjs",
+      "source": "Investigacion de causa raiz de #149 al descartar la hipotesis de version",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "preparacion-operativa-sdd-harness",
+      "consequence": "GITNEXUS_VERSION promete un binario fijo, pero npx escribe un rango caret en el manifiesto de su directorio efimero. Mientras sobreviva el lockfile de esa cache el binario es el declarado; si la cache se limpia, la resolucion puede traer un build distinto sin que ningun comando lo advierta, y con el la clasificacion del grafo de la que depende el fixture estructural del doctor.",
+      "remediation": "Fijar la resolucion de forma verificable: comprobar la version efectiva antes de usarla, o resolver el binario por una ruta que no dependa del manifiesto que escribe npx. No se aborda en este change porque excede el alcance del issue y exigiria tocar la invocacion del wrapper, que sus no objetivos protegen.",
+      "evidence": [
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/05-version-fijada.txt - el manifiesto efimero de npx declara {\"gitnexus\":\"^1.6.10-rc.23\"}; semver.satisfies confirma que ese rango admite 1.6.10-rc.109, 1.6.10 final y 1.7.0",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "comando",
+          "ref": "Mismo archivo: la integridad del tarball resuelto hoy coincide con dist.integrity del registro para 1.6.10-rc.23, de modo que el riesgo es latente y no esta materializado",
+          "date": "2026-07-25"
+        }
+      ],
+      "verification": {
+        "method": "Lectura del package.json que npx escribe en su directorio de cache y de su .package-lock.json, mas evaluacion del rango con el paquete semver instalado, contrastando contra dist.integrity y la fecha de publicacion que devuelve el registro npm.",
+        "result": "Confirmado como riesgo real pero latente: hoy el binario ejecutado es 1.6.10-rc.23 y su integridad coincide con la del registro, asi que no es la causa del fallo de #149 y no afecta ningun resultado vigente. El riesgo es de reproducibilidad futura ante una cache limpia.",
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "title": "El indice local de GitNexus se degrada en silencio por un mecanismo no reproducido",
+      "artifact": ".gitnexus/",
+      "source": "Investigacion de causa raiz de #149",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "preparacion-operativa-sdd-harness",
+      "consequence": "El indice puede quedar fresco y a la vez inutil para consultas por UID: 2272 de 2298 nodos Function perdieron su identificador conservando sus aristas, lo que deja sin ruta estructural primaria a todo agente que dependa de GitNexus. Este change lo detecta y lo repara, pero no lo previene, porque la secuencia que lo provoca sigue sin conocerse.",
+      "remediation": "Si el estado reaparece, capturar la secuencia de operaciones que lo produce y escalarlo al proveedor del CLI. Mientras tanto la recuperacion lo absorbe: gitnexus:repair lo detecta por comprobacion observable del resultado y reconstruye el indice.",
+      "evidence": [
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/02-grafo-degradado.txt - 2272 de 2298 nodos Function con id vacio (26 utilizables) y 973 nodos Section, sobre un indice clasificado como fresco",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "comando",
+          "ref": "openspec/changes/restaurar-fixture-estructural-doctor/evidencia/03-grafo-tras-rebuild.txt - tras clean --force mas analyze --index-only los 2298 recuperan su id y el fixture resuelve epistemic exact",
+          "date": "2026-07-25"
+        }
+      ],
+      "verification": {
+        "method": "Consultas cypher contra el grafo antes y despues de un rebuild completo, mas un intento explicito de reproduccion: commit sobre el indice sano seguido de analyze --index-only, midiendo de nuevo el conteo de nodos Function con id.",
+        "result": "Degradacion confirmada y reparacion confirmada; mecanismo NO reproducido. El intento de reproduccion dejo 2298 de 2298 nodos con su id intacto, asi que un solo paso incremental no lo provoca. Se registra el estado observado, no un mecanismo probado.",
+        "date": "2026-07-25"
+      }
+    }
+  ],
+  "exceptions": [],
+  "notes": "Flujo de remediacion de #149. La hipotesis del issue (el indexador reclasifico el simbolo y el fixture quedo obsoleto) quedo refutada con evidencia y comentada en el propio issue; FIXTURE_UID no se toco. El defecto corregido es que la recuperacion medía su exito solo por la frescura. La revision adversarial independiente dio FAIL inicial con 2 Majors, ambos corregidos dentro del change y cubiertos por regresion nueva: el camino escalado no reaplicaba las post-condiciones de frescura y FTS, y un fallo duro del CLI se saltaba la escalada entera. Ningun candidato de este assessment nace del codigo escrito aqui: el duplicate es trabajo de producto preexistente y los dos external-risk son condiciones de terceros descubiertas al investigar."
+}
