@@ -8,7 +8,7 @@ La recuperacion que el selector ofrece SHALL corresponder a la causa: recargar l
 
 Cuando una escritura fallida alcanzo a modificar y encolar parte de los elementos, el selector SHALL informar cuantos quedaron guardados y cuantos siguen pendientes. SHALL NOT presentar el fallo como si no se hubiera guardado nada, porque lo ya escrito quedo encolado y se subira igual.
 
-Un reintento de la escritura SHALL escribir unicamente los elementos que aun no quedaron escritos y encolados hacia el destino vigente, de modo que no se dupliquen operaciones en la cola del motor de sincronizacion. Cuando el destino cambia despues de un fallo parcial, el reintento SHALL escribir de nuevo todos los elementos hacia el destino nuevo, porque lo escrito antes apunta al destino anterior.
+Un reintento de la escritura SHALL escribir unicamente los elementos que aun no quedaron escritos y encolados hacia el destino vigente, y el conteo informado SHALL acumular los intentos, de modo que el resultado final diga cuantos elementos quedaron asignados y no cuantos entraron en el ultimo intento. Cuando el destino cambia despues de un fallo parcial, el reintento SHALL escribir de nuevo todos los elementos hacia el destino nuevo, porque lo escrito antes apunta al destino anterior.
 
 #### Scenario: Falla la escritura de la asignacion
 
@@ -28,7 +28,7 @@ Un reintento de la escritura SHALL escribir unicamente los elementos que aun no 
 #### Scenario: El docente reintenta tras un fallo parcial
 
 - **WHEN** el docente reintenta la asignacion tras un fallo parcial sin cambiar el destino
-- **THEN** solo se escriben y encolan los elementos que quedaban pendientes, y los ya encolados no producen una segunda operacion en la cola
+- **THEN** solo se escriben y encolan los elementos que quedaban pendientes, y el resultado informa el total acumulado de elementos asignados, no solo los del ultimo intento
 
 #### Scenario: El docente cambia el destino tras un fallo parcial
 

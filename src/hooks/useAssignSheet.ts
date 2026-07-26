@@ -299,9 +299,11 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
     try {
       for (const elemento of elementos) {
         const marca = marcaElemento(elemento);
-        // Reintentar no reescribe lo ya resuelto: `actualizar*` encola en el motor, asi que
-        // repetirlo duplicaria operaciones en la unica cola sancionada sin cambiar el
-        // destino final.
+        // Reintentar no reescribe lo ya resuelto. La cola deduplica los `update` del mismo
+        // id, asi que no habria operaciones repetidas; lo que se evita es otra cosa: que el
+        // conteo se reinicie en cada intento, pagar persistencia y flush por trabajo ya
+        // hecho, y reencolar un elemento que ya esperaba, cosa que le borra el contador de
+        // reintentos y lo manda al final de la cola.
         if (avance.procesados.has(marca)) continue;
 
         if (elemento.tipo === "recurso") {

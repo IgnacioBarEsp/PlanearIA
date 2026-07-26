@@ -340,8 +340,10 @@ describe("useAssignSheet", () => {
         await result.current.asignar();
       });
 
-      // Tres llamadas en total, no cuatro: el elemento 1 ya estaba escrito Y ENCOLADO, y
-      // repetirlo duplicaria su operacion en la unica cola sancionada por #84.
+      // Tres llamadas en total, no cuatro: el elemento 1 ya estaba escrito y encolado. La
+      // cola deduplica por id, asi que repetirlo no crearia una operacion de mas; lo que
+      // evita saltarselo es reiniciar el conteo, pagar persistencia y flush por trabajo ya
+      // hecho, y devolver al final de la cola una operacion que ya esperaba.
       expect(mockActualizarRecurso).toHaveBeenCalledTimes(3);
       expect(mockActualizarRecurso.mock.calls[2][0]).toBe(2);
       expect(result.current.errorEscritura).toBeNull();
