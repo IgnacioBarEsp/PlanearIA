@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "issue": 114,
+  "change": "adoptar-assign-sheet-contenido",
+  "surfaces": ["ui", "sync"],
+  "validations": ["openspec-strict", "sync-tests"],
+  "evidence": [
+    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/114" },
+    { "id": "pr-link", "ref": "PENDIENTE: se completa al abrir el PR en opsx:finish." },
+    { "id": "adversarial-review", "ref": "PENDIENTE: se completa tras la revision adversarial en contexto limpio." },
+    { "id": "web-http-200", "ref": "PENDIENTE: expo start --web con HTTP 200 verificado antes de navegar; registro en evidencia/." },
+    { "id": "playwright-breakpoints", "ref": "PENDIENTE: capturas en 375/768/1280, tema claro y oscuro, midiendo el panel por data-testid." },
+    { "id": "nielsen", "ref": "PENDIENTE: checklist Nielsen con severidad 0-4 y checklist anti-slop de la seccion 1.9." },
+    { "id": "offline-reconnect", "ref": "PENDIENTE: asignar sin conexion, reconectar y comprobar subida sin intervencion." },
+    { "id": "cross-device", "ref": "PENDIENTE: la asignacion encolada llega al backend y es visible desde otro origen." },
+    { "id": "no-local-loss", "ref": "PENDIENTE: la asignacion sobrevive a un pull con trabajo pendiente (reconcileWithPending)." }
+  ],
+  "rollback": {
+    "strategy": "Revertir el commit del PR devuelve el alert 'Proximamente' de la accion asignar, restaura la lista estatica de opciones del menu y restaura el alert de exito incondicional de handleConfirmSelection. No hay migracion de datos que revertir: el change no crea, renombra ni borra claves de almacenamiento, no cambia esquema, no toca src/sync ni el backend ni configuracion remota ni proyecto nativo. Las asignaciones ya escritas y encoladas antes del rollback siguen siendo validas y se suben igual, porque viajan por el motor de sincronizacion vigente y no por nada que este change introduzca. Las dos correcciones (adopcion de la hoja y anuncio de resultado del modo seleccion) son independientes entre si y viven en bloques separados del mismo archivo, asi que una regresion aislada se revierte sola sin arrastrar a la otra. La paleta local DT no se toca, asi que revertir no puede afectarla. El assessment y el registro de deuda no se borran al revertir: un item resuelto volveria a abrirse mediante un flujo de saneamiento nuevo, no editando el registro.",
+    "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
+  },
+  "adversarialReview": {
+    "ref": "PENDIENTE: se completa tras la revision adversarial en contexto limpio."
+  },
+  "exceptions": []
+}
