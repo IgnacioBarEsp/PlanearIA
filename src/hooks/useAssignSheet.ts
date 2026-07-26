@@ -114,13 +114,6 @@ interface ProgresoEscritura {
   syncOk: boolean;
 }
 
-const PROGRESO_VACIO = (): ProgresoEscritura => ({
-  clave: claveDestino(DESTINO_VACIO),
-  procesados: new Set<string>(),
-  asignados: 0,
-  syncOk: true,
-});
-
 export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewModel {
   const { grupos, isLoading: cargandoClases } = useGruposContext();
   const { actualizarRecurso, obtenerRecursoPorId } = useRecursos();
@@ -142,7 +135,11 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
   // Vive en una ref y no en estado porque no se pinta: lo que la hoja muestra son los
   // conteos ya volcados en `errorEscritura` y en `resultado`. Guardarlo en estado forzaria
   // un render por elemento escrito sin cambiar nada de lo que se ve.
-  const progreso = useRef<ProgresoEscritura>(PROGRESO_VACIO());
+  //
+  // Arranca en null en vez de en un progreso vacio: pasarle un objeto al `useRef` lo
+  // construiria en cada render para que React lo descarte, y aqui eso incluye un `Set`
+  // nuevo cada vez. `null` ademas dice lo que corresponde: todavia no hay progreso.
+  const progreso = useRef<ProgresoEscritura | null>(null);
 
   useEffect(() => {
     const grupoId = destino.grupoId;
@@ -251,7 +248,7 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
     // La clave de destino ya impide cruzar progreso entre destinos, pero no distingue volver
     // a abrir la hoja y elegir el mismo destino: sin este reset el conteo de la sesion
     // anterior se arrastraria a la nueva.
-    progreso.current = PROGRESO_VACIO();
+    progreso.current = null;
   }, []);
 
   const resumenDestino = useMemo(() => {
@@ -288,7 +285,7 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
     // Un intento sobre un destino distinto del que produjo el progreso empieza de cero: lo
     // escrito antes apunta al destino anterior y hay que reescribirlo hacia el nuevo.
     const clave = claveDestino(destino);
-    if (progreso.current.clave !== clave) {
+    if (progreso.current === null || progreso.current.clave !== clave) {
       progreso.current = { clave, procesados: new Set<string>(), asignados: 0, syncOk: true };
     }
     const avance = progreso.current;
