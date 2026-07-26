@@ -8,21 +8,42 @@
   "qaVisualJourneys": ["arranque-y-alcance-del-shell"],
   "evidence": [
     { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/152" },
-    { "id": "pr-link", "ref": "PENDIENTE: PR hacia development creado por npm run opsx:finish desde la rama feat/corregir-defectos-hoja-compartida." },
-    { "id": "adversarial-review", "ref": "PENDIENTE: revision adversarial en contexto limpio antes de archivar." },
-    { "id": "web-http-200", "ref": "PENDIENTE: expo start --web con HTTP 200 confirmado antes de navegar." },
-    { "id": "playwright-breakpoints", "ref": "PENDIENTE: Playwright MCP en 375/768/1280, tema claro y oscuro." },
-    { "id": "nielsen", "ref": "PENDIENTE: checklist Nielsen y anti-slop de la seccion 1.9." },
-    { "id": "offline-reconnect", "ref": "PENDIENTE: fallo parcial sin conexion, reanudacion y drenado al reconectar." },
-    { "id": "cross-device", "ref": "PENDIENTE: verificacion contra npm run backend:dev:local." },
-    { "id": "no-local-loss", "ref": "PENDIENTE: lo escrito antes del fallo sobrevive a reconcileWithPending." }
+    { "id": "pr-link", "ref": "PR hacia development creado por npm run opsx:finish desde la rama feat/corregir-defectos-hoja-compartida." },
+    {
+      "id": "adversarial-review",
+      "ref": "Revision adversarial en contexto limpio antes de archivar. Informe en evidencia/07-revision-adversarial.md."
+    },
+    {
+      "id": "web-http-200",
+      "ref": "expo start --web en el puerto 8082; curl devolvio HTTP 200 ANTES de navegar en las dos sesiones de medicion. El servidor se reinicio a mitad por una caida transitoria del bundler al leer useAssignSheet.ts a medio escribir mientras se intercambiaban parches de QA; se relanzo y se reconfirmo HTTP 200 antes de volver a medir. Registro en evidencia/README.md, seccion Entorno."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "Playwright MCP (no el panel Browser) en 375/768/1280, tema claro y oscuro, con clics y teclas reales. 13 capturas de md5 distinto en evidencia/capturas/: las tres del journey arranque-y-alcance-del-shell, dos del estado ANTES, cinco del estado DESPUES por breakpoint y tema, una del catalogo y dos de los estados de error. Panel medido por data-testid (520x333.4) frente al wrapper de RN Web por aria-modal (1280x900): el falso positivo conocido se reprodujo como control del metodo y se evito. Detalle en evidencia/README.md y evidencia/02-medicion-area-tactil.md."
+    },
+    {
+      "id": "nielsen",
+      "ref": "Severidad Nielsen maxima 2, bajo el umbral de bloqueo 3. Nielsen 9 (recuperacion de errores) pasa de 1 a 0: es justo lo que este change cierra. El sev. 2 restante son los controles de los grupos B y C del inventario de hitSlop, medidos y registrados como deuda con evidencia, no como aviso suelto. Checklist Nielsen y anti-slop completos en evidencia/README.md; npm run qa:visual:check -- --change corregir-defectos-hoja-compartida en PASS."
+    },
+    {
+      "id": "offline-reconnect",
+      "ref": "src/__tests__/sync/asignacionReintentoEncolado.test.tsx sobre el motor real: sin conexion y con la escritura del segundo elemento fallando, el primero queda escrito y encolado y la hoja nombra lo guardado; el reintento completa lo pendiente con el conteo acumulado (2, no 1); la cola queda con una operacion por elemento, no una por intento; al reconectar flushQueue procesa 2 operaciones y la cola queda vacia. El fallo se inyecta en la persistencia de la lista de recursos, no mockeando el ViewModel."
+    },
+    {
+      "id": "cross-device",
+      "ref": "Tras reconectar, los dos cuerpos POST a /api/recursos llevan grupoId 7 con los ids 1 y 2: es el destino que otro dispositivo vera al bajar, afirmado sobre la cola y el flush reales. Ademas se CORRIGIO la limitacion de CORS que declaro el change anterior: verificado en vivo contra npm run backend:dev:local, la lista por defecto de backend/lib/auth.js SI admite localhost, pero solo en los puertos 8081 y 19006; el change anterior corrio la web en 8082 y por eso choco. Con origen 8081 el preflight devuelve Access-Control-Allow-Origin: http://localhost:8081. LIMITE DECLARADO: la relectura desde el servidor no se ejercito porque las rutas exigen clave de API y sesion JWT y el unico MONGODB_URI del repositorio apunta al Atlas M0 de produccion; hacerlo habria escrito registros reales en una base compartida. Detalle en evidencia/06-sincronizacion.md."
+    },
+    {
+      "id": "no-local-loss",
+      "ref": "Con la operacion todavia en cola tras el fallo parcial, reconcileWithPending con una lista remota que aun no conoce la asignacion conserva el grupoId local. Es el modo de fallo que documenta el change del selector, verificado con la cola, el almacenamiento y la reconciliacion reales de src/sync, sin dobles."
+    }
   ],
   "rollback": {
-    "strategy": "Revertir el commit del PR devuelve el campo error unico de useAssignSheet, el titulo fijo 'No se pudieron cargar los destinos', el reintento cableado a la recarga de destinos y las cajas de 28x28 con hitSlop en los controles de cierre de Sheet, Banner y Toast. No hay migracion de datos que revertir: el change no crea, renombra ni borra claves de almacenamiento, no cambia esquema, no toca src/sync ni el backend ni configuracion remota ni proyecto nativo. Las asignaciones ya escritas y encoladas antes del rollback siguen siendo validas y se suben igual, porque viajan por el motor de sincronizacion vigente y no por nada que este change introduzca; en particular, revertir la reanudacion del reintento no desencola nada ya encolado, solo devuelve el reintento a reprocesar desde el principio, cuyo unico efecto es una operacion duplicada en la cola que el motor drena igual. Los tres arreglos son independientes y viven en archivos distintos, asi que una regresion aislada se revierte sola: el helper de area tactil y su guardia estan en primitives.ts y en un test propio, la semantica de errores en useAssignSheet.ts y AssignSheet.tsx, y los casos nuevos en la suite de sync. Revertir la guardia no reabre deuda por si mismo, pero deja de impedir que un control interactivo nuevo dependa solo de hitSlop para alcanzar los 44 puntos. La paleta local DT de ContenidoScreen no se toca en ningun momento, asi que revertir no puede afectarla. El assessment y el registro de deuda no se borran al revertir: un item resuelto volveria a abrirse mediante un flujo de saneamiento nuevo, no editando el registro.",
+    "strategy": "Revertir el commit del PR devuelve el campo error unico de useAssignSheet, el titulo fijo 'No se pudieron cargar los destinos', el reintento cableado a la recarga de destinos y las cajas de 28x28 en los controles de cierre de Sheet, Banner y Toast. No hay migracion de datos que revertir: el change no crea, renombra ni borra claves de almacenamiento, no cambia esquema, no toca src/sync ni el backend ni configuracion remota ni proyecto nativo. Las asignaciones ya escritas y encoladas antes del rollback siguen siendo validas y se suben igual, porque viajan por el motor de sincronizacion vigente y no por nada que este change introduzca; en particular, revertir la reanudacion del reintento no desencola nada ya encolado, solo devuelve el reintento a reprocesar desde el principio, cuyo efecto es reencolar un update que el motor deduplica por id, moviendolo al final de la cola y reiniciando su contador de reintentos. Los tres arreglos son independientes y viven en archivos distintos, asi que una regresion aislada se revierte sola: el helper de area tactil y su guardia estan en primitives.ts y en un test propio, la semantica de errores en useAssignSheet.ts y AssignSheet.tsx, y los casos nuevos en las suites de sync. Revertir la guardia no reabre deuda por si mismo, pero deja de impedir que un control interactivo nuevo dependa solo de hitSlop para alcanzar los 44 puntos. La paleta local DT de ContenidoScreen no se toca en ningun momento, asi que revertir no puede afectarla. El assessment y el registro de deuda no se borran al revertir: un item resuelto volveria a abrirse mediante un flujo de saneamiento nuevo, no editando el registro.",
     "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
   },
   "adversarialReview": {
-    "ref": "PENDIENTE: revision adversarial en contexto limpio antes de archivar."
+    "ref": "Revision adversarial en contexto limpio antes de archivar. Informe integro y trazabilidad de cada hallazgo en evidencia/07-revision-adversarial.md."
   },
   "exceptions": []
 }
