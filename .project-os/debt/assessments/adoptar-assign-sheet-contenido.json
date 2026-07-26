@@ -1,0 +1,89 @@
+{
+  "schemaVersion": 1,
+  "flow": "adoptar-assign-sheet-contenido",
+  "date": "2026-07-25",
+  "kind": "feature",
+  "result": "debt",
+  "candidates": [
+    {
+      "title": "El control de cierre de la hoja compartida mide 28x28 en web",
+      "artifact": "src/components/base/Sheet.tsx#cerrar",
+      "source": "QA visual con Playwright MCP durante la adopcion en Contenido (#114)",
+      "category": "defect",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "La spec cross-surface-assignment exige que todo control interactivo del selector ofrezca un area tactil de al menos 44 puntos en ambos lados. El componente base Sheet lo resuelve con hitSlop, que React Native Web no implementa, asi que en web el control de cierre queda en 28x28 reales. Afecta a toda hoja de la app, no solo a esta superficie, y degrada la puntería en pantallas tactiles y para personas con motricidad reducida. No es bloqueante porque la hoja tambien cierra desde el fondo y con Escape, ambos verificados.",
+      "remediation": "Dar al control de cierre una caja real de 44x44 en el componente base (padding o minWidth/minHeight en vez de depender de hitSlop), y conservar hitSlop solo como refuerzo en nativo. Requiere pasada de regresion visual propia porque toca el encabezado de todas las hojas de la app, por eso no se hizo dentro de #114, cuyo alcance es la adopcion en una superficie.",
+      "evidence": [
+        {
+          "type": "command",
+          "ref": "getBoundingClientRect del elemento [data-testid=contenido-asignar-sheet-close] en http://localhost:8082 devuelve 28x28; getComputedStyle da padding '0px 0px 0px 0px'; document.elementFromPoint a 8px por fuera del borde izquierdo NO alcanza el boton mientras que en el centro si. Verificado en Chrome via Playwright MCP el 2026-07-25.",
+          "date": "2026-07-25"
+        },
+        {
+          "type": "doc",
+          "ref": "src/components/base/Sheet.tsx:108 usa hitSlop={hitSlopToMinTarget(ICONO_CERRAR, ICONO_CERRAR)}; openspec/specs/cross-surface-assignment/spec.md requisito 'El selector es operable y comprensible sin depender del color'. Detalle en openspec/changes/adoptar-assign-sheet-contenido/evidencia/04-qa-visual.md.",
+          "date": "2026-07-25"
+        }
+      ],
+      "verification": {
+        "method": "Medicion en runtime en el navegador, no inferencia desde el codigo: se leyo la caja real, el padding calculado y se probo con elementFromPoint si el area declarada por hitSlop es alcanzable en web. Se comprobo ademas que la adopcion de referencia (Biblioteca) monta el mismo componente base, asi que el hallazgo no es propio de Contenido.",
+        "result": "Confirmado: RN Web no traduce hitSlop a area alcanzable, el control queda en 28x28 en web y el incumplimiento del minimo de 44 es real y preexistente en el componente base de #82.",
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "title": "La hoja compartida confunde el error de carga de destinos con el error de escritura",
+      "artifact": "src/hooks/useAssignSheet.ts#error",
+      "source": "revision adversarial en contexto limpio de #114 (Minor 3)",
+      "category": "defect",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "useAssignSheet usa un unico campo error para dos fallos distintos y AssignSheet lo pinta siempre con el titulo fijo 'No se pudieron cargar los destinos' y una accion 'Reintentar' cableada a vm.reintentar(), que recarga destinos en vez de reintentar la asignacion. Si la escritura falla despues de haber escrito y encolado parte de los elementos, el docente ve un titulo equivocado, un reintento que no reintenta lo que fallo y ninguna señal de que parte del trabajo ya quedo guardado.",
+      "remediation": "Separar en el ViewModel el error de carga del error de escritura, y que la hoja elija titulo y accion segun cual sea: recargar destinos para el primero, reintentar la asignacion para el segundo, informando cuantos elementos alcanzaron a escribirse. Toca el componente transversal y su ViewModel, asi que merece su propio flujo SDD y no un parche dentro de la adopcion.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "src/hooks/useAssignSheet.ts:118 (setError de carga) y :255-257 (setError de escritura, mismo campo); src/components/assign/AssignSheet.tsx:184-192 pinta titulo fijo y accion vm.reintentar.",
+          "date": "2026-07-25"
+        }
+      ],
+      "verification": {
+        "method": "Lectura del ViewModel y del componente siguiendo las dos rutas que escriben en el mismo estado, y del render que lo consume. Se confirmo que no hay discriminante entre ambos errores y que la accion ofrecida solo cubre el caso de carga.",
+        "result": "Confirmado por inspeccion: un unico campo de error alimenta dos fallos con recuperaciones distintas, y la UI ofrece solo la del primero.",
+        "date": "2026-07-25"
+      }
+    },
+    {
+      "title": "El estado vacio y el de error de la hoja no se ejercitan desde la superficie Contenido",
+      "artifact": "src/__tests__/sync/asignacionContenidoEncolada.test.tsx",
+      "source": "revision adversarial en contexto limpio de #114 (Minor 2)",
+      "category": "optional-improvement",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "La cobertura de la adopcion recorre abrir, elegir destino, confirmar y cancelar, pero no el estado vacio (docente sin clases, cuya salida navega a CrearGrupo) ni el de error de carga de destinos. Ambos estan cubiertos por assignSheet.test.tsx a nivel de componente y son codigo compartido no modificado aqui, asi que el riesgo es bajo, pero la salida onCrearClase de esta superficie concreta no tiene prueba ni captura.",
+      "remediation": "Agregar a la suite de sync un caso con cero grupos que afirme el estado vacio y que su salida navega a ClasesTab/CrearGrupo, y otro que haga fallar classroomFacade para observar el banner de error con reintento. Es coste bajo y cabe en cualquier flujo que vuelva a tocar esta superficie.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "Seccion Limitaciones de openspec/changes/adoptar-assign-sheet-contenido/evidencia/README.md, puntos 2 y 3. Nielsen 9 se puntua 1 y no 0 por este motivo.",
+          "date": "2026-07-25"
+        }
+      ],
+      "verification": {
+        "method": "Revision de las tres suites que cubren la adopcion: la de pantalla mockea la hoja, y las dos de sync siembran siempre un grupo y un facade que resuelve, asi que ninguna llega a renderizar el vacio ni el error.",
+        "result": "Confirmado: los dos estados no se ejercitan desde esta superficie. Se declara como limite en la evidencia en vez de afirmarlos verificados.",
+        "date": "2026-07-25"
+      }
+    }
+  ],
+  "resolves": [],
+  "exceptions": [],
+  "notes": "Adopcion del selector canonico AssignSheet en la accion del menu de ContenidoScreen y retiro del boton muerto (#114). El change no resuelve ningun item del registro: la deuda que lo origina estaba documentada dentro del issue cerrado #84, no en el registro. La paleta local DT de la pantalla (debt-f7ff020d5dee) NO se toca: conserva su excepcion vigente hasta 2027-07-24 y su recuperacion sigue dependiendo de #148; se verifico que no crecio (23 entradas antes y despues, ningun hex literal nuevo). Los tres candidatos registrados son hallazgos verificados que este change encontro y no introdujo: dos defectos del componente transversal de #84 y una limitacion de cobertura declarada. La revision adversarial en contexto limpio dio FAIL inicial con 6 Majors, todos cerrados dentro del change y trazados en evidencia/05-revision-adversarial.md; entre ellos aparecio y se corrigio un defecto preexistente de perdida de datos silenciosa (el grupo destino del modo seleccion se escribia como cadena, dejando la asignacion invisible para el resto de la app). El warning nuevo de react-doctor no-barrel-import se clasifica como falso positivo verificado y por eso no figura como candidato."
+}

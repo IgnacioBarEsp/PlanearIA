@@ -1,0 +1,49 @@
+{
+  "schemaVersion": 1,
+  "issue": 114,
+  "change": "adoptar-assign-sheet-contenido",
+  "surfaces": ["ui", "sync"],
+  "validations": ["openspec-strict", "sync-tests"],
+  "qaVisualNivel": "N1",
+  "qaVisualJourneys": ["arranque-y-alcance-del-shell"],
+  "evidence": [
+    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/114" },
+    { "id": "pr-link", "ref": "PR hacia development creado por npm run opsx:finish desde la rama feat/adoptar-assign-sheet-contenido." },
+    {
+      "id": "adversarial-review",
+      "ref": "Revision adversarial en contexto limpio: veredicto inicial FAIL con 6 Majors y 4 Minors. Los 6 Majors se cerraron dentro del change (resultado del modo seleccion que no distinguia encolado de sincronizado; modo seleccion que ofrecia tipos no asignables; evidencia offline-reconnect y cross-device declarada y no entregada; qa:visual:check en FAIL por falta de evidencia/README.md; tasks.md sin marcar; assessment de deuda ausente). Informe completo en evidencia/05-revision-adversarial.md."
+    },
+    {
+      "id": "web-http-200",
+      "ref": "expo start --web en puerto 8082; curl devolvio HTTP 200 ANTES de navegar. Registro en evidencia/03-entorno-web.md. El puerto 8081 lo ocupaba un dev server previo a la sesion, que no se toco."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "Playwright MCP (no el panel Browser) en 375/768/1280, tema claro y oscuro, con clics y teclas reales. 11 capturas de md5 distinto en evidencia/capturas/: las tres del journey arranque-y-alcance-del-shell mas ocho del flujo de la accion. Panel medido por data-testid (520x333 en 768 y 1280; 375 de ancho en movil) frente al wrapper de RN Web por aria-modal (768x1024 y 1280x900): el falso positivo de #110 se reprodujo en vivo y se evito. Detalle en evidencia/04-qa-visual.md."
+    },
+    {
+      "id": "nielsen",
+      "ref": "Severidad Nielsen maxima 2, bajo el umbral de bloqueo 3. El unico hallazgo con severidad 2 es el control de cierre de 28x28 en web, preexistente del componente base #82 y registrado como deuda. Checklist Nielsen y anti-slop completos en evidencia/README.md; npm run qa:visual:check -- --change adoptar-assign-sheet-contenido en PASS."
+    },
+    {
+      "id": "offline-reconnect",
+      "ref": "src/__tests__/sync/asignacionContenidoOfflineReconexion.test.tsx recorre el ciclo completo desde la pantalla real: sin conexion la hoja informa la falta de red sin deshabilitar confirmar, la asignacion queda escrita localmente y encolada, y el resultado no afirma que subio. Al reconectar, flushQueue procesa 1 operacion, la cola queda vacia y se emite una unica peticion a /api/recursos. Segundo caso: un flush con la red aun caida no consume la operacion ni altera el dato local."
+    },
+    {
+      "id": "cross-device",
+      "ref": "Verificado por el documento que sale en la subida, que es lo unico que este flujo entrega al servidor: tras reconectar, el cuerpo del POST a /api/recursos contiene { id: 1, grupoId: 7 }, es decir el destino que otro dispositivo vera al bajar (asignacionContenidoOfflineReconexion.test.tsx). LIMITE DECLARADO: no se observo contra un backend real porque el backend desplegado rechaza por CORS el origen localhost (Access-Control-Allow-Origin: https://planearai.com). Registrado en la seccion Limitaciones de evidencia/README.md."
+    },
+    {
+      "id": "no-local-loss",
+      "ref": "src/__tests__/sync/asignacionContenidoEncolada.test.tsx recorre pantalla, hoja, ViewModel, contexto y cola sin mockear el motor: tras asignar hay 1 operacion update en cola y reconcileWithPending, con una lista remota que aun no refleja la asignacion, conserva el grupoId. Es el modo de fallo exacto que documenta #84. Ademas verificado en el navegador: @planearia:recursos queda con grupoId 7, @planearia:pending_ops_v2_recursos con una operacion update, y el segundo recurso intacto."
+    }
+  ],
+  "rollback": {
+    "strategy": "Revertir el commit del PR devuelve el alert 'Proximamente' de la accion asignar, restaura la lista estatica de opciones del menu, restaura el alert de exito incondicional de handleConfirmSelection y devuelve el modo seleccion a admitir cualquier tipo. No hay migracion de datos que revertir: el change no crea, renombra ni borra claves de almacenamiento, no cambia esquema, no toca src/sync ni el backend ni configuracion remota ni proyecto nativo. Las asignaciones ya escritas y encoladas antes del rollback siguen siendo validas y se suben igual, porque viajan por el motor de sincronizacion vigente y no por nada que este change introduzca. Las correcciones son independientes entre si y viven en bloques separados del mismo archivo, asi que una regresion aislada se revierte sola sin arrastrar a las demas. Un matiz: revertir tambien devuelve la escritura del grupo destino como cadena en el modo seleccion, defecto preexistente que este change corrige; los documentos que hayan quedado con grupoId 'N' de antes del change no los toca ni el change ni su reversion. La paleta local DT no se toca, asi que revertir no puede afectarla. El assessment y el registro de deuda no se borran al revertir: un item resuelto volveria a abrirse mediante un flujo de saneamiento nuevo, no editando el registro.",
+    "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
+  },
+  "adversarialReview": {
+    "ref": "Veredicto inicial FAIL (6 Majors, 4 Minors) el 2026-07-25, todos los Majors cerrados dentro del change. Informe integro y trazabilidad de cada hallazgo en evidencia/05-revision-adversarial.md."
+  },
+  "exceptions": []
+}

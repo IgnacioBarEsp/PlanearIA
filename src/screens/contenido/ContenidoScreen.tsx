@@ -40,6 +40,9 @@ import {
   asignarRecursosAGrupo,
   asignarEntregablesAGrupo,
 } from "../../services/grupoAsignacionesService";
+import { AssignSheet } from "../../components/assign";
+import type { ElementoAsignable } from "../../components/assign";
+import { useSyncPresentation } from "../../hooks/useSyncPresentation";
 
 type Nav = StackNavigationProp<AppRoutesParamList>;
 
@@ -133,6 +136,54 @@ const FILTER_ESTADOS: { key: Exclude<FiltroEstado, "">; label: string }[] = [
 ];
 
 // ─── Helpers ───
+
+/**
+ * Traduce el modelo de presentacion de Contenido al contrato de entrada de la hoja compartida.
+ *
+ * La traduccion vive en la pantalla y no en la hoja porque es un cruce de contexto: Contenido conoce
+ * el contrato del selector, el selector no conoce Contenido. Devolver `null` es la unica señal de que
+ * un elemento no es asignable, y de ahi cuelga tanto la accion del menu como su ausencia.
+ */
+const aElementoAsignable = (item: ContenidoItem): ElementoAsignable | null => {
+  const tipo: ElementoAsignable["tipo"] | null =
+    item.tipo === "recursos" ? "recurso" : item.tipo === "entregables" ? "entregable" : null;
+  if (tipo === null) return null;
+
+  // El id sale de la entidad real y no de parsear el prefijo de `item.id`. Ese prefijo es una cadena
+  // de presentacion: derivar de el el identificador crearia una segunda fuente de verdad que fallaria
+  // en silencio el dia que cambie.
+  const bruto = (item.raw as { id?: unknown }).id;
+  // `Number(null)` y `Number("")` valen 0, que es finito: un registro corrupto pasaria el filtro, se
+  // ofreceria la accion y la escritura terminaria en "no se asigno nada". Los ids reales son enteros
+  // positivos, asi que el filtro exige exactamente eso.
+  const id = typeof bruto === "number" || typeof bruto === "string" ? Number(bruto) : NaN;
+  if (!Number.isInteger(id) || id <= 0) return null;
+
+  return { id, titulo: item.titulo, tipo };
+};
+
+type OpcionMenu = {
+  key: string;
+  icon: keyof typeof MaterialIcons.glyphMap;
+  label: string;
+};
+
+/**
+ * Las opciones del menu se derivan del elemento abierto en vez de ser una lista fija.
+ *
+ * "Asignar a grupo" aparece solo cuando la hoja compartida admite el elemento. Ofrecerla sobre una
+ * planeacion o una plantilla producia un control que no puede cumplir lo que anuncia: es el boton
+ * muerto que este change retira (#114). Un control deshabilitado seria el mismo defecto anunciado.
+ */
+const opcionesMenu = (item: ContenidoItem): OpcionMenu[] => [
+  { key: "editar", icon: "edit", label: "Editar" },
+  { key: "duplicar", icon: "content-copy", label: "Duplicar" },
+  ...(aElementoAsignable(item)
+    ? [{ key: "asignar", icon: "group-add", label: "Asignar a grupo" } as OpcionMenu]
+    : []),
+  { key: "compartir_feed", icon: "dynamic-feed", label: "Compartir en Feed" },
+  { key: "enviar_chat", icon: "send", label: "Enviar por chat" },
+];
 
 const formatTimeAgo = (fecha: string): string => {
   if (!fecha) return "";
@@ -345,10 +396,15 @@ const ContenidoScreen: React.FC = () => {
   const vm = useContenidoViewModel();
   const searchRef = useRef<TextInput>(null);
   const { enviarMensaje, crearConversacion, getConversacionByContacto } = useMensajes();
+  const presentacionSync = useSyncPresentation();
 
   // Selection mode params
   const isSelectionMode = route.params?.selectionMode === true;
-  const targetGroupId = route.params?.targetGroupId;
+  // Llega como cadena (`DetalleGrupo` navega con `String(grupoId)`) y los documentos guardan `grupoId`
+  // numerico. Escribirlo sin convertir dejaba "7" donde el resto de la app compara contra 7, asi que
+  // la asignacion se guardaba pero el grupo no la mostraba nunca.
+  const targetGroupId = Number(route.params?.targetGroupId);
+  const tieneDestino = Number.isInteger(targetGroupId) && targetGroupId > 0;
 
   const [menuItem, setMenuItem] = useState<ContenidoItem | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -358,6 +414,7 @@ const ContenidoScreen: React.FC = () => {
   const [itemToSend, setItemToSend] = useState<ContenidoItem | null>(null);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const [isAssigning, setIsAssigning] = useState(false);
+  const [itemParaAsignar, setItemParaAsignar] = useState<ElementoAsignable | null>(null);
 
   // ─── Handlers ───
 
@@ -368,7 +425,7 @@ const ContenidoScreen: React.FC = () => {
   }, []);
 
   const handleConfirmSelection = useCallback(async () => {
-    if (selectedIds.length === 0 || !targetGroupId) return;
+    if (selectedIds.length === 0 || !tieneDestino) return;
 
     setIsAssigning(true);
     try {
@@ -386,7 +443,7 @@ const ContenidoScreen: React.FC = () => {
         }
       });
 
-      const promises = [];
+      const promises: Promise<number>[] = [];
       if (numIdsRecursos.length > 0) {
         promises.push(asignarRecursosAGrupo(targetGroupId, numIdsRecursos));
       }
@@ -394,19 +451,46 @@ const ContenidoScreen: React.FC = () => {
         promises.push(asignarEntregablesAGrupo(targetGroupId, numIdsEntregables));
       }
 
-      await Promise.all(promises);
-      Alert.alert("Éxito", "Elementos asignados correctamente.");
+      // Los servicios devuelven cuantos documentos modificaron de verdad. Antes se descartaba ese
+      // conteo y se afirmaba exito siempre: con ids que ya no existen, o que ya pertenecian al grupo
+      // destino, la escritura queda en cero y el docente veia "asignados correctamente" sobre nada.
+      const conteos = await Promise.all(promises);
+      const asignados = conteos.reduce((total, cantidad) => total + cantidad, 0);
+
+      if (asignados === 0) {
+        Alert.alert(
+          "No se asignó nada",
+          "Ningún elemento cambió de destino. Revisa tu selección e inténtalo de nuevo."
+        );
+        // No se vuelve atrás: regresar es la señal de que el trabajo se completó.
+        return;
+      }
+
+      // El resultado distingue sincronizado de encolado, y toma el texto de la fuente unica de
+      // presentacion de sincronizacion (#83) en vez de inventar copy propio de falta de conexion.
+      const pendiente =
+        presentacionSync.estado === "sin-conexion" || presentacionSync.estado === "sin-servidor";
+      Alert.alert(
+        "Listo",
+        `${asignados} ${asignados === 1 ? "elemento asignado" : "elementos asignados"} al grupo. ` +
+          (pendiente
+            ? `${presentacionSync.titulo}. Se asignara en el servidor cuando vuelva la conexion.`
+            : "La asignación ya está sincronizada.")
+      );
       navigation.goBack();
     } catch (error) {
       Alert.alert("Error", "No se pudo realizar la asignación.");
     } finally {
       setIsAssigning(false);
     }
-  }, [selectedIds, targetGroupId, navigation]);
+  }, [selectedIds, targetGroupId, tieneDestino, navigation, presentacionSync]);
 
   const handleItemPress = useCallback(
     (item: ContenidoItem) => {
       if (isSelectionMode) {
+        // Tocar la tarjeta es el otro camino para elegir: tiene que respetar la misma regla que la
+        // casilla, o un tipo no asignable volveria a colarse en la seleccion.
+        if (aElementoAsignable(item) === null) return;
         handleToggleSelect(item);
         return;
       }
@@ -425,7 +509,10 @@ const ContenidoScreen: React.FC = () => {
         navigation.navigate("DetallePlantilla", { plantillaId: (item.raw as any).id } as any);
       }
     },
-    [navigation]
+    // `isSelectionMode` y `handleToggleSelect` faltaban: la rama de seleccion se leia de un cierre
+    // congelado del primer render. Con la regla nueva de tipos asignables un cierre viejo decidiria
+    // mal quien puede seleccionarse.
+    [navigation, isSelectionMode, handleToggleSelect]
   );
 
   const handleCreatePress = useCallback(() => {
@@ -460,12 +547,13 @@ const ContenidoScreen: React.FC = () => {
         case "exportar":
           handleExportar(currentItem);
           break;
-        case "asignar":
-          Alert.alert(
-            "Próximamente",
-            "Asignar a grupo estará disponible en una próxima actualización."
-          );
+        case "asignar": {
+          // El menu no ofrece esta accion sobre lo no asignable, asi que el guard solo cubre una
+          // llamada por otra via. No hay aviso que mostrar: no hay nada que prometer.
+          const elemento = aElementoAsignable(currentItem);
+          if (elemento) setItemParaAsignar(elemento);
           break;
+        }
         case "compartir_feed":
           // El Feed vive en el hub Mas; cruce de hub con forma anidada.
           navigateToHub(navigation, "MasTab", "Feed", {
@@ -922,17 +1010,7 @@ const ContenidoScreen: React.FC = () => {
                 </Pressable>
               </View>
               <View style={styles.sheetDivider} />
-              {[
-                { key: "editar", icon: "edit" as const, label: "Editar" },
-                { key: "duplicar", icon: "content-copy" as const, label: "Duplicar" },
-                { key: "asignar", icon: "group-add" as const, label: "Asignar a grupo" },
-                {
-                  key: "compartir_feed",
-                  icon: "dynamic-feed" as const,
-                  label: "Compartir en Feed",
-                },
-                { key: "enviar_chat", icon: "send" as const, label: "Enviar por chat" },
-              ].map((opt) => (
+              {opcionesMenu(menuItem).map((opt) => (
                 <Pressable
                   key={opt.key}
                   style={({ pressed }) => [styles.sheetOption, pressed && { opacity: 0.6 }]}
@@ -1054,7 +1132,10 @@ const ContenidoScreen: React.FC = () => {
         onPress={() => handleItemPress(item)}
         onMenuPress={() => setMenuItem(item)}
         isDesktop={isDesktop}
-        selectionMode={isSelectionMode}
+        // Misma regla que el menu: solo se ofrece elegir lo que la asignacion puede escribir. Antes
+        // una planeacion se dejaba seleccionar y despues se descartaba en silencio, asi que elegir
+        // solo planeaciones terminaba siempre en "no se asigno nada".
+        selectionMode={isSelectionMode && aElementoAsignable(item) !== null}
         selected={selectedIds.includes(item.id)}
         onToggleSelect={() => handleToggleSelect(item)}
       />
@@ -1297,6 +1378,19 @@ const ContenidoScreen: React.FC = () => {
         onClose={() => setShowCrearNuevo(false)}
         onNavigate={handleCrearNuevoNavigate}
       />
+
+      {/* Selector transversal de asignacion (#84). La pantalla solo aporta el elemento: los
+          destinos, la confirmacion, la escritura encolada y el estado de sincronizacion son de la
+          hoja. Misma adopcion que ListaRecursosScreen. */}
+      {itemParaAsignar ? (
+        <AssignSheet
+          visible
+          elementos={[itemParaAsignar]}
+          onClose={() => setItemParaAsignar(null)}
+          onCrearClase={() => navigateToHub(navigation, "ClasesTab", "CrearGrupo")}
+          testID="contenido-asignar-sheet"
+        />
+      ) : null}
     </SafeAreaView>
   );
 };
