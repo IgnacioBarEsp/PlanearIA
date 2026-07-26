@@ -32,6 +32,13 @@ no guarda nada, y sobre todo que lo guardado **sobrevive a una sincronizacion** 
 que es el modo de fallo que ya costo perdida de datos antes. Cada prueba nueva debe fallar sin el
 cambio. Cierra con revision visual por tamaño de pantalla y tema, y revision adversarial.
 
+## Que cambio despues de la revision adversarial
+
+La revision independiente reprobo la primera version y encontro cosas reales. El aviso del otro camino
+decia cuantos elementos se guardaron pero no si ya habian subido al servidor. La pantalla dejaba elegir
+planeaciones para asignar y luego las descartaba en silencio. Y el grupo destino se guardaba como texto,
+asi que la asignacion quedaba invisible. Las tres se corrigieron, con pruebas que fallan sin el arreglo.
+
 ## Resumen integral del change
 
 Contenido tenia un boton que prometia asignar y no asignaba, y otro camino que decia "listo" sin
@@ -39,4 +46,4 @@ comprobar nada. Ambas cosas se corrigen sin rediseñar la pantalla ni tocar su d
 La funcion no se reinventa: se adopta la que ya existe, para que asignar se sienta igual en toda la app
 y el trabajo del docente no se pierda al sincronizar. Donde la funcion no aplica, la opcion simplemente
 no aparece, en vez de fingir que llegara despues. La prueba clave es que lo guardado sobreviva al
-siguiente ciclo de sincronizacion.
+siguiente ciclo de sincronizacion, con o sin conexion.

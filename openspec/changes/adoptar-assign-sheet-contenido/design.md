@@ -93,6 +93,34 @@ devueltos y ejecuta `Alert.alert("Exito", "Elementos asignados correctamente.")`
 
 El caso de error mantiene su alert actual.
 
+**Ampliacion tras la revision adversarial.** El requisito tiene dos mitades y la version inicial de esta
+decision solo cubria una. Ademas de no afirmar exito sin escritura, hay que **distinguir lo que ya subio
+de lo que quedo guardado a la espera**. El resultado ahora consume `useSyncPresentation()` (#83), la
+misma fuente unica que usa la hoja, y añade `"<titulo de la fuente>. Se asignara en el servidor cuando
+vuelva la conexion."` o `"La asignacion ya esta sincronizada."`.
+
+Se descarto cambiar la firma de `grupoAsignacionesService` para devolver `syncOk`: eso rippleaba a
+`AsignarRecursoScreen` y `ConversacionScreen`, dos consumidores fuera del alcance de este change.
+
+**Defecto preexistente encontrado al corregir.** `DetalleGrupo` navega con
+`targetGroupId: String(grupoId)` y la pantalla lo pasaba sin convertir a un servicio que espera
+`number`. El documento quedaba con `grupoId: "7"` mientras el resto de la app compara contra `7`: la
+asignacion se guardaba y el grupo no la mostraba nunca. Sin corregirlo, el resultado nuevo habria
+afirmado "1 elemento asignado" sobre una asignacion invisible, justo lo que el requisito prohibe. Se
+convierte a numero y se valida que sea un entero positivo antes de escribir.
+
+## Decision 3b: el modo seleccion tambien respeta la regla de tipos
+
+La spec que este change modifica dice que una superficie no ofrece la accion sobre elementos que el
+selector no admite. El modo seleccion la incumplia: daba casilla a toda tarjeta y despues
+`handleConfirmSelection` descartaba en silencio los ids que no fueran `rec-`/`ent-`. Elegir solo
+planeaciones terminaba siempre en "No se asigno nada", un callejon sin salida producido por el mismo
+change que retira botones muertos.
+
+**Decision.** La casilla aparece solo en elementos asignables, y tocar la tarjeta (el otro camino de
+seleccion) aplica la misma regla. Se corrige el codigo en vez de debilitar la redaccion de la spec: una
+SHALL que el propio archivo incumple no sirve para la siguiente superficie que adopte la hoja.
+
 **Alcance de esta correccion.** Es conformidad con la spec vigente, no un cambio de contrato: por eso no
 aparece como requisito modificado. Se corrige aqui, y no en un issue aparte, porque vive en el mismo
 archivo, en la misma capacidad y bajo el mismo criterio de aceptacion que este change tiene que

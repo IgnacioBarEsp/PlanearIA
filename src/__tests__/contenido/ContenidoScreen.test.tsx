@@ -78,6 +78,23 @@ jest.mock("../../components/assign", () => {
   };
 });
 
+const PRESENTACION_SINCRONIZADA = {
+  estado: "sincronizado" as const,
+  tono: "exito" as const,
+  icono: "cloud-done" as const,
+  titulo: "Todo sincronizado",
+  detalle: null,
+  etiquetaA11y: "Todo sincronizado",
+  accion: null,
+  ocupado: false,
+  complementoGuardado: null,
+};
+
+let mockPresentacionSync: Record<string, unknown> = { ...PRESENTACION_SINCRONIZADA };
+jest.mock("../../hooks/useSyncPresentation", () => ({
+  useSyncPresentation: () => mockPresentacionSync,
+}));
+
 const mockAsignarRecursos = jest.fn().mockResolvedValue(1);
 const mockAsignarEntregables = jest.fn().mockResolvedValue(1);
 jest.mock("../../services/grupoAsignacionesService", () => ({
@@ -229,6 +246,9 @@ describe("ContenidoScreen", () => {
     jest.clearAllMocks();
     mockCurrentVm = { ...defaultVm };
     mockRouteParams = {};
+    mockPresentacionSync = { ...PRESENTACION_SINCRONIZADA };
+    mockAsignarRecursos.mockResolvedValue(1);
+    mockAsignarEntregables.mockResolvedValue(1);
   });
 
   it("renderiza el header con título y conteo", () => {
@@ -423,6 +443,36 @@ describe("ContenidoScreen", () => {
 
       expect(queryByTestId("assign-sheet-sonda")).toBeNull();
     });
+
+    it.each([
+      ["nulo", null],
+      ["cadena vacia", ""],
+      ["cero", 0],
+      ["texto", "abc"],
+      ["ausente", undefined],
+    ])("no ofrece la accion cuando el id de la entidad es %s", (_caso, idBruto) => {
+      // Number(null) y Number("") valen 0, que es finito: sin un filtro estricto estos registros
+      // pasarian, se ofreceria la accion y la escritura acabaria en "no se asigno nada".
+      const { queryByText } = abrirMenuDe({
+        ...mockItems[1],
+        raw: { id: idBruto } as never,
+      });
+
+      expect(queryByText("Asignar a grupo")).toBeNull();
+    });
+
+    it("acepta un id numerico entregado como cadena", () => {
+      const { getByText, getByTestId } = abrirMenuDe({
+        ...mockItems[1],
+        raw: { id: "77" } as never,
+      });
+
+      fireEvent.press(getByText("Asignar a grupo"));
+
+      expect(getByTestId("assign-sheet-sonda").props.accessibilityLabel).toBe(
+        JSON.stringify([{ id: 77, titulo: "Video de Historia", tipo: "recurso" }])
+      );
+    });
   });
 
   it("ejecuta búsqueda al escribir en el campo", () => {
@@ -541,13 +591,17 @@ describe("ContenidoScreen", () => {
   // ─── Modo seleccion: el resultado se afirma segun el hecho real (#114) ───
 
   describe("modo seleccion", () => {
-    /** Entra en modo seleccion con destino resuelto, elige el recurso y confirma. */
-    const confirmarSeleccion = async () => {
-      mockRouteParams = { selectionMode: true, targetGroupId: 7 };
-      mockCurrentVm = { ...defaultVm, items: [mockItems[1]], borradores: [], totalItems: 1 };
+    /**
+     * Entra en modo seleccion, elige el recurso y confirma.
+     *
+     * `targetGroupId` viaja como cadena porque asi lo manda DetalleGrupo (`String(grupoId)`).
+     */
+    const confirmarSeleccion = async (items: ContenidoItem[] = [mockItems[1]]) => {
+      mockRouteParams = { selectionMode: true, targetGroupId: "7" };
+      mockCurrentVm = { ...defaultVm, items, borradores: [], totalItems: items.length };
 
       const utils = render(<ContenidoScreen />);
-      fireEvent.press(utils.getByText("Video de Historia"));
+      for (const item of items) fireEvent.press(utils.getByText(item.titulo));
       fireEvent.press(utils.getByText("Asignar a Grupo"));
       return utils;
     };
@@ -559,10 +613,82 @@ describe("ContenidoScreen", () => {
       await confirmarSeleccion();
 
       await waitFor(() =>
-        expect(alertSpy).toHaveBeenCalledWith("Listo", "1 elemento asignado al grupo.")
+        expect(alertSpy).toHaveBeenCalledWith(
+          "Listo",
+          expect.stringContaining("1 elemento asignado al grupo.")
+        )
       );
       expect(mockGoBack).toHaveBeenCalled();
       alertSpy.mockRestore();
+    });
+
+    it("convierte el grupo destino a numero antes de escribir", async () => {
+      // DetalleGrupo navega con String(grupoId). Escribir la cadena dejaba grupoId "7" donde el
+      // resto de la app compara contra 7, asi que la asignacion se guardaba invisible.
+      await confirmarSeleccion();
+
+      await waitFor(() => expect(mockAsignarRecursos).toHaveBeenCalled());
+      expect(mockAsignarRecursos).toHaveBeenCalledWith(7, [1]);
+      expect(mockAsignarRecursos.mock.calls[0][0]).toStrictEqual(7);
+    });
+
+    it("distingue encolado de sincronizado con el vocabulario compartido", async () => {
+      const alertSpy = jest.spyOn(Alert, "alert");
+      mockPresentacionSync = {
+        ...PRESENTACION_SINCRONIZADA,
+        estado: "sin-conexion",
+        titulo: "Sin conexión",
+      };
+      mockAsignarRecursos.mockResolvedValueOnce(1);
+
+      await confirmarSeleccion();
+
+      await waitFor(() =>
+        expect(alertSpy).toHaveBeenCalledWith(
+          "Listo",
+          expect.stringContaining("Sin conexión. Se asignara en el servidor cuando vuelva la conexion.")
+        )
+      );
+      // El texto de falta de conexion viene de la fuente unica, no de un literal de esta pantalla.
+      expect(alertSpy).not.toHaveBeenCalledWith("Listo", expect.stringContaining("ya está sincronizada"));
+      alertSpy.mockRestore();
+    });
+
+    it("afirma sincronizado cuando la cola quedo drenada", async () => {
+      const alertSpy = jest.spyOn(Alert, "alert");
+      mockAsignarRecursos.mockResolvedValueOnce(1);
+
+      await confirmarSeleccion();
+
+      await waitFor(() =>
+        expect(alertSpy).toHaveBeenCalledWith(
+          "Listo",
+          expect.stringContaining("La asignación ya está sincronizada.")
+        )
+      );
+      alertSpy.mockRestore();
+    });
+
+    it("no deja elegir tipos que la asignacion no puede escribir", async () => {
+      mockRouteParams = { selectionMode: true, targetGroupId: "7" };
+      mockCurrentVm = {
+        ...defaultVm,
+        items: [mockItems[0], ITEM_PLANTILLA],
+        borradores: [],
+        totalItems: 2,
+      };
+
+      const { getByText } = render(<ContenidoScreen />);
+      // Tocar la tarjeta es el otro camino de seleccion: tampoco debe admitir estos tipos.
+      fireEvent.press(getByText("Fracciones equivalentes"));
+      fireEvent.press(getByText("Plantilla de examen"));
+      fireEvent.press(getByText("Asignar a Grupo"));
+
+      // Sin seleccion valida no se llama al servicio: antes se descartaban en silencio y el docente
+      // aterrizaba siempre en "no se asigno nada".
+      expect(mockAsignarRecursos).not.toHaveBeenCalled();
+      expect(mockAsignarEntregables).not.toHaveBeenCalled();
+      expect(getByText("0 elementos seleccionados")).toBeTruthy();
     });
 
     it("no afirma exito ni vuelve atras cuando no hubo ninguna escritura", async () => {

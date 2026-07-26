@@ -42,6 +42,7 @@ import {
 } from "../../services/grupoAsignacionesService";
 import { AssignSheet } from "../../components/assign";
 import type { ElementoAsignable } from "../../components/assign";
+import { useSyncPresentation } from "../../hooks/useSyncPresentation";
 
 type Nav = StackNavigationProp<AppRoutesParamList>;
 
@@ -151,8 +152,12 @@ const aElementoAsignable = (item: ContenidoItem): ElementoAsignable | null => {
   // El id sale de la entidad real y no de parsear el prefijo de `item.id`. Ese prefijo es una cadena
   // de presentacion: derivar de el el identificador crearia una segunda fuente de verdad que fallaria
   // en silencio el dia que cambie.
-  const id = Number((item.raw as { id?: unknown }).id);
-  if (!Number.isFinite(id)) return null;
+  const bruto = (item.raw as { id?: unknown }).id;
+  // `Number(null)` y `Number("")` valen 0, que es finito: un registro corrupto pasaria el filtro, se
+  // ofreceria la accion y la escritura terminaria en "no se asigno nada". Los ids reales son enteros
+  // positivos, asi que el filtro exige exactamente eso.
+  const id = typeof bruto === "number" || typeof bruto === "string" ? Number(bruto) : NaN;
+  if (!Number.isInteger(id) || id <= 0) return null;
 
   return { id, titulo: item.titulo, tipo };
 };
@@ -391,10 +396,15 @@ const ContenidoScreen: React.FC = () => {
   const vm = useContenidoViewModel();
   const searchRef = useRef<TextInput>(null);
   const { enviarMensaje, crearConversacion, getConversacionByContacto } = useMensajes();
+  const presentacionSync = useSyncPresentation();
 
   // Selection mode params
   const isSelectionMode = route.params?.selectionMode === true;
-  const targetGroupId = route.params?.targetGroupId;
+  // Llega como cadena (`DetalleGrupo` navega con `String(grupoId)`) y los documentos guardan `grupoId`
+  // numerico. Escribirlo sin convertir dejaba "7" donde el resto de la app compara contra 7, asi que
+  // la asignacion se guardaba pero el grupo no la mostraba nunca.
+  const targetGroupId = Number(route.params?.targetGroupId);
+  const tieneDestino = Number.isInteger(targetGroupId) && targetGroupId > 0;
 
   const [menuItem, setMenuItem] = useState<ContenidoItem | null>(null);
   const [showFilters, setShowFilters] = useState(false);
@@ -415,7 +425,7 @@ const ContenidoScreen: React.FC = () => {
   }, []);
 
   const handleConfirmSelection = useCallback(async () => {
-    if (selectedIds.length === 0 || !targetGroupId) return;
+    if (selectedIds.length === 0 || !tieneDestino) return;
 
     setIsAssigning(true);
     try {
@@ -456,9 +466,16 @@ const ContenidoScreen: React.FC = () => {
         return;
       }
 
+      // El resultado distingue sincronizado de encolado, y toma el texto de la fuente unica de
+      // presentacion de sincronizacion (#83) en vez de inventar copy propio de falta de conexion.
+      const pendiente =
+        presentacionSync.estado === "sin-conexion" || presentacionSync.estado === "sin-servidor";
       Alert.alert(
         "Listo",
-        `${asignados} ${asignados === 1 ? "elemento asignado" : "elementos asignados"} al grupo.`
+        `${asignados} ${asignados === 1 ? "elemento asignado" : "elementos asignados"} al grupo. ` +
+          (pendiente
+            ? `${presentacionSync.titulo}. Se asignara en el servidor cuando vuelva la conexion.`
+            : "La asignación ya está sincronizada.")
       );
       navigation.goBack();
     } catch (error) {
@@ -466,11 +483,14 @@ const ContenidoScreen: React.FC = () => {
     } finally {
       setIsAssigning(false);
     }
-  }, [selectedIds, targetGroupId, navigation]);
+  }, [selectedIds, targetGroupId, tieneDestino, navigation, presentacionSync]);
 
   const handleItemPress = useCallback(
     (item: ContenidoItem) => {
       if (isSelectionMode) {
+        // Tocar la tarjeta es el otro camino para elegir: tiene que respetar la misma regla que la
+        // casilla, o un tipo no asignable volveria a colarse en la seleccion.
+        if (aElementoAsignable(item) === null) return;
         handleToggleSelect(item);
         return;
       }
@@ -489,7 +509,10 @@ const ContenidoScreen: React.FC = () => {
         navigation.navigate("DetallePlantilla", { plantillaId: (item.raw as any).id } as any);
       }
     },
-    [navigation]
+    // `isSelectionMode` y `handleToggleSelect` faltaban: la rama de seleccion se leia de un cierre
+    // congelado del primer render. Con la regla nueva de tipos asignables un cierre viejo decidiria
+    // mal quien puede seleccionarse.
+    [navigation, isSelectionMode, handleToggleSelect]
   );
 
   const handleCreatePress = useCallback(() => {
@@ -1109,7 +1132,10 @@ const ContenidoScreen: React.FC = () => {
         onPress={() => handleItemPress(item)}
         onMenuPress={() => setMenuItem(item)}
         isDesktop={isDesktop}
-        selectionMode={isSelectionMode}
+        // Misma regla que el menu: solo se ofrece elegir lo que la asignacion puede escribir. Antes
+        // una planeacion se dejaba seleccionar y despues se descartaba en silencio, asi que elegir
+        // solo planeaciones terminaba siempre en "no se asigno nada".
+        selectionMode={isSelectionMode && aElementoAsignable(item) !== null}
         selected={selectedIds.includes(item.id)}
         onToggleSelect={() => handleToggleSelect(item)}
       />
