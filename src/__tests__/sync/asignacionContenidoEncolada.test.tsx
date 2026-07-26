@@ -1,5 +1,5 @@
 import React from "react";
-import { act, fireEvent, render, waitFor } from "@testing-library/react-native";
+import { act, fireEvent, render, waitFor, within } from "@testing-library/react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ThemeProvider } from "../../context/ThemeContext";
 import { FontSizeProvider } from "../../context/FontSizeContext";
@@ -11,6 +11,7 @@ import ContenidoScreen from "../../screens/contenido/ContenidoScreen";
 import { SYNC_ENTITIES, reconcileWithPending } from "../../sync/services/entitySync";
 import { getPendingOps } from "../../sync/services/syncEngine";
 import type { ContenidoItem, ContenidoViewModel } from "../../hooks/useContenidoViewModel";
+import { expectConsoleError } from "../helpers/consoleSignal";
 
 /**
  * La asignacion hecha desde Contenido encola y sobrevive al pull (#114).
@@ -75,8 +76,12 @@ jest.mock("react-native-safe-area-context", () => ({
 }));
 
 const mockGoBack = jest.fn();
+// `navigate` se declara aqui y no dentro del factory: una `jest.fn()` nueva por llamada no
+// deja observar a donde salio el docente, que es justo lo que verifica el caso del estado
+// vacio.
+const mockNavigate = jest.fn();
 jest.mock("@react-navigation/native", () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: mockGoBack }),
+  useNavigation: () => ({ navigate: mockNavigate, goBack: mockGoBack }),
   useRoute: () => ({ params: {} }),
 }));
 
@@ -88,14 +93,19 @@ jest.mock("../../context/MensajesContext", () => ({
   }),
 }));
 
+let mockGrupos: Array<{ id: number; nombre: string }> = [{ id: 7, nombre: "2do A" }];
+
 jest.mock("../../context/GruposContext", () => ({
-  useGruposContext: () => ({ grupos: [{ id: 7, nombre: "2do A" }], isLoading: false }),
+  useGruposContext: () => ({ grupos: mockGrupos, isLoading: false }),
 }));
+
+const mockGetUnidades = jest.fn();
+const mockGetActividades = jest.fn();
 
 jest.mock("../../services/classroom/classroomFacade", () => ({
   classroomFacade: {
-    getUnidadesByGrupoId: jest.fn().mockResolvedValue([]),
-    getActividadesByGrupoId: jest.fn().mockResolvedValue([]),
+    getUnidadesByGrupoId: (grupoId: number) => mockGetUnidades(grupoId),
+    getActividadesByGrupoId: (grupoId: number) => mockGetActividades(grupoId),
   },
 }));
 
@@ -209,6 +219,9 @@ describe("asignar desde Contenido encola y sobrevive al pull (#114)", () => {
   beforeEach(async () => {
     await AsyncStorage.clear();
     jest.clearAllMocks();
+    mockGrupos = [{ id: 7, nombre: "2do A" }];
+    mockGetUnidades.mockResolvedValue([]);
+    mockGetActividades.mockResolvedValue([]);
     await AsyncStorage.setItem(SYNC_ENTITIES.recursos.storageKey, JSON.stringify([RECURSO]));
   });
 
@@ -287,5 +300,76 @@ describe("asignar desde Contenido encola y sobrevive al pull (#114)", () => {
     await waitFor(() => expect(utils.getByText("No se asigno nada")).toBeTruthy());
     expect(utils.getByText("Ningun elemento cambio de destino.")).toBeTruthy();
     expect(await getPendingOps("recursos")).toHaveLength(0);
+  });
+
+  /**
+   * Estado vacio y estado de error desde ESTA superficie (#152, debt-7f36f0586032).
+   *
+   * `assignSheet.test.tsx` ya cubre ambos a nivel de componente con el ViewModel real, pero
+   * no cubre lo que esta pantalla aporta: que la salida `onCrearClase` de Contenido lleve al
+   * formulario de crear grupo del hub de Clases. Ese cableado es propio de la superficie y
+   * era lo unico sin prueba ni captura al cerrar #114.
+   */
+  describe("estados de la hoja desde Contenido", () => {
+    it("sin clases ofrece crear una y su salida lleva a CrearGrupo", async () => {
+      mockGrupos = [];
+
+      const utils = await montar();
+      await abrirHoja(utils);
+
+      expect(utils.getByTestId("contenido-asignar-sheet-vacio")).toBeTruthy();
+      // Sin clases no hay nada que confirmar: el pie de la hoja no ofrece la accion.
+      expect(utils.queryByTestId("contenido-asignar-sheet-confirmar")).toBeNull();
+
+      await act(async () => {
+        fireEvent.press(utils.getByText("Crear clase"));
+      });
+
+      // La salida no es generica: aterriza en el formulario de crear grupo del hub Clases.
+      expect(mockNavigate).toHaveBeenCalledWith("MainTabs", {
+        screen: "ClasesTab",
+        params: { screen: "CrearGrupo", params: undefined },
+      });
+      // Y salir cierra la hoja en vez de dejarla montada sobre la pantalla nueva.
+      expect(utils.queryByTestId("contenido-asignar-sheet")).toBeNull();
+      expect(await getPendingOps("recursos")).toHaveLength(0);
+    });
+
+    it("si falla la carga de destinos avisa y permite reintentar sin perder el elemento", async () => {
+      expectConsoleError(/No se pudieron cargar los destinos/);
+      mockGetUnidades.mockRejectedValueOnce(new Error("sin red"));
+
+      const utils = await montar();
+      await abrirHoja(utils);
+
+      fireEvent.press(utils.getByTestId("contenido-asignar-sheet-clase-7"));
+      await waitFor(() =>
+        expect(utils.getByTestId("contenido-asignar-sheet-error-carga")).toBeTruthy()
+      );
+      // El aviso nombra la causa real, no el fallo de escritura.
+      expect(utils.getByText("No se pudieron cargar los destinos")).toBeTruthy();
+      expect(utils.queryByTestId("contenido-asignar-sheet-error-escritura")).toBeNull();
+
+      mockGetUnidades.mockResolvedValue([
+        { id: "u1", grupoId: 7, nombre: "Unidad 1", posicion: 0 },
+      ]);
+      await act(async () => {
+        fireEvent.press(utils.getByText("Reintentar"));
+      });
+
+      await waitFor(() =>
+        expect(utils.queryByTestId("contenido-asignar-sheet-error-carga")).toBeNull()
+      );
+      // La hoja sigue abierta con el elemento intacto: el fallo no la cerro ni perdio la
+      // seleccion, y ahora si ofrece la unidad que antes no pudo cargar.
+      expect(utils.getByTestId("contenido-asignar-sheet")).toBeTruthy();
+      expect(utils.getByTestId("contenido-asignar-sheet-unidad-u1")).toBeTruthy();
+      // El resumen se busca DENTRO del panel: el mismo titulo tambien esta en la lista de
+      // Contenido que quedo detras, y una busqueda global no distinguiria una de otra.
+      const panel = within(utils.getByTestId("contenido-asignar-sheet-panel"));
+      expect(panel.getByText("Guia de fracciones")).toBeTruthy();
+      // Un fallo de carga no escribe ni encola nada.
+      expect(await getPendingOps("recursos")).toHaveLength(0);
+    });
   });
 });

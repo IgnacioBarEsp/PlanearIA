@@ -5,7 +5,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import { useAppTheme } from "../../themes/useAppTheme";
 import { radii, scaleType, spacing, typography } from "../../themes/tokens";
 import type { ColorTokens, ThemedStylesInput } from "../../themes/types";
-import { MIN_TOUCH_TARGET, hitSlopToMinTarget, useFocusRing } from "./primitives";
+import { MIN_TOUCH_TARGET, minTargetBox, overflowMinTarget, useFocusRing } from "./primitives";
 import type { ToneVariant } from "./primitives";
 
 export interface BannerProps {
@@ -77,9 +77,11 @@ const Banner: React.FC<BannerProps> = ({
           onPress={onDismiss}
           onFocus={cerrarFoco.onFocus}
           onBlur={cerrarFoco.onBlur}
-          hitSlop={hitSlopToMinTarget(ICONO_CERRAR, ICONO_CERRAR)}
           accessibilityRole="button"
           accessibilityLabel="Descartar aviso"
+          // Sin ancla propia el control no se puede medir en navegador, que es como se
+          // detecto que su area tactil no llegaba a 44 puntos.
+          testID={testID ? `${testID}-dismiss` : undefined}
         >
           <MaterialIcons name="close" size={18} color={colors.textSecondary} />
         </Pressable>
@@ -88,7 +90,7 @@ const Banner: React.FC<BannerProps> = ({
   );
 };
 
-/** Lado visual del boton de cerrar. Menor a 44pt a proposito: el area se extiende con hitSlop. */
+/** Huella visual del boton de cerrar. La caja tactil es de 44 y desborda esto por lado. */
 const ICONO_CERRAR = 28;
 
 interface TonoPaleta {
@@ -141,10 +143,10 @@ const getStyles = ({ colors, scaled, highContrast }: ThemedStylesInput) =>
       ...scaleType(typography.bodyStrong, scaled),
     },
     cerrar: {
-      width: ICONO_CERRAR,
-      height: ICONO_CERRAR,
-      alignItems: "center",
-      justifyContent: "center",
+      ...minTargetBox(),
+      // Ver Sheet: la caja llega a 44 y el desborde se absorbe en el padding del aviso, asi
+      // que el alto del banner no cambia.
+      marginVertical: -overflowMinTarget(ICONO_CERRAR),
       borderRadius: radii.sm,
     },
     focusRing: {

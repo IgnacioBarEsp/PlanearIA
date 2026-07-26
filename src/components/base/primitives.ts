@@ -1,5 +1,5 @@
 import { useCallback, useState } from "react";
-import type { Insets } from "react-native";
+import type { Insets, ViewStyle } from "react-native";
 
 /**
  * Primitivas internas compartidas por la biblioteca base.
@@ -32,6 +32,39 @@ export function hitSlopToMinTarget(width: number, height: number): Insets | unde
   const vertical = Math.max(0, (MIN_TOUCH_TARGET - height) / 2);
   if (horizontal === 0 && vertical === 0) return undefined;
   return { top: vertical, bottom: vertical, left: horizontal, right: horizontal };
+}
+
+/**
+ * Caja real de 44x44 para un control cuya forma visual mide menos.
+ *
+ * Existe porque `hitSlopToMinTarget` no sirve en web: react-native-web no implementa
+ * `hitSlop`, asi que un control que se apoya solo en el conserva su tamano visual como area
+ * efectiva. Medido al adoptar la hoja en Contenido: el cierre daba 28x28 reales y un punto a
+ * 21pt del centro no lo alcanzaba. Este helper resuelve el minimo con caja, que si viaja al
+ * DOM, y por eso vale en las dos plataformas.
+ *
+ * Devuelve solo la caja y el centrado. El desborde respecto de la forma visual lo compensa
+ * quien lo usa, porque solo el contenedor sabe si tiene padding que lo absorba: meter aqui
+ * un margen negativo lo aplicaria tambien donde produce solapes. Ver `overflowMinTarget`.
+ */
+export function minTargetBox(): ViewStyle {
+  return {
+    width: MIN_TOUCH_TARGET,
+    height: MIN_TOUCH_TARGET,
+    alignItems: "center",
+    justifyContent: "center",
+  };
+}
+
+/**
+ * Cuanto desborda por lado una caja de 44 sobre una forma visual de `visual` puntos.
+ *
+ * Se usa como margen negativo para que ampliar el area tactil no empuje el layout del
+ * contenedor: el desborde cae dentro de su padding, que es espacio vacio. Devuelve 0 cuando
+ * la forma visual ya cubre el minimo.
+ */
+export function overflowMinTarget(visual: number): number {
+  return Math.max(0, (MIN_TOUCH_TARGET - visual) / 2);
 }
 
 export interface FocusRing {

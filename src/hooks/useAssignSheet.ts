@@ -44,6 +44,21 @@ export interface ResultadoAsignacion {
   syncOk: boolean;
 }
 
+/**
+ * Fallo de la escritura, con lo que alcanzo a ocurrir antes de fallar.
+ *
+ * Los conteos no son decoracion: los elementos ya escritos quedaron ademas encolados, asi
+ * que se subiran igual. Callarlos haria creer al docente que no se guardo nada y lo
+ * llevaria a rehacer un trabajo que ya existe.
+ */
+export interface ErrorEscritura {
+  mensaje: string;
+  /** Elementos escritos y encolados hacia el destino vigente, acumulados entre intentos. */
+  asignados: number;
+  /** Elementos que aun no se intentaron y que un reintento tomaria. */
+  pendientes: number;
+}
+
 export interface AssignSheetViewModel {
   clases: OpcionDestino[];
   unidades: OpcionDestino[];
@@ -58,15 +73,46 @@ export interface AssignSheetViewModel {
   resumenDestino: string | null;
   puedeConfirmar: boolean;
   cargando: boolean;
-  error: string | null;
-  reintentar: () => void;
+  /**
+   * Fallo al cargar los destinos de la clase elegida.
+   *
+   * Separado de `errorEscritura` a proposito: con un solo campo, los dos caminos se pisaban
+   * y la hoja anunciaba siempre la causa equivocada con una accion que no reparaba nada.
+   */
+  errorCarga: string | null;
+  /** Recuperacion del fallo de carga: vuelve a pedir los destinos de la clase elegida. */
+  reintentarCarga: () => void;
+  errorEscritura: ErrorEscritura | null;
   ejecutando: boolean;
   resultado: ResultadoAsignacion | null;
+  /** Ejecuta la asignacion. Reinvocarla tras un fallo es el reintento: retoma lo pendiente. */
   asignar: () => Promise<void>;
   reiniciar: () => void;
 }
 
 const DESTINO_VACIO: DestinoAsignacion = { grupoId: null, unidadId: null, tareaId: null };
+
+/**
+ * Identidad del destino, para que el progreso de escritura no pueda cruzarse de destino.
+ *
+ * Lo ya escrito apunta al destino con el que se escribio. Si el docente cambia de destino
+ * tras un fallo parcial, saltarse esos elementos los dejaria en el destino anterior sin que
+ * nadie lo note. Comparar esta clave hace la invariante estructural: no depende de acordarse
+ * de limpiar el progreso en cada `elegir*`.
+ */
+const claveDestino = (destino: DestinoAsignacion): string =>
+  `${destino.grupoId}|${destino.unidadId}|${destino.tareaId}`;
+
+/** Marca estable de un elemento dentro de un intento de escritura. */
+const marcaElemento = (elemento: ElementoAsignable): string => `${elemento.tipo}:${elemento.id}`;
+
+interface ProgresoEscritura {
+  clave: string;
+  /** Elementos ya resueltos: escritos, o descartados por no existir. No se reintentan. */
+  procesados: Set<string>;
+  asignados: number;
+  syncOk: boolean;
+}
 
 export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewModel {
   const { grupos, isLoading: cargandoClases } = useGruposContext();
@@ -77,13 +123,23 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
   const [unidadesGrupo, setUnidadesGrupo] = useState<UnidadClassroom[]>([]);
   const [actividadesGrupo, setActividadesGrupo] = useState<Tarea[]>([]);
   const [cargando, setCargando] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [errorCarga, setErrorCarga] = useState<string | null>(null);
+  const [errorEscritura, setErrorEscritura] = useState<ErrorEscritura | null>(null);
   const [ejecutando, setEjecutando] = useState(false);
   const [resultado, setResultado] = useState<ResultadoAsignacion | null>(null);
   const [intento, setIntento] = useState(0);
 
   // Una respuesta lenta de un grupo abandonado no debe pisar la de su reemplazo.
   const grupoVigente = useRef<number | null>(null);
+
+  // Vive en una ref y no en estado porque no se pinta: lo que la hoja muestra son los
+  // conteos ya volcados en `errorEscritura` y en `resultado`. Guardarlo en estado forzaria
+  // un render por elemento escrito sin cambiar nada de lo que se ve.
+  //
+  // Arranca en null en vez de en un progreso vacio: pasarle un objeto al `useRef` lo
+  // construiria en cada render para que React lo descarte, y aqui eso incluye un `Set`
+  // nuevo cada vez. `null` ademas dice lo que corresponde: todavia no hay progreso.
+  const progreso = useRef<ProgresoEscritura | null>(null);
 
   useEffect(() => {
     const grupoId = destino.grupoId;
@@ -93,13 +149,13 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
       setUnidadesGrupo([]);
       setActividadesGrupo([]);
       setCargando(false);
-      setError(null);
+      setErrorCarga(null);
       return;
     }
 
     let vigente = true;
     setCargando(true);
-    setError(null);
+    setErrorCarga(null);
 
     void (async () => {
       try {
@@ -115,7 +171,7 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
         logger.error("[useAssignSheet] No se pudieron cargar los destinos:", err);
         setUnidadesGrupo([]);
         setActividadesGrupo([]);
-        setError("No se pudieron cargar los destinos de esta clase.");
+        setErrorCarga("No se pudieron cargar los destinos de esta clase.");
       } finally {
         if (vigente && grupoVigente.current === grupoId) setCargando(false);
       }
@@ -166,28 +222,57 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
     [actividadesGrupo, admiteActividad]
   );
 
-  const elegirClase = useCallback((grupoId: number | null) => {
-    // Cambiar de clase invalida los niveles inferiores: una unidad pertenece a una clase.
-    setDestino({ grupoId, unidadId: null, tareaId: null });
+  /**
+   * Todo cambio de destino invalida lo que se dijo del destino anterior.
+   *
+   * El resultado y el fallo de escritura hablan ambos de un destino concreto: sus conteos
+   * son "cuantos elementos fueron a ESE destino". Conservar el aviso de fallo al cambiar de
+   * destino dejaria en pantalla un conteo que ya no describe nada, junto a un "reintentar
+   * continua desde ahi" que el propio ViewModel no va a cumplir, porque la clave de destino
+   * cambio y el reintento reescribe todo. Es el mismo defecto que este ViewModel corrige un
+   * nivel mas arriba, asi que se cierra aqui tambien.
+   */
+  const olvidarResultadoDelDestinoAnterior = useCallback(() => {
     setResultado(null);
+    setErrorEscritura(null);
   }, []);
 
-  const elegirUnidad = useCallback((unidadId: string | null) => {
-    setDestino((prev) => ({ ...prev, unidadId, tareaId: null }));
-    setResultado(null);
-  }, []);
+  const elegirClase = useCallback(
+    (grupoId: number | null) => {
+      // Cambiar de clase invalida los niveles inferiores: una unidad pertenece a una clase.
+      setDestino({ grupoId, unidadId: null, tareaId: null });
+      olvidarResultadoDelDestinoAnterior();
+    },
+    [olvidarResultadoDelDestinoAnterior]
+  );
 
-  const elegirActividad = useCallback((tareaId: number | null) => {
-    setDestino((prev) => ({ ...prev, tareaId }));
-    setResultado(null);
-  }, []);
+  const elegirUnidad = useCallback(
+    (unidadId: string | null) => {
+      setDestino((prev) => ({ ...prev, unidadId, tareaId: null }));
+      olvidarResultadoDelDestinoAnterior();
+    },
+    [olvidarResultadoDelDestinoAnterior]
+  );
 
-  const reintentar = useCallback(() => setIntento((valor) => valor + 1), []);
+  const elegirActividad = useCallback(
+    (tareaId: number | null) => {
+      setDestino((prev) => ({ ...prev, tareaId }));
+      olvidarResultadoDelDestinoAnterior();
+    },
+    [olvidarResultadoDelDestinoAnterior]
+  );
+
+  const reintentarCarga = useCallback(() => setIntento((valor) => valor + 1), []);
 
   const reiniciar = useCallback(() => {
     setDestino(DESTINO_VACIO);
     setResultado(null);
-    setError(null);
+    setErrorCarga(null);
+    setErrorEscritura(null);
+    // La clave de destino ya impide cruzar progreso entre destinos, pero no distingue volver
+    // a abrir la hoja y elegir el mismo destino: sin este reset el conteo de la sesion
+    // anterior se arrastraria a la nueva.
+    progreso.current = null;
   }, []);
 
   const resumenDestino = useMemo(() => {
@@ -221,19 +306,36 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
     // otra clase apuntaria a una unidad que ya no existe en este grupo.
     const unidadId = destino.unidadId ?? undefined;
 
+    // Un intento sobre un destino distinto del que produjo el progreso empieza de cero: lo
+    // escrito antes apunta al destino anterior y hay que reescribirlo hacia el nuevo.
+    const clave = claveDestino(destino);
+    if (progreso.current === null || progreso.current.clave !== clave) {
+      progreso.current = { clave, procesados: new Set<string>(), asignados: 0, syncOk: true };
+    }
+    const avance = progreso.current;
+
     setEjecutando(true);
-    setError(null);
+    setErrorEscritura(null);
 
     try {
-      let asignados = 0;
-      let syncOk = true;
-
       for (const elemento of elementos) {
+        const marca = marcaElemento(elemento);
+        // Reintentar no reescribe lo ya resuelto. La cola deduplica los `update` del mismo
+        // id, asi que no habria operaciones repetidas; lo que se evita es otra cosa: que el
+        // conteo se reinicie en cada intento, pagar persistencia y flush por trabajo ya
+        // hecho, y reencolar un elemento que ya esperaba, cosa que le borra el contador de
+        // reintentos y lo manda al final de la cola.
+        if (avance.procesados.has(marca)) continue;
+
         if (elemento.tipo === "recurso") {
           // Un id inexistente no se asigna: los contextos hacen upsert sobre el merge, asi
           // que escribir a ciegas crearia una entidad fantasma y despues se afirmaria que
           // se asigno algo que no existe.
-          if (!obtenerRecursoPorId(elemento.id)) continue;
+          if (!obtenerRecursoPorId(elemento.id)) {
+            // Resuelto aunque no cuente como asignado: reintentarlo volveria a descartarlo.
+            avance.procesados.add(marca);
+            continue;
+          }
           const cambios: Partial<Recurso> = {
             grupoId,
             unidadId,
@@ -241,20 +343,30 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
             asignadoComoTarea,
           };
           const salida = await actualizarRecurso(elemento.id, cambios);
-          if (!salida.syncOk) syncOk = false;
+          if (!salida.syncOk) avance.syncOk = false;
         } else {
-          if (!obtenerEntregablePorId(elemento.id)) continue;
+          if (!obtenerEntregablePorId(elemento.id)) {
+            avance.procesados.add(marca);
+            continue;
+          }
           const cambios: Partial<Tarea> = { grupoId, unidadId };
           const salida = await actualizarEntregable(elemento.id, cambios);
-          if (!salida.syncOk) syncOk = false;
+          if (!salida.syncOk) avance.syncOk = false;
         }
-        asignados += 1;
+        // Despues del await: si la escritura lanza, el elemento queda pendiente y el
+        // reintento lo toma.
+        avance.procesados.add(marca);
+        avance.asignados += 1;
       }
 
-      setResultado({ asignados, syncOk });
+      setResultado({ asignados: avance.asignados, syncOk: avance.syncOk });
     } catch (err) {
       logger.error("[useAssignSheet] La asignacion fallo:", err);
-      setError("No se pudo completar la asignacion.");
+      setErrorEscritura({
+        mensaje: "No se pudo completar la asignacion.",
+        asignados: avance.asignados,
+        pendientes: elementos.filter((item) => !avance.procesados.has(marcaElemento(item))).length,
+      });
     } finally {
       setEjecutando(false);
     }
@@ -280,8 +392,9 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
     resumenDestino,
     puedeConfirmar,
     cargando: cargandoTodo,
-    error,
-    reintentar,
+    errorCarga,
+    reintentarCarga,
+    errorEscritura,
     ejecutando,
     resultado,
     asignar,

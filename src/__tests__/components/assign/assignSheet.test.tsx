@@ -1,6 +1,7 @@
 import React from "react";
 import { act, fireEvent, waitFor } from "@testing-library/react-native";
 import { renderConProveedores } from "../base/renderConProveedores";
+import { expectConsoleError } from "../../helpers/consoleSignal";
 import AssignSheet from "../../../components/assign/AssignSheet";
 import type { PresentacionSync } from "../../../hooks/syncPresentation";
 
@@ -37,12 +38,13 @@ jest.mock("../../../context/EntregablesContext", () => ({
   }),
 }));
 
+const mockGetUnidades = jest.fn();
+const mockGetActividades = jest.fn();
+
 jest.mock("../../../services/classroom/classroomFacade", () => ({
   classroomFacade: {
-    getUnidadesByGrupoId: jest.fn().mockResolvedValue([
-      { id: "u1", grupoId: 1, nombre: "Unidad 1", posicion: 0 },
-    ]),
-    getActividadesByGrupoId: jest.fn().mockResolvedValue([]),
+    getUnidadesByGrupoId: (grupoId: number) => mockGetUnidades(grupoId),
+    getActividadesByGrupoId: (grupoId: number) => mockGetActividades(grupoId),
   },
 }));
 
@@ -82,6 +84,9 @@ describe("AssignSheet", () => {
     jest.clearAllMocks();
     mockGrupos = [{ id: 1, nombre: "2do A" }];
     mockPresentacion = PRESENTACION_BASE;
+    mockActualizarRecurso.mockResolvedValue({ syncOk: true });
+    mockGetUnidades.mockResolvedValue([{ id: "u1", grupoId: 1, nombre: "Unidad 1", posicion: 0 }]);
+    mockGetActividades.mockResolvedValue([]);
   });
 
   it("no permite confirmar mientras no hay clase elegida", async () => {
@@ -180,5 +185,97 @@ describe("AssignSheet", () => {
     expect(getByTestId("hoja-vacio")).toBeTruthy();
     fireEvent.press(getByText("Crear clase"));
     expect(onCrearClase).toHaveBeenCalled();
+  });
+
+  /**
+   * Cada fallo con su propio aviso (#152, debt-9f9d7019d927).
+   *
+   * Antes habia un solo banner con el titulo fijo "No se pudieron cargar los destinos" y
+   * una accion cableada a la recarga de destinos. Un fallo de escritura se anunciaba con la
+   * causa equivocada y su reintento no reintentaba lo que habia fallado.
+   */
+  describe("avisos de error", () => {
+    it("el fallo de carga se anuncia como fallo de carga y recarga destinos", async () => {
+      expectConsoleError(/No se pudieron cargar los destinos/);
+      mockGetUnidades.mockRejectedValueOnce(new Error("sin red"));
+      const { getByTestId, queryByTestId, getByText } = await montar();
+
+      fireEvent.press(getByTestId("hoja-clase-1"));
+      await waitFor(() => expect(getByTestId("hoja-error-carga")).toBeTruthy());
+
+      expect(getByText("No se pudieron cargar los destinos")).toBeTruthy();
+      // El otro aviso no aparece: son dos banners distintos, no uno con dos causas.
+      expect(queryByTestId("hoja-error-escritura")).toBeNull();
+
+      mockGetUnidades.mockResolvedValue([{ id: "u1", grupoId: 1, nombre: "Unidad 1", posicion: 0 }]);
+      await act(async () => {
+        fireEvent.press(getByText("Reintentar"));
+      });
+      // Reintentar aqui vuelve a pedir los destinos, que es lo que fallo.
+      await waitFor(() => expect(queryByTestId("hoja-error-carga")).toBeNull());
+      expect(getByTestId("hoja-unidad-u1")).toBeTruthy();
+    });
+
+    it("el fallo de escritura se anuncia como tal y nombra lo ya guardado", async () => {
+      expectConsoleError(/La asignacion fallo/);
+      mockActualizarRecurso
+        .mockResolvedValueOnce({ syncOk: true })
+        .mockRejectedValueOnce(new Error("almacenamiento lleno"));
+
+      const { getByTestId, queryByTestId, getByText } = await montar({
+        elementos: [ELEMENTO, { id: 2, titulo: "Examen", tipo: "recurso" as const }],
+      });
+
+      fireEvent.press(getByTestId("hoja-clase-1"));
+      await waitFor(() =>
+        expect(getByTestId("hoja-confirmar").props.accessibilityState.disabled).toBe(false)
+      );
+      await act(async () => {
+        fireEvent.press(getByTestId("hoja-confirmar"));
+      });
+
+      await waitFor(() => expect(getByTestId("hoja-error-escritura")).toBeTruthy());
+      // El titulo corresponde a la causa, no al fallo de carga.
+      expect(getByText("No se pudo completar la asignacion")).toBeTruthy();
+      expect(queryByTestId("hoja-error-carga")).toBeNull();
+      // Y el docente sabe que parte del trabajo ya quedo guardado.
+      expect(
+        getByText(
+          "No se pudo completar la asignacion. Se guardo 1 elemento y queda 1 pendiente. Reintentar continua desde ahi."
+        )
+      ).toBeTruthy();
+    });
+
+    it("reintentar el fallo de escritura reintenta la asignacion, no la carga", async () => {
+      expectConsoleError(/La asignacion fallo/);
+      mockActualizarRecurso
+        .mockResolvedValueOnce({ syncOk: true })
+        .mockRejectedValueOnce(new Error("almacenamiento lleno"));
+
+      const { getByTestId, getByText } = await montar({
+        elementos: [ELEMENTO, { id: 2, titulo: "Examen", tipo: "recurso" as const }],
+      });
+
+      fireEvent.press(getByTestId("hoja-clase-1"));
+      await waitFor(() =>
+        expect(getByTestId("hoja-confirmar").props.accessibilityState.disabled).toBe(false)
+      );
+      await act(async () => {
+        fireEvent.press(getByTestId("hoja-confirmar"));
+      });
+      await waitFor(() => expect(getByTestId("hoja-error-escritura")).toBeTruthy());
+
+      const llamadasAntes = mockGetUnidades.mock.calls.length;
+      mockActualizarRecurso.mockResolvedValue({ syncOk: true });
+      await act(async () => {
+        fireEvent.press(getByText("Reintentar"));
+      });
+
+      // La escritura se retoma y la hoja llega al resultado.
+      await waitFor(() => expect(getByTestId("hoja-resultado")).toBeTruthy());
+      expect(getByText("2 elementos asignados a 2do A.")).toBeTruthy();
+      // Y no se recargaron destinos: eso era la accion equivocada del defecto original.
+      expect(mockGetUnidades.mock.calls.length).toBe(llamadasAntes);
+    });
   });
 });
