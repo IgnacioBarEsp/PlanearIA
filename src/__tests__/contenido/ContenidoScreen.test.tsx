@@ -52,9 +52,37 @@ jest.mock("react-native-safe-area-context", () => {
 });
 
 const mockNavigate = jest.fn();
+const mockGoBack = jest.fn();
+let mockRouteParams: Record<string, unknown> = {};
 jest.mock("@react-navigation/native", () => ({
-  useNavigation: () => ({ navigate: mockNavigate }),
-  useRoute: () => ({ params: {} }),
+  useNavigation: () => ({ navigate: mockNavigate, goBack: mockGoBack }),
+  useRoute: () => ({ params: mockRouteParams }),
+}));
+
+/**
+ * La hoja compartida se sustituye por una sonda que expone el payload recibido.
+ *
+ * Lo que esta suite verifica es la responsabilidad de la pantalla: a que elementos ofrece la
+ * accion y que entrega al selector canonico. El comportamiento interno de la hoja ya lo cubre
+ * assignSheet.test.tsx, y el camino completo hasta la cola lo cubre
+ * src/__tests__/sync/asignacionContenidoEncolada.test.tsx con la hoja real y sin mocks.
+ */
+jest.mock("../../components/assign", () => {
+  const ReactModule = require("react");
+  return {
+    AssignSheet: ({ elementos }: { elementos: unknown[] }) =>
+      ReactModule.createElement("View", {
+        testID: "assign-sheet-sonda",
+        accessibilityLabel: JSON.stringify(elementos),
+      }),
+  };
+});
+
+const mockAsignarRecursos = jest.fn().mockResolvedValue(1);
+const mockAsignarEntregables = jest.fn().mockResolvedValue(1);
+jest.mock("../../services/grupoAsignacionesService", () => ({
+  asignarRecursosAGrupo: (...args: unknown[]) => mockAsignarRecursos(...args),
+  asignarEntregablesAGrupo: (...args: unknown[]) => mockAsignarEntregables(...args),
 }));
 
 jest.mock("../../context/MensajesContext", () => ({
@@ -168,10 +196,39 @@ jest.mock("../../hooks/useContenidoViewModel", () => ({
   ContenidoItem: {},
 }));
 
+const ITEM_ENTREGABLE: ContenidoItem = {
+  id: "ent-9",
+  tipo: "entregables",
+  titulo: "Ensayo de Historia",
+  subtitulo: "Tarea",
+  fechaModificacion: "2024-06-07T00:00:00.000Z",
+  esBorrador: false,
+  raw: { id: 9 } as never,
+};
+
+const ITEM_PLANTILLA: ContenidoItem = {
+  id: "pla-4",
+  tipo: "plantillas",
+  titulo: "Plantilla de examen",
+  subtitulo: "Plantilla",
+  fechaModificacion: "2024-06-06T00:00:00.000Z",
+  esBorrador: false,
+  raw: { id: 4 } as never,
+};
+
+/** Monta la pantalla con un unico elemento y abre su menu de opciones. */
+const abrirMenuDe = (item: ContenidoItem) => {
+  mockCurrentVm = { ...defaultVm, items: [item], borradores: [], totalItems: 1 };
+  const utils = render(<ContenidoScreen />);
+  fireEvent.press(utils.getAllByLabelText("Más opciones")[0]);
+  return utils;
+};
+
 describe("ContenidoScreen", () => {
   beforeEach(() => {
     jest.clearAllMocks();
     mockCurrentVm = { ...defaultVm };
+    mockRouteParams = {};
   });
 
   it("renderiza el header con título y conteo", () => {
@@ -284,13 +341,12 @@ describe("ContenidoScreen", () => {
     expect(queryByText("Sin conexión — Mostrando datos guardados")).toBeNull();
   });
 
-  it("muestra opciones Asignar a grupo, Exportar y Compartir en context menu", () => {
+  it("muestra opciones Exportar y Compartir en context menu", () => {
     const { getAllByLabelText, getByText } = render(<ContenidoScreen />);
 
     const moreButtons = getAllByLabelText("Más opciones");
     fireEvent.press(moreButtons[0]);
 
-    expect(getByText("Asignar a grupo")).toBeTruthy();
     expect(getByText("Exportar")).toBeTruthy();
     expect(getByText("Compartir")).toBeTruthy();
   });
@@ -304,20 +360,69 @@ describe("ContenidoScreen", () => {
     expect(getAllByLabelText("Cerrar menú").length).toBeGreaterThan(0);
   });
 
-  it("acción Asignar a grupo muestra alerta Próximamente", () => {
-    const alertSpy = jest.spyOn(Alert, "alert");
+  // ─── Asignar a grupo: adopcion del selector canonico (#114) ───
 
-    const { getAllByLabelText, getByText } = render(<ContenidoScreen />);
+  describe("accion Asignar a grupo", () => {
+    it("ofrece la accion en un recurso y abre el selector canonico con ese elemento", () => {
+      const { getByText, getByTestId } = abrirMenuDe(mockItems[1]);
 
-    const moreButtons = getAllByLabelText("Más opciones");
-    fireEvent.press(moreButtons[0]);
-    fireEvent.press(getByText("Asignar a grupo"));
+      fireEvent.press(getByText("Asignar a grupo"));
 
-    expect(alertSpy).toHaveBeenCalledWith(
-      "Próximamente",
-      expect.stringContaining("próxima actualización")
-    );
-    alertSpy.mockRestore();
+      // El payload es el contrato con la hoja: id de la entidad real (no del prefijo de
+      // presentacion "rec-1"), titulo y tipo traducido al vocabulario del selector.
+      expect(getByTestId("assign-sheet-sonda").props.accessibilityLabel).toBe(
+        JSON.stringify([{ id: 1, titulo: "Video de Historia", tipo: "recurso" }])
+      );
+    });
+
+    it("ofrece la accion en un entregable y traduce su tipo", () => {
+      const { getByText, getByTestId } = abrirMenuDe(ITEM_ENTREGABLE);
+
+      fireEvent.press(getByText("Asignar a grupo"));
+
+      expect(getByTestId("assign-sheet-sonda").props.accessibilityLabel).toBe(
+        JSON.stringify([{ id: 9, titulo: "Ensayo de Historia", tipo: "entregable" }])
+      );
+    });
+
+    it("no ofrece la accion en una planeacion", () => {
+      const { queryByText } = abrirMenuDe(mockItems[0]);
+
+      expect(queryByText("Asignar a grupo")).toBeNull();
+    });
+
+    it("no ofrece la accion en una plantilla", () => {
+      const { queryByText } = abrirMenuDe(ITEM_PLANTILLA);
+
+      expect(queryByText("Asignar a grupo")).toBeNull();
+    });
+
+    it("no sustituye la accion ausente por un aviso de disponibilidad futura", () => {
+      const alertSpy = jest.spyOn(Alert, "alert");
+      const { queryByText } = abrirMenuDe(mockItems[0]);
+
+      // Ni control inerte ni promesa: la opcion simplemente no existe para ese tipo.
+      expect(queryByText("Asignar a grupo")).toBeNull();
+      expect(queryByText("Próximamente")).toBeNull();
+      expect(alertSpy).not.toHaveBeenCalled();
+      alertSpy.mockRestore();
+    });
+
+    it("conserva el resto de opciones del menu en un tipo no asignable", () => {
+      const { getByText } = abrirMenuDe(mockItems[0]);
+
+      expect(getByText("Editar")).toBeTruthy();
+      expect(getByText("Duplicar")).toBeTruthy();
+      expect(getByText("Compartir en Feed")).toBeTruthy();
+      expect(getByText("Enviar por chat")).toBeTruthy();
+      expect(getByText("Eliminar")).toBeTruthy();
+    });
+
+    it("no monta el selector mientras no se dispara la accion", () => {
+      const { queryByTestId } = abrirMenuDe(mockItems[1]);
+
+      expect(queryByTestId("assign-sheet-sonda")).toBeNull();
+    });
   });
 
   it("ejecuta búsqueda al escribir en el campo", () => {
@@ -431,5 +536,52 @@ describe("ContenidoScreen", () => {
       ])
     );
     alertSpy.mockRestore();
+  });
+
+  // ─── Modo seleccion: el resultado se afirma segun el hecho real (#114) ───
+
+  describe("modo seleccion", () => {
+    /** Entra en modo seleccion con destino resuelto, elige el recurso y confirma. */
+    const confirmarSeleccion = async () => {
+      mockRouteParams = { selectionMode: true, targetGroupId: 7 };
+      mockCurrentVm = { ...defaultVm, items: [mockItems[1]], borradores: [], totalItems: 1 };
+
+      const utils = render(<ContenidoScreen />);
+      fireEvent.press(utils.getByText("Video de Historia"));
+      fireEvent.press(utils.getByText("Asignar a Grupo"));
+      return utils;
+    };
+
+    it("afirma el resultado y vuelve atras cuando si hubo escritura", async () => {
+      const alertSpy = jest.spyOn(Alert, "alert");
+      mockAsignarRecursos.mockResolvedValueOnce(1);
+
+      await confirmarSeleccion();
+
+      await waitFor(() =>
+        expect(alertSpy).toHaveBeenCalledWith("Listo", "1 elemento asignado al grupo.")
+      );
+      expect(mockGoBack).toHaveBeenCalled();
+      alertSpy.mockRestore();
+    });
+
+    it("no afirma exito ni vuelve atras cuando no hubo ninguna escritura", async () => {
+      const alertSpy = jest.spyOn(Alert, "alert");
+      // El servicio ya devuelve 0 cuando ningun id coincide: ids que desaparecieron, o que ya
+      // pertenecian al grupo destino. Antes ese conteo se descartaba y se afirmaba exito igual.
+      mockAsignarRecursos.mockResolvedValueOnce(0);
+
+      await confirmarSeleccion();
+
+      await waitFor(() =>
+        expect(alertSpy).toHaveBeenCalledWith(
+          "No se asignó nada",
+          expect.stringContaining("Ningún elemento cambió de destino")
+        )
+      );
+      expect(alertSpy).not.toHaveBeenCalledWith("Éxito", expect.anything());
+      expect(mockGoBack).not.toHaveBeenCalled();
+      alertSpy.mockRestore();
+    });
   });
 });

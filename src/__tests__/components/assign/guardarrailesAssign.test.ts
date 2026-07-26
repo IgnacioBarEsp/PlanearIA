@@ -75,6 +75,35 @@ describe("toda asignacion pasa por el camino que encola", () => {
   });
 });
 
+/**
+ * Las superficies que adoptan la hoja no pueden reimplementar lo que la hoja resuelve.
+ *
+ * La spec lo pide desde #84 ("ninguna superficie construye su propio selector"), pero hasta la
+ * adopcion en Contenido (#114) ninguna guardia lo vigilaba del lado de las superficies: solo del
+ * lado de la hoja. Una superficie que escribe por su cuenta reintroduce exactamente el defecto que
+ * #84 cerro, y lo hace sin tocar ninguno de los archivos que las otras guardias miran.
+ */
+describe("las superficies adoptantes no reimplementan la asignacion", () => {
+  const SUPERFICIES = [
+    path.join(RAIZ, "screens", "biblioteca", "ListaRecursosScreen.tsx"),
+    path.join(RAIZ, "screens", "contenido", "ContenidoScreen.tsx"),
+  ];
+
+  it.each(SUPERFICIES)("%s monta la hoja compartida desde el barrel", (archivo) => {
+    expect(soloCodigo(archivo)).toMatch(/from\s+"[^"]*components\/assign"/);
+  });
+
+  it.each(SUPERFICIES)("%s no abre almacenamiento, cola ni cliente propios", (archivo) => {
+    const codigo = soloCodigo(archivo);
+    expect(codigo).not.toMatch(/AsyncStorage/);
+    expect(codigo).not.toMatch(/queueEntityOperation/);
+    expect(codigo).not.toMatch(/\bfetch\s*\(/);
+    // Una clave de almacenamiento escrita a mano en una pantalla es una fuente de verdad
+    // paralela al registro de sincronizacion.
+    expect(codigo).not.toMatch(/@planearia:/);
+  });
+});
+
 describe("props ARIA que React Native Web no deriva solo", () => {
   /**
    * Igual que en #82: el renderer nativo de las pruebas normaliza los `aria-*` de vuelta a
