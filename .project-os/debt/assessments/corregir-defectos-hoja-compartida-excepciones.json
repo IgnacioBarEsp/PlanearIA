@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "flow": "corregir-defectos-hoja-compartida-excepciones",
+  "date": "2026-07-26",
+  "kind": "remediation",
+  "result": "clean",
+  "candidates": [],
+  "exceptions": [
+    {
+      "id": "debt-73eac38e3d7b",
+      "reason": "El defecto es real pero NO es alcanzable desde la interfaz vigente: AssignSheet admite varios elementos por contrato, pero las dos superficies que la montan pasan exactamente uno (ContenidoScreen linea 1388 y ListaRecursosScreen linea 420), asi que hoy ningun docente puede provocarlo. Ademas su consecuencia esta acotada por el propio motor: la cola SI recibe el documento completo de cada elemento, de modo que el servidor acaba correcto y el pull siguiente repara el estado local; la ventana de exposicion es entre la asignacion y ese pull. Es preexistente y ajeno a este change, verificado por historia de git: RecursosContext no se toca desde el commit del motor de sync, muy anterior. Cerrarlo aqui exigiria reescribir actualizarRecurso y actualizarEntregable, es decir el camino de escritura y los contextos de datos, que los no objetivos de #152 protegen expresamente para no convertir un saneamiento de tres defectos de presentacion en un refactor de la capa de datos. Se acepta con fecha de revision corta porque es accionable por nosotros y no depende de terceros.",
+      "owner": "RitualBoat",
+      "approvedBy": "RitualBoat",
+      "expiresOn": "2026-10-31",
+      "recovery": "Corregirlo en un change propio del camino de escritura: que actualizarRecurso y actualizarEntregable escriban sobre el estado vigente en vez del snapshot del render, con actualizador funcional o con una ref que persist mantenga al dia, o dando a los contextos una operacion por lote que el ViewModel use cuando hay mas de un elemento. Ese change debe cubrir con pruebas la asignacion multiple en una sola pasada y el cierre de la hoja durante la escritura, que es el segundo sintoma del mismo mecanismo. DISPARADOR REAL, antes que la fecha: en cuanto una superficie vaya a pasar mas de un elemento a AssignSheet, el defecto deja de ser latente y su correccion se vuelve prerrequisito de esa superficie. Al vencer sin correccion, la excepcion caduca y el motor vuelve a contarlo, que es el disparo previsto para forzar la decision."
+    },
+    {
+      "id": "debt-31dcd5bbaa77",
+      "reason": "Los 25 usos restantes son exactamente el alcance que #152 declaro no objetivo, y la medicion que este change aporta es lo que permite decidirlos con criterio en vez de a bulto. No son un reemplazo mecanico: el grupo B (Chip, su boton de cerrar y SyncStatusChip) exige decision de diseno, porque subir el eje corto a 44 cambia la densidad de controles disenados a 32 y 28 puntos, y el cierre del chip vive dentro de un chip de 32 de alto, donde una caja de 44 desbordaria su contenedor; el grupo C son siete pantallas y componentes legacy, cada uno con su QA visual propia. Ninguno es bloqueante: ninguno es el unico camino a su accion, y ninguno esta bajo la SHALL de cross-surface-assignment, que se refiere al selector compartido y quedo satisfecha al corregir su control de cierre. El riesgo de que el problema CREZCA mientras tanto queda cerrado por la guardia src/__tests__/components/base/areaTactilWeb.test.ts, que falla ante cualquier uso nuevo sin declarar y obliga a limpiar la lista al corregir uno; es decir, la deuda queda congelada y vigilada, no solo anotada.",
+      "owner": "RitualBoat",
+      "approvedBy": "RitualBoat",
+      "expiresOn": "2027-01-31",
+      "recovery": "Tratar los dos grupos en changes separados, porque su coste es distinto. Grupo B: decision de diseno sobre densidad de chips, con QA visual por breakpoint y revision del cierre del chip, que es el peor caso medido (16x16). Grupo C: adoptar minTargetBox() pantalla por pantalla donde el contenedor tenga padding que absorba el desborde; ScreenBackButton es el mas barato, con caja propia de 40x40 que falla por solo 4 puntos. Pendiente ademas medir uno a uno los nueve usos de CuentaScreen, declarados en el inventario como no medidos. Cada sitio corregido obliga a quitar su linea del inventario de la guardia, que es donde se vera el avance. Al vencer sin correccion, la excepcion caduca y el motor vuelve a contarlo."
+    }
+  ],
+  "notes": "Flujo de aceptacion de los dos defectos preexistentes que descubrio la revision adversarial de corregir-defectos-hoja-compartida. Se captura como flujo aparte porque el assessment original es evidencia historica inmutable; es el mismo patron con el que restaurar-fixture-estructural-doctor-excepciones acepto los external-risk de #149 y con el que corregir-riesgo-supply-chain-sheetjs acepto debt-770acc1e9d53. Ninguno de los dos items nace del codigo escrito en este change: uno es comportamiento de los contextos de datos anterior al change y el otro es el alcance que el change declaro fuera desde el issue. La regla NO GENERAR MAS DEUDA TECNICA se cumple en su intencion: este saneamiento no genero deuda, la descubrio y la dejo medida, clasificada, con recuperacion escrita y, en el caso del area tactil, con una guardia ejecutable que impide que crezca. Aprobacion humana solicitada y concedida explicitamente el 2026-07-26 antes de capturar; el agente no la asumio."
+}

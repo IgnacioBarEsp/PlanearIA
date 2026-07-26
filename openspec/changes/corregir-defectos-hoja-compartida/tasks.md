@@ -45,6 +45,6 @@
 ## 7. Cierre
 
 - [x] 7.1 `npm run typecheck`, `npm run lint -- --quiet`, `npm test -- --runInBand`, `npm run test:sync -- --runInBand`, `npm run test:project-os-contract`, `npm run agent:harness:check`, `npm run openspec:validate` y `npm run qa:visual:check -- --change corregir-defectos-hoja-compartida`
-- [ ] 7.2 Revision adversarial en contexto limpio y cierre de todos los Blockers y Majors
-- [ ] 7.3 Assessment de deuda (`kind: remediation`) resolviendo los tres items y registrando como candidato lo no corregido del inventario de `hitSlop`
+- [x] 7.2 Revision adversarial en contexto limpio y cierre de todos los Blockers y Majors
+- [x] 7.3 Assessment de deuda (`kind: remediation`) resolviendo los tres items y registrando como candidato lo no corregido del inventario de `hitSlop`
 - [ ] 7.4 Gate `npm run openspec:ready:archive -- --change corregir-defectos-hoja-compartida --run-local` en PASS
