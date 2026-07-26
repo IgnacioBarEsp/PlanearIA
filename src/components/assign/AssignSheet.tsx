@@ -20,6 +20,7 @@ import { useSyncPresentation } from "../../hooks/useSyncPresentation";
 import {
   useAssignSheet,
   type ElementoAsignable,
+  type ErrorEscritura,
   type OpcionDestino,
   type ResultadoAsignacion,
 } from "../../hooks/useAssignSheet";
@@ -181,13 +182,29 @@ const AssignSheet: React.FC<AssignSheetProps> = ({
             />
           ) : null}
 
-          {vm.error ? (
+          {/* Dos avisos distintos, no uno con dos causas. Antes un solo campo servia a los
+              dos fallos y la hoja anunciaba siempre "no se pudieron cargar los destinos"
+              con un reintento que recargaba destinos, incluso cuando lo que habia fallado
+              era guardar. El titulo mentia y la accion no reparaba nada. */}
+          {vm.errorCarga ? (
             <Banner
               tone="warning"
               titulo="No se pudieron cargar los destinos"
-              mensaje={vm.error}
-              accion={{ label: "Reintentar", onPress: vm.reintentar }}
-              testID={testID ? `${testID}-error` : undefined}
+              mensaje={vm.errorCarga}
+              accion={{ label: "Reintentar", onPress: vm.reintentarCarga }}
+              testID={testID ? `${testID}-error-carga` : undefined}
+            />
+          ) : null}
+
+          {vm.errorEscritura ? (
+            <Banner
+              tone="error"
+              titulo="No se pudo completar la asignacion"
+              mensaje={mensajeEscrituraFallida(vm.errorEscritura)}
+              // Reinvocar `asignar` ES el reintento: retoma los elementos pendientes sin
+              // reescribir los que ya quedaron encolados.
+              accion={{ label: "Reintentar", onPress: () => void confirmar() }}
+              testID={testID ? `${testID}-error-escritura` : undefined}
             />
           ) : null}
 
@@ -272,6 +289,22 @@ const AssignSheet: React.FC<AssignSheetProps> = ({
       )}
     </Sheet>
   );
+};
+
+/**
+ * Texto del fallo de escritura, nombrando lo que ya quedo guardado.
+ *
+ * Un fallo parcial no es "no se guardo nada": los elementos escritos antes del fallo
+ * quedaron ademas encolados y se subiran igual. Callarlo llevaria al docente a rehacer un
+ * trabajo que ya existe.
+ */
+const mensajeEscrituraFallida = (error: ErrorEscritura): string => {
+  if (error.asignados === 0) return `${error.mensaje} No se guardo ningun elemento.`;
+  const guardados =
+    error.asignados === 1 ? "Se guardo 1 elemento" : `Se guardaron ${error.asignados} elementos`;
+  const faltan =
+    error.pendientes === 1 ? "queda 1 pendiente" : `quedan ${error.pendientes} pendientes`;
+  return `${error.mensaje} ${guardados} y ${faltan}. Reintentar continua desde ahi.`;
 };
 
 const resumenElementos = (elementos: ElementoAsignable[]): string =>

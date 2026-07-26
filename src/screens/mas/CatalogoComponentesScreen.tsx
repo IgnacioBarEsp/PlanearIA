@@ -136,6 +136,7 @@ const CatalogoComponentesScreen: React.FC = () => {
           titulo="No se pudo exportar"
           mensaje="El archivo quedo incompleto."
           onDismiss={() => undefined}
+          testID="banner-catalogo"
         />
       </Seccion>
 
@@ -172,6 +173,7 @@ const CatalogoComponentesScreen: React.FC = () => {
           tone="success"
           mensaje="Planeacion guardada en este dispositivo."
           onDismiss={() => setToastVisible(false)}
+          testID="toast-catalogo"
         />
       </Seccion>
 

@@ -19,7 +19,7 @@ import {
 } from "../../themes/tokens";
 import type { ThemedStylesInput } from "../../themes/types";
 import { useBreakpoint } from "../../hooks/useBreakpoint";
-import { MIN_TOUCH_TARGET, hitSlopToMinTarget, useFocusRing } from "./primitives";
+import { MIN_TOUCH_TARGET, minTargetBox, overflowMinTarget, useFocusRing } from "./primitives";
 
 export interface SheetProps {
   visible: boolean;
@@ -105,7 +105,6 @@ const Sheet: React.FC<SheetProps> = ({ visible, titulo, onClose, children, foote
               onPress={onClose}
               onFocus={cerrarFoco.onFocus}
               onBlur={cerrarFoco.onBlur}
-              hitSlop={hitSlopToMinTarget(ICONO_CERRAR, ICONO_CERRAR)}
               style={[styles.cerrar, cerrarFoco.focused && styles.focusRing]}
               accessibilityRole="button"
               accessibilityLabel="Cerrar"
@@ -126,6 +125,7 @@ const Sheet: React.FC<SheetProps> = ({ visible, titulo, onClose, children, foote
 
 /** Desplazamiento de entrada, en puntos. Corto a proposito: la hoja acompana, no viaja. */
 const DESPLAZAMIENTO_ENTRADA = 24;
+/** Huella visual del control de cierre. La caja tactil es de 44 y desborda esto por lado. */
 const ICONO_CERRAR = 28;
 
 const getStyles = ({ colors, scaled, highContrast, breakpoint = "mobile" }: ThemedStylesInput) => {
@@ -170,10 +170,12 @@ const getStyles = ({ colors, scaled, highContrast, breakpoint = "mobile" }: Them
       flex: 1,
     },
     cerrar: {
-      width: ICONO_CERRAR,
-      height: ICONO_CERRAR,
-      alignItems: "center",
-      justifyContent: "center",
+      ...minTargetBox(),
+      // El area tactil crece a 44 sin mover el encabezado: el desborde cae dentro de su
+      // `padding`, que es espacio vacio. Sin esta compensacion el encabezado de todas las
+      // hojas de la app creceria de 60 a 76 puntos sin darle nada al docente, porque lo que
+      // se gana es el area tactil y esa ya la entrega la caja.
+      marginVertical: -overflowMinTarget(ICONO_CERRAR),
       borderRadius: radii.sm,
     },
     cuerpo: {

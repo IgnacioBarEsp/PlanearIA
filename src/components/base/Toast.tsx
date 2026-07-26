@@ -18,7 +18,7 @@ import {
   zIndex,
 } from "../../themes/tokens";
 import type { ColorTokens, ThemedStylesInput } from "../../themes/types";
-import { hitSlopToMinTarget, useFocusRing } from "./primitives";
+import { minTargetBox, overflowMinTarget, useFocusRing } from "./primitives";
 import type { ToneVariant } from "./primitives";
 
 export interface ToastProps {
@@ -81,7 +81,6 @@ const Toast: React.FC<ToastProps> = ({ visible, tone = "info", mensaje, onDismis
           onPress={onDismiss}
           onFocus={cerrarFoco.onFocus}
           onBlur={cerrarFoco.onBlur}
-          hitSlop={hitSlopToMinTarget(ICONO_CERRAR, ICONO_CERRAR)}
           style={[styles.cerrar, cerrarFoco.focused && styles.focusRing]}
           accessibilityRole="button"
           accessibilityLabel="Descartar aviso"
@@ -96,6 +95,7 @@ const Toast: React.FC<ToastProps> = ({ visible, tone = "info", mensaje, onDismis
 
 /** El toast sube desde abajo. Recorrido corto: es un aviso, no una transicion de pantalla. */
 const DESPLAZAMIENTO_ENTRADA = 16;
+/** Huella visual del boton de cerrar. La caja tactil es de 44 y desborda esto por lado. */
 const ICONO_CERRAR = 28;
 
 interface TonoPaleta {
@@ -131,10 +131,10 @@ const getStyles = ({ colors, scaled, highContrast }: ThemedStylesInput) => {
       flex: 1,
     },
     cerrar: {
-      width: ICONO_CERRAR,
-      height: ICONO_CERRAR,
-      alignItems: "center",
-      justifyContent: "center",
+      ...minTargetBox(),
+      // Ver Sheet: la caja llega a 44 y el desborde se absorbe en el padding del toast, asi
+      // que el alto del aviso no cambia.
+      marginVertical: -overflowMinTarget(ICONO_CERRAR),
       borderRadius: radii.sm,
     },
     focusRing: {

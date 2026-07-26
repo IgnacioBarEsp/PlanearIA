@@ -266,16 +266,156 @@ describe("useAssignSheet", () => {
     await act(async () => {
       result.current.elegirClase(1);
     });
-    await waitFor(() => expect(result.current.error).not.toBeNull());
+    await waitFor(() => expect(result.current.errorCarga).not.toBeNull());
+    // El fallo de carga no puede aparecer como fallo de escritura: son campos distintos.
+    expect(result.current.errorEscritura).toBeNull();
 
     mockGetUnidades.mockResolvedValue([
       { id: "u1", grupoId: 1, nombre: "Unidad 1", posicion: 0 },
     ]);
     await act(async () => {
-      result.current.reintentar();
+      result.current.reintentarCarga();
     });
 
     await waitFor(() => expect(result.current.unidades).toHaveLength(1));
-    expect(result.current.error).toBeNull();
+    expect(result.current.errorCarga).toBeNull();
+  });
+
+  /**
+   * Semantica de errores separada (#152, debt-9f9d7019d927).
+   *
+   * El defecto original: un unico campo `error` para dos fallos, y una hoja que siempre
+   * anunciaba el de carga con un reintento que recargaba destinos. Si la escritura fallaba
+   * tras haber escrito y encolado parte del trabajo, el docente veia el titulo equivocado,
+   * un reintento que no reintentaba lo que fallo y ningun rastro de lo ya guardado.
+   */
+  describe("fallo de escritura", () => {
+    const DOS: ElementoAsignable[] = [
+      { id: 1, titulo: "Guia", tipo: "recurso" },
+      { id: 2, titulo: "Examen", tipo: "recurso" },
+    ];
+
+    const elegirYAsignar = async (result: { current: ReturnType<typeof useAssignSheet> }) => {
+      await act(async () => {
+        result.current.elegirClase(1);
+      });
+      await waitFor(() => expect(result.current.puedeConfirmar).toBe(true));
+      await act(async () => {
+        await result.current.asignar();
+      });
+    };
+
+    it("no lo confunde con el fallo de carga y cuenta lo ya escrito", async () => {
+      expectConsoleError(/La asignacion fallo/);
+      // El primero se escribe y encola; el segundo revienta.
+      mockActualizarRecurso
+        .mockResolvedValueOnce({ syncOk: true })
+        .mockRejectedValueOnce(new Error("almacenamiento lleno"));
+
+      const { result } = montar(DOS);
+      await elegirYAsignar(result);
+
+      expect(result.current.errorCarga).toBeNull();
+      expect(result.current.errorEscritura).toEqual({
+        mensaje: "No se pudo completar la asignacion.",
+        asignados: 1,
+        pendientes: 1,
+      });
+      // No hay resultado: afirmar "listo" tras un fallo seria la mentira que #114 cerro.
+      expect(result.current.resultado).toBeNull();
+    });
+
+    it("reintentar retoma lo pendiente sin reescribir lo ya encolado", async () => {
+      expectConsoleError(/La asignacion fallo/);
+      mockActualizarRecurso
+        .mockResolvedValueOnce({ syncOk: true })
+        .mockRejectedValueOnce(new Error("almacenamiento lleno"));
+
+      const { result } = montar(DOS);
+      await elegirYAsignar(result);
+      expect(mockActualizarRecurso).toHaveBeenCalledTimes(2);
+
+      mockActualizarRecurso.mockResolvedValue({ syncOk: true });
+      await act(async () => {
+        await result.current.asignar();
+      });
+
+      // Tres llamadas en total, no cuatro: el elemento 1 ya estaba escrito Y ENCOLADO, y
+      // repetirlo duplicaria su operacion en la unica cola sancionada por #84.
+      expect(mockActualizarRecurso).toHaveBeenCalledTimes(3);
+      expect(mockActualizarRecurso.mock.calls[2][0]).toBe(2);
+      expect(result.current.errorEscritura).toBeNull();
+      expect(result.current.resultado).toEqual({ asignados: 2, syncOk: true });
+    });
+
+    it("cambiar de destino tras un fallo parcial reescribe todo hacia el destino nuevo", async () => {
+      expectConsoleError(/La asignacion fallo/);
+      mockActualizarRecurso
+        .mockResolvedValueOnce({ syncOk: true })
+        .mockRejectedValueOnce(new Error("almacenamiento lleno"));
+
+      const { result } = montar(DOS);
+      await elegirYAsignar(result);
+      expect(mockActualizarRecurso).toHaveBeenCalledTimes(2);
+
+      mockActualizarRecurso.mockResolvedValue({ syncOk: true });
+      await act(async () => {
+        result.current.elegirClase(2);
+      });
+      await waitFor(() => expect(result.current.puedeConfirmar).toBe(true));
+      await act(async () => {
+        await result.current.asignar();
+      });
+
+      // Los dos elementos se reescriben: el primero quedo en la clase 1 y saltarselo lo
+      // dejaria ahi mientras la hoja afirma que fueron a la clase 2.
+      const haciaGrupo2 = mockActualizarRecurso.mock.calls.filter(
+        (llamada) => (llamada[1] as { grupoId: number }).grupoId === 2
+      );
+      expect(haciaGrupo2).toHaveLength(2);
+      expect(result.current.resultado).toEqual({ asignados: 2, syncOk: true });
+    });
+
+    it("conserva el encolado pendiente al acumular intentos", async () => {
+      expectConsoleError(/La asignacion fallo/);
+      // El primero queda en cola (syncOk false) y el segundo falla.
+      mockActualizarRecurso
+        .mockResolvedValueOnce({ syncOk: false })
+        .mockRejectedValueOnce(new Error("almacenamiento lleno"));
+
+      const { result } = montar(DOS);
+      await elegirYAsignar(result);
+
+      mockActualizarRecurso.mockResolvedValue({ syncOk: true });
+      await act(async () => {
+        await result.current.asignar();
+      });
+
+      // syncOk arrastra el intento anterior: el elemento 1 sigue en cola aunque el segundo
+      // intento haya drenado. Reiniciarlo presentaria como sincronizado algo que no lo esta.
+      expect(result.current.resultado).toEqual({ asignados: 2, syncOk: false });
+    });
+
+    it("reiniciar limpia el progreso para que la siguiente sesion no herede el conteo", async () => {
+      expectConsoleError(/La asignacion fallo/);
+      mockActualizarRecurso
+        .mockResolvedValueOnce({ syncOk: true })
+        .mockRejectedValueOnce(new Error("almacenamiento lleno"));
+
+      const { result } = montar(DOS);
+      await elegirYAsignar(result);
+      expect(result.current.errorEscritura?.asignados).toBe(1);
+
+      await act(async () => {
+        result.current.reiniciar();
+      });
+      expect(result.current.errorEscritura).toBeNull();
+
+      mockActualizarRecurso.mockResolvedValue({ syncOk: true });
+      await elegirYAsignar(result);
+
+      // Dos, no tres: el conteo de la sesion anterior no se arrastra al mismo destino.
+      expect(result.current.resultado).toEqual({ asignados: 2, syncOk: true });
+    });
   });
 });
