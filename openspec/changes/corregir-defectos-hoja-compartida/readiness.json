@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "issue": 152,
+  "change": "corregir-defectos-hoja-compartida",
+  "surfaces": ["ui", "sync"],
+  "validations": ["openspec-strict", "sync-tests"],
+  "qaVisualNivel": "N1",
+  "qaVisualJourneys": ["arranque-y-alcance-del-shell"],
+  "evidence": [
+    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/152" },
+    { "id": "pr-link", "ref": "PENDIENTE: PR hacia development creado por npm run opsx:finish desde la rama feat/corregir-defectos-hoja-compartida." },
+    { "id": "adversarial-review", "ref": "PENDIENTE: revision adversarial en contexto limpio antes de archivar." },
+    { "id": "web-http-200", "ref": "PENDIENTE: expo start --web con HTTP 200 confirmado antes de navegar." },
+    { "id": "playwright-breakpoints", "ref": "PENDIENTE: Playwright MCP en 375/768/1280, tema claro y oscuro." },
+    { "id": "nielsen", "ref": "PENDIENTE: checklist Nielsen y anti-slop de la seccion 1.9." },
+    { "id": "offline-reconnect", "ref": "PENDIENTE: fallo parcial sin conexion, reanudacion y drenado al reconectar." },
+    { "id": "cross-device", "ref": "PENDIENTE: verificacion contra npm run backend:dev:local." },
+    { "id": "no-local-loss", "ref": "PENDIENTE: lo escrito antes del fallo sobrevive a reconcileWithPending." }
+  ],
+  "rollback": {
+    "strategy": "Revertir el commit del PR devuelve el campo error unico de useAssignSheet, el titulo fijo 'No se pudieron cargar los destinos', el reintento cableado a la recarga de destinos y las cajas de 28x28 con hitSlop en los controles de cierre de Sheet, Banner y Toast. No hay migracion de datos que revertir: el change no crea, renombra ni borra claves de almacenamiento, no cambia esquema, no toca src/sync ni el backend ni configuracion remota ni proyecto nativo. Las asignaciones ya escritas y encoladas antes del rollback siguen siendo validas y se suben igual, porque viajan por el motor de sincronizacion vigente y no por nada que este change introduzca; en particular, revertir la reanudacion del reintento no desencola nada ya encolado, solo devuelve el reintento a reprocesar desde el principio, cuyo unico efecto es una operacion duplicada en la cola que el motor drena igual. Los tres arreglos son independientes y viven en archivos distintos, asi que una regresion aislada se revierte sola: el helper de area tactil y su guardia estan en primitives.ts y en un test propio, la semantica de errores en useAssignSheet.ts y AssignSheet.tsx, y los casos nuevos en la suite de sync. Revertir la guardia no reabre deuda por si mismo, pero deja de impedir que un control interactivo nuevo dependa solo de hitSlop para alcanzar los 44 puntos. La paleta local DT de ContenidoScreen no se toca en ningun momento, asi que revertir no puede afectarla. El assessment y el registro de deuda no se borran al revertir: un item resuelto volveria a abrirse mediante un flujo de saneamiento nuevo, no editando el registro.",
+    "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
+  },
+  "adversarialReview": {
+    "ref": "PENDIENTE: revision adversarial en contexto limpio antes de archivar."
+  },
+  "exceptions": []
+}
