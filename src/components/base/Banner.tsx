@@ -80,7 +80,7 @@ const Banner: React.FC<BannerProps> = ({
           accessibilityRole="button"
           accessibilityLabel="Descartar aviso"
           // Sin ancla propia el control no se puede medir en navegador, que es como se
-          // detecto que el area tactil no llegaba a 44 (#114, #110).
+          // detecto que su area tactil no llegaba a 44 puntos.
           testID={testID ? `${testID}-dismiss` : undefined}
         >
           <MaterialIcons name="close" size={18} color={colors.textSecondary} />

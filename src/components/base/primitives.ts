@@ -39,8 +39,8 @@ export function hitSlopToMinTarget(width: number, height: number): Insets | unde
  *
  * Existe porque `hitSlopToMinTarget` no sirve en web: react-native-web no implementa
  * `hitSlop`, asi que un control que se apoya solo en el conserva su tamano visual como area
- * efectiva. Medido en #114: el cierre de la hoja daba 28x28 reales y un punto a 21pt del
- * centro no alcanzaba el control. Este helper resuelve el minimo con caja, que si viaja al
+ * efectiva. Medido al adoptar la hoja en Contenido: el cierre daba 28x28 reales y un punto a
+ * 21pt del centro no lo alcanzaba. Este helper resuelve el minimo con caja, que si viaja al
  * DOM, y por eso vale en las dos plataformas.
  *
  * Devuelve solo la caja y el centrado. El desborde respecto de la forma visual lo compensa
