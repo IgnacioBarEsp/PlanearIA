@@ -398,6 +398,26 @@ describe("useAssignSheet", () => {
       expect(result.current.resultado).toEqual({ asignados: 2, syncOk: false });
     });
 
+    it("cambiar de destino retira el aviso de fallo, que ya no describe nada cierto", async () => {
+      expectConsoleError(/La asignacion fallo/);
+      mockActualizarRecurso
+        .mockResolvedValueOnce({ syncOk: true })
+        .mockRejectedValueOnce(new Error("almacenamiento lleno"));
+
+      const { result } = montar(DOS);
+      await elegirYAsignar(result);
+      expect(result.current.errorEscritura).not.toBeNull();
+
+      await act(async () => {
+        result.current.elegirClase(2);
+      });
+
+      // El aviso decia "se guardo 1 y queda 1 pendiente, reintentar continua desde ahi".
+      // Hacia la clase 2 no se ha guardado nada y el reintento reescribe todo, asi que
+      // conservarlo dejaria en pantalla un conteo falso y una promesa que no se cumple.
+      expect(result.current.errorEscritura).toBeNull();
+    });
+
     it("reiniciar limpia el progreso para que la siguiente sesion no herede el conteo", async () => {
       expectConsoleError(/La asignacion fallo/);
       mockActualizarRecurso

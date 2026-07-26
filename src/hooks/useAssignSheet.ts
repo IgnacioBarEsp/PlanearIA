@@ -222,21 +222,45 @@ export function useAssignSheet(elementos: ElementoAsignable[]): AssignSheetViewM
     [actividadesGrupo, admiteActividad]
   );
 
-  const elegirClase = useCallback((grupoId: number | null) => {
-    // Cambiar de clase invalida los niveles inferiores: una unidad pertenece a una clase.
-    setDestino({ grupoId, unidadId: null, tareaId: null });
+  /**
+   * Todo cambio de destino invalida lo que se dijo del destino anterior.
+   *
+   * El resultado y el fallo de escritura hablan ambos de un destino concreto: sus conteos
+   * son "cuantos elementos fueron a ESE destino". Conservar el aviso de fallo al cambiar de
+   * destino dejaria en pantalla un conteo que ya no describe nada, junto a un "reintentar
+   * continua desde ahi" que el propio ViewModel no va a cumplir, porque la clave de destino
+   * cambio y el reintento reescribe todo. Es el mismo defecto que este ViewModel corrige un
+   * nivel mas arriba, asi que se cierra aqui tambien.
+   */
+  const olvidarResultadoDelDestinoAnterior = useCallback(() => {
     setResultado(null);
+    setErrorEscritura(null);
   }, []);
 
-  const elegirUnidad = useCallback((unidadId: string | null) => {
-    setDestino((prev) => ({ ...prev, unidadId, tareaId: null }));
-    setResultado(null);
-  }, []);
+  const elegirClase = useCallback(
+    (grupoId: number | null) => {
+      // Cambiar de clase invalida los niveles inferiores: una unidad pertenece a una clase.
+      setDestino({ grupoId, unidadId: null, tareaId: null });
+      olvidarResultadoDelDestinoAnterior();
+    },
+    [olvidarResultadoDelDestinoAnterior]
+  );
 
-  const elegirActividad = useCallback((tareaId: number | null) => {
-    setDestino((prev) => ({ ...prev, tareaId }));
-    setResultado(null);
-  }, []);
+  const elegirUnidad = useCallback(
+    (unidadId: string | null) => {
+      setDestino((prev) => ({ ...prev, unidadId, tareaId: null }));
+      olvidarResultadoDelDestinoAnterior();
+    },
+    [olvidarResultadoDelDestinoAnterior]
+  );
+
+  const elegirActividad = useCallback(
+    (tareaId: number | null) => {
+      setDestino((prev) => ({ ...prev, tareaId }));
+      olvidarResultadoDelDestinoAnterior();
+    },
+    [olvidarResultadoDelDestinoAnterior]
+  );
 
   const reintentarCarga = useCallback(() => setIntento((valor) => valor + 1), []);
 
