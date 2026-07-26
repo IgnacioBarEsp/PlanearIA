@@ -1,0 +1,92 @@
+{
+  "schemaVersion": 1,
+  "flow": "corregir-defectos-hoja-compartida",
+  "date": "2026-07-26",
+  "kind": "remediation",
+  "result": "debt",
+  "resolves": [
+    {
+      "id": "debt-9f9d7019d927",
+      "evidence": "useAssignSheet deja de exponer un unico campo error. Ahora expone errorCarga (con reintentarCarga, que vuelve a pedir los destinos) y errorEscritura (un objeto con mensaje, asignados y pendientes, cuya recuperacion es reinvocar asignar). AssignSheet pinta dos banners distintos, con titulo y tono propios: 'No se pudieron cargar los destinos' en warning y 'No se pudo completar la asignacion' en error. El contador de asignados salio del try de asignar a un registro de progreso que sobrevive al fallo, asi que un fallo parcial informa cuantos elementos alcanzaron a escribirse y encolarse y cuantos quedan; el texto exacto es 'Se guardo 1 elemento y queda 1 pendiente. Reintentar continua desde ahi.' El reintento reanuda desde los pendientes y no reescribe lo ya resuelto, y el progreso queda ligado a la clave del destino (grupoId|unidadId|tareaId), de modo que cambiar de destino tras un fallo parcial lo invalida y obliga a reescribir todo hacia el destino nuevo. Verificado en navegador con Chrome via Playwright MCP: los dos banners nunca coexisten, y midiendo llamadas se confirmo que Reintentar sobre el fallo de escritura NO recarga destinos (mockGetUnidades.mock.calls.length no cambia) y lleva la hoja al resultado. Cobertura nueva en src/__tests__/hooks/useAssignSheet.test.tsx (6 casos), src/__tests__/components/assign/assignSheet.test.tsx (3 casos) y src/__tests__/sync/asignacionReintentoEncolado.test.tsx sobre el motor real. No vacuidad demostrada por mutacion con git checkout development: 5 y 4 casos fallando respectivamente. Spec: requirement nueva 'El fallo de escritura se distingue del fallo de carga y nombra lo ya guardado' con cinco escenarios en cross-surface-assignment. Detalle en openspec/changes/corregir-defectos-hoja-compartida/evidencia/04-estados-de-error.md y 05-mutacion.md."
+    },
+    {
+      "id": "debt-c319ed19fe20",
+      "evidence": "El control de cierre de Sheet pasa de una caja de 28x28 con hitSlop a una caja real de 44x44 mediante minTargetBox(), helper nuevo en src/components/base/primitives.ts junto a hitSlopToMinTarget. Se retira el hitSlop en vez de conservarlo como refuerzo: con caja de 44, hitSlopToMinTarget(44,44) devuelve undefined por contrato, asi que dejarlo seria una prop inerte; la desviacion respecto de la remediacion registrada esta razonada en design.md D4. El crecimiento se compensa con marginVertical negativo derivado de overflowMinTarget(28) = 8, de modo que el desborde cae dentro del padding del encabezado. MEDICION EN NAVEGADOR, no inferida (Chrome via Playwright MCP, expo start --web con HTTP 200 confirmado antes de navegar): ANTES getBoundingClientRect daba 28x28 con padding y margin en cero, y document.elementFromPoint a 21pt del centro NO alcanzaba el control en ninguno de los cuatro lados; DESPUES da 44x44 con margin -8px, alcanza a 21pt en los cuatro lados y NO alcanza a 23pt, lo que prueba que se midio el control y no un contenedor. El layout no cambio: encabezado 60.6 y panel 520x333.4 (375.4 en movil) identicos antes y despues, verificado en 375/768/1280 y en tema claro y oscuro. Foco con Tab real: el cierre recibe foco con anillo visible y caja 44x44; Escape cierra. El mismo arreglo se aplico a los otros dos controles de cierre de la biblioteca base con forma identica, Banner y Toast, medidos tambien en 44x44. Guardia nueva src/__tests__/components/base/areaTactilWeb.test.ts con inventario declarado, probada por mutacion en tres direcciones. Detalle en evidencia/02-medicion-area-tactil.md y 03-inventario-hitslop.md."
+    },
+    {
+      "id": "debt-7f36f0586032",
+      "evidence": "src/__tests__/sync/asignacionContenidoEncolada.test.tsx suma dos casos que recorren la pantalla real. Estado vacio: con cero grupos la hoja presenta contenido-asignar-sheet-vacio, el pie no ofrece confirmar, y pulsar 'Crear clase' llama navigate('MainTabs', { screen: 'ClasesTab', params: { screen: 'CrearGrupo', params: undefined } }) y cierra la hoja, sin escribir ni encolar nada. Para poder observarlo se hoisto el mock de navigate, que antes era una jest.fn() nueva por llamada y no dejaba afirmar el destino. Error de carga: haciendo fallar classroomFacade.getUnidadesByGrupoId la hoja muestra contenido-asignar-sheet-error-carga con su titulo propio y sin el banner de escritura, y tras pulsar Reintentar la hoja sigue abierta, ofrece la unidad que antes no pudo cargar y conserva el elemento seleccionado (afirmado dentro del panel con within, porque el mismo titulo esta tambien en la lista de Contenido detras). El caso de error falla contra el codigo sin el cambio. El caso de estado vacio NO falla contra el codigo viejo, y es lo correcto: este item esta clasificado como optional-improvement, es decir cobertura faltante sobre comportamiento que ya era correcto, no un defecto. Declarado explicitamente en evidencia/05-mutacion.md en vez de presentarlo como prueba de regresion. Nielsen 9 pasa de 1 a 0."
+    }
+  ],
+  "candidates": [
+    {
+      "title": "Asignar varios elementos en una sola pasada pierde localmente el destino de todos menos el ultimo",
+      "artifact": "src/context/RecursosContext.tsx#actualizarRecurso",
+      "source": "revision adversarial del flujo corregir-defectos-hoja-compartida (#152)",
+      "category": "defect",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "actualizarRecurso construye la lista siguiente a partir del recursos del render en el que se creo la callback. Dos llamadas seguidas dentro del mismo bucle de asignar parten del mismo snapshot, asi que la segunda escritura pisa a la primera: en almacenamiento local queda un unico elemento con grupoId y el resto sin el. La cola SI recibe el documento completo de cada elemento, de modo que el servidor acaba correcto y el pull siguiente repara el estado local, pero entre la asignacion y ese pull el docente ve elementos que marco como asignados y aparecen sin asignar. En una app offline-first eso se lee como trabajo perdido. NO es alcanzable desde la interfaz vigente: AssignSheet admite varios elementos por contrato, pero las dos superficies que la montan pasan exactamente uno (ContenidoScreen linea 1388 y ListaRecursosScreen linea 420). Es un defecto latente que se activaria en cuanto una superficie futura use la asignacion multiple que el componente ya anuncia. El mismo mecanismo explica un segundo sintoma menor: cerrar la hoja mientras la escritura esta en curso deja el bucle en vuelo, porque ni Cancelar ni el control de cierre se deshabilitan durante la escritura, y al reabrir la hoja puede entrar directa a la pantalla de resultado con el nombre del destino ya vaciado.",
+      "remediation": "Hacer que actualizarRecurso y actualizarEntregable escriban sobre el estado vigente en vez de sobre el snapshot del render, por ejemplo leyendo la lista dentro de un actualizador funcional o persistiendo desde una ref que el propio persist mantenga al dia. Alternativamente, dar a los contextos una operacion de actualizacion por lote que el ViewModel use cuando hay mas de un elemento, que ademas evitaria el bucle secuencial de awaits que react-doctor ya senala. Corregirlo toca el camino de escritura y los contextos de datos, que son no objetivo declarado de #152, y merece su propio flujo con pruebas de la asignacion multiple y del cierre durante la escritura.",
+      "evidence": [
+        {
+          "type": "command",
+          "ref": "Sonda ejecutada sobre el motor real (cola, almacenamiento y reconciliacion de src/sync sin dobles), montando AssignSheet con dos recursos y confirmando una sola vez: almacenamiento local queda [{\"id\":1},{\"id\":2,\"grupoId\":7}] mientras la cola queda [{\"id\":1,\"grupoId\":7},{\"id\":2,\"grupoId\":7}]. El elemento 1 perdio su grupoId en local pero lo conserva en la operacion encolada.",
+          "date": "2026-07-26"
+        },
+        {
+          "type": "doc",
+          "ref": "src/context/RecursosContext.tsx lineas 89-101: actualizarRecurso declara useCallback con dependencia [recursos, persist] y construye next a partir de ese recursos. Preexistente: git log -1 sobre el archivo devuelve 6913186 'feat(sync): unified offline-first sync engine', muy anterior a #152. Consumidores verificados con un solo elemento: src/screens/contenido/ContenidoScreen.tsx:1388 y src/screens/biblioteca/ListaRecursosScreen.tsx:420.",
+          "date": "2026-07-26"
+        },
+        {
+          "type": "doc",
+          "ref": "openspec/changes/corregir-defectos-hoja-compartida/evidencia/07-revision-adversarial.md, segundo hallazgo Major y el Minor asociado al cierre durante la escritura.",
+          "date": "2026-07-26"
+        }
+      ],
+      "verification": {
+        "method": "Sonda de integracion sobre el motor real con dos elementos en una sola confirmacion, leyendo despues el almacenamiento y la cola. Se comprobo ademas por lectura del codigo que la causa es el cierre sobre el estado del render y no un fallo del motor, y por historia de git que el archivo no se toca desde el commit del motor de sync. Se verifico que ninguna superficie vigente pasa mas de un elemento, es decir que el defecto no es alcanzable hoy desde la interfaz.",
+        "result": "Confirmado como defecto real y preexistente, no alcanzable desde la interfaz vigente. No introducido por este flujo.",
+        "date": "2026-07-26"
+      }
+    },
+    {
+      "title": "Veinticinco controles interactivos siguen dependiendo de hitSlop para alcanzar los 44 puntos en web",
+      "artifact": "src/components/base/Chip.tsx, src/components/sync/SyncStatusChip.tsx y siete pantallas y componentes legacy",
+      "source": "inventario medido durante corregir-defectos-hoja-compartida (#152)",
+      "category": "defect",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "react-native-web no implementa hitSlop, asi que todo control que se apoye solo en el conserva su tamano visual como area efectiva en el navegador. Quedan 25 usos en 9 archivos de produccion tras corregir los 3 de la biblioteca base. Medidos en navegador: el chip da 103x32, su boton de cerrar 16x16, el chip de sincronizacion 203x28, y en ContenidoScreen el menu de item da 28x28 y el control de filtros 60x18. Degradan la punteria en pantallas tactiles y para personas con motricidad reducida. No son bloqueantes: ninguno es el unico camino a su accion y ninguno esta bajo la SHALL de cross-surface-assignment, que se refiere al selector compartido y quedo satisfecha al corregir su control de cierre.",
+      "remediation": "Tratar los dos grupos por separado, porque su coste es distinto. Grupo B (Chip y SyncStatusChip): subir el eje corto a 44 cambia la densidad de controles disenados a 32 y 28 puntos, y el cierre del chip vive dentro de un chip de 32 de alto, asi que una caja de 44 desbordaria su contenedor; es decision de diseno con QA visual propia, no un reemplazo mecanico. Grupo C (siete pantallas y componentes legacy): adoptar minTargetBox() donde el contenedor tenga padding que absorba el desborde, una pantalla a la vez con su QA visual. ScreenBackButton es el mas barato del grupo, con caja propia de 40x40 que falla por solo 4 puntos. Mientras tanto, la guardia src/__tests__/components/base/areaTactilWeb.test.ts impide que aparezcan sitios nuevos y obliga a limpiar la lista al corregir uno.",
+      "evidence": [
+        {
+          "type": "command",
+          "ref": "Medicion en Chrome via Playwright MCP sobre expo start --web (HTTP 200 confirmado antes de navegar), excluyendo [aria-hidden=true] porque react-native-web deja montadas las pantallas anteriores: Chip 103x32, cierre del Chip 16x16, SyncStatusChip 203x28, ContenidoScreen 'Mas opciones' 28x28 y 'Filtros' 60x18. En la misma pasada los botones del TopBar dan 44x44 y las tabs 199x54, lo que prueba que el metodo distingue lo que cumple de lo que no.",
+          "date": "2026-07-26"
+        },
+        {
+          "type": "doc",
+          "ref": "openspec/changes/corregir-defectos-hoja-compartida/evidencia/03-inventario-hitslop.md: los 28 usos clasificados en tres patrones estructurales, cada uno con al menos una medicion directa, y la declaracion explicita de que los nueve usos de CuentaScreen quedaron pendientes de medir uno a uno por no haberse alcanzado la pantalla en la sesion de QA.",
+          "date": "2026-07-26"
+        },
+        {
+          "type": "doc",
+          "ref": "Guardia vigente src/__tests__/components/base/areaTactilWeb.test.ts con los 9 archivos declarados y su motivo; falla si aparece un uso nuevo sin declarar y si una entrada declarada deja de usar hitSlop. Probada por mutacion en ambas direcciones en evidencia/05-mutacion.md.",
+          "date": "2026-07-26"
+        }
+      ],
+      "verification": {
+        "method": "Inventario estructural sobre el codigo de produccion mas medicion en navegador de un representante de cada patron, con controles que si cumplen en la misma pasada como contraste. La clasificacion de lo no alcanzable se deriva de pertenecer a un patron con medicion directa, y se declara como tal en vez de presentarse como medido.",
+        "result": "Confirmado: 25 usos siguen sin caja real en web, con cinco mediciones directas y el resto clasificado por patron. Un uso de la lista, CuentaScreen, queda declarado como pendiente de medicion individual.",
+        "date": "2026-07-26"
+      }
+    }
+  ],
+  "notes": "Flujo de saneamiento de la deuda residual de la adopcion de AssignSheet en Contenido (#114). Cierra los tres items abiertos del plan uxui-navegacion-global con evidencia medida en navegador, no inferida. La revision adversarial encontro un Major introducido por este mismo change (los tres elegir* limpiaban resultado pero no errorEscritura, de modo que cambiar de destino tras un fallo parcial dejaba en pantalla un conteo falso y una promesa de reanudacion que el ViewModel no iba a cumplir): se cerro dentro del change con prueba propia, commit 28ef5a3. Los dos candidatos registrados son PREEXISTENTES y estan verificados como tales por historia de git; ninguno lo genera este flujo. Correccion de registro respecto de la justificacion original del diseno: la reanudacion del reintento NO evita operaciones duplicadas en la cola, porque enqueueOperation ya deduplica los update por id; las razones reales son el conteo acumulado entre intentos, el coste redundante de persistir y flushear trabajo ya hecho, y que reencolar reinicia el contador de reintentos y manda la operacion al final de la cola. La nota de correccion quedo escrita en design.md D2 y la spec se redacto sobre las razones reales. Se corrigio ademas la limitacion de CORS que #114 habia declarado como propiedad del backend desplegado: verificado en vivo contra npm run backend:dev:local, la lista por defecto de backend/lib/auth.js si admite localhost pero solo en los puertos 8081 y 19006, y #114 corrio la web en 8082. La relectura desde el servidor no se ejercito deliberadamente, porque el unico MONGODB_URI del repositorio apunta al Atlas M0 de produccion y hacerlo habria escrito registros reales en una base compartida."
+}
