@@ -117,6 +117,15 @@ npm run codegraph:explore -- "how does SyncContext reach entitySync and syncEngi
 - `Documentacion/01-planes-maestros/meta_guia_planes.md`: SDD con OpenSpec.
 - `Documentacion/02-operacion/MCP_FLUJOS_PLANEARIA.md`: MCPs y QA Playwright.
 
+## Licencia
+
+Todos los derechos reservados. Copyright (c) 2026 Ignacio Barboza Espinoza.
+
+Este repositorio es publico para consulta y evaluacion, no es open source. La ausencia de un archivo
+`LICENSE` es deliberada: PlanearIA es un producto con intencion comercial y no se concede permiso
+para usar, copiar, modificar, distribuir ni crear obras derivadas del codigo o de los recursos.
+Para cualquier uso, escribe a itic_ibarboza@accitesz.com.
+
 ## Version
 
 - Actualizado: 2026-07-06.
