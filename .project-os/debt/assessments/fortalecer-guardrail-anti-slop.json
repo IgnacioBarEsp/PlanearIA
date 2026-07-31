@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "flow": "fortalecer-guardrail-anti-slop",
+  "date": "2026-07-31",
+  "kind": "feature",
+  "result": "clean",
+  "candidates": [],
+  "notes": "Cambio de gobernanza documental y de harness para diseño anti-slop de la Ola 2 UX/UI (#86). La revisión adversarial registró dos límites operativos, no defectos ni deuda verificable: una política no puede sustituir validación por superficie ni determinar semánticamente estética mediante lint. No se modificó runtime, stack, datos de usuario ni dependencias; no quedan candidatos verificables nacidos de este flujo."
+}

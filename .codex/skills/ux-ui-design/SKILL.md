@@ -12,6 +12,7 @@ description: Design or review PlanearIA UX/UI, navigation, responsive web/tablet
 - `Documentacion/04-referencia/MAPA_NAVEGACION_ACTUAL.md`
 - `Documentacion/00-fundamentos/IHC_DISCOVERY_DOCENTE.md`
 - `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`
+- `Documentacion/05-context-engineering/DISENO_ANTI_SLOP.md`
 - `Documentacion/99-archivo/prompt_mejorado_auditoria_uxui_ejecutada_2026-07.md` only as historical audit reference
 
 ## Product North Star
@@ -42,6 +43,9 @@ Core experiences:
 - The AI chatbot can be explicit and conversational, but actions from it must still be confirmable and reversible.
 - Do not leave dead controls that look usable.
 - Use existing tokens and contexts: `src/themes/colors.ts`, ThemeContext, FontSizeContext, DaltonismoContext.
+- Complete the anti-slop preflight before deciding a visible surface. Tie composition, hierarchy, color, type and one signature moment to a teacher task; do not start from cards, bento, glass, gradients, pills, halos or icon circles.
+- An effect is an exception, not a style system: document purpose, contrast, solid fallback, reduce-motion behavior, performance budget and rollback before proposing blur, translucency or expressive depth.
+- If Figma, a skill, MCP or ground truth is unavailable, declare the limitation and prepare a reversible draft. Never claim parity or human approval that does not exist.
 
 ## Implementation Fit
 
@@ -60,3 +64,4 @@ When designing, provide:
 4. States.
 5. Components/tokens affected.
 6. Risks and tests.
+7. Completed anti-slop preflight, including the generic pattern refuted and the next visual evidence.

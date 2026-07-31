@@ -22,7 +22,7 @@ PlanearIA trabaja con contexto dirigido. Una IA no lee todo el repo: identifica 
 | Tarea | Leer primero | Evidencia esperada |
 | --- | --- | --- |
 | Ejecutar una User Story | `01-planes-maestros/meta_guia_planes.md`, `02-operacion/MCP_FLUJOS_PLANEARIA.md`, issue GitHub | Issue enriquecido, change OpenSpec, tasks con evidencia |
-| UX/UI visible | `01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`, `00-fundamentos/IHC_DISCOVERY_DOCENTE.md`, `context/README.md` | Capturas Playwright por breakpoint, checklist Nielsen |
+| UX/UI visible o decisión en Figma/otra herramienta | `DISENO_ANTI_SLOP.md`, `01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`, `00-fundamentos/IHC_DISCOVERY_DOCENTE.md`, `context/README.md` | Preflight por superficie, capturas por breakpoint y checklist Nielsen |
 | Theming/accesibilidad | `openspec/specs/settings-accessibility-preferences/spec.md`, `src/themes/`, contexts de tema/fuente/daltonismo | Tests afectados + QA visual |
 | Sync/offline | `00-fundamentos/FLUJO_SINCRONIZACION.md`, `src/sync/README.md`, GitNexus (+ CodeGraph si hace falta fuente lineada) | Tests sync/backend, no perdida local |
 | Backend/auth/datos | `00-fundamentos/ARQUITECTURA.md`, `01-planes-maestros/PLAN_AUTH_SEGURIDAD_SESION_REAL.md`, `backend/README.md` | `backend:check`, aislamiento `userId` |
@@ -75,9 +75,12 @@ Al cerrar un overhaul documental, comprobar que una IA puede responder con rutas
 7. Donde esta el runbook para preparar un repositorio sin producto?
 8. Que acciones del constructor requieren intervencion humana?
 9. Donde se distingue nucleo universal de perfiles condicionales?
+10. Que debe consultar un agente antes de decidir una interfaz visible?
 
 La respuesta aceptable debe llegar a las rutas correctas en menos de 3 saltos desde `AGENTS.md` o `CLAUDE.md`.
 
 Para las preguntas 7-9, la entrada canónica es el
 [índice del constructor](../02-operacion/constructor-proyectos/README.md); desde allí cada respuesta está a
 un enlace.
+
+Para la pregunta 10, la entrada canónica es [Diseño Anti-Slop](DISENO_ANTI_SLOP.md); el preflight no se omite aunque el agente no disponga de Figma, MCP o skills.

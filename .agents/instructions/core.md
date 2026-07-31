@@ -175,6 +175,14 @@ Para paridad alta, usar `context/<modulo>-ground-truth/` y Figma cuando exista:
 
 Referencias open source son inspiracion y analisis; no son codigo de PlanearIA.
 
+## Diseño Visible Anti-Slop
+
+- Antes de decidir o construir UI visible en Figma, React Native u otra herramienta, leer `Documentacion/05-context-engineering/DISENO_ANTI_SLOP.md`, el plan UX/UI, IHC y el ground truth disponible.
+- Completar el preflight por superficie: tarea docente, zona de intensidad, jerarquía, estructura, firma útil, patrón genérico refutado, tokens, estados negativos, accesibilidad y evidencia siguiente.
+- Glass, blur, gradientes, halos, bento, cards, pills, sombras e iconos no son una receta. Solo una excepción documentada puede usarlos con propósito, contraste, fallback sólido, reducir movimiento, presupuesto de rendimiento y rollback.
+- Si no hay skill, Figma, MCP o ground truth, declarar la limitación y producir un draft reversible; nunca declarar paridad o aprobación inexistente.
+- Figma, QA automática y screenshots no cierran los gates manuales de aprobación visual o entrevistas docentes.
+
 ## Validacion
 
 Comandos base:
