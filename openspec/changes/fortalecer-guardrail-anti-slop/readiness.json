@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "issue": 86,
+  "change": "fortalecer-guardrail-anti-slop",
+  "surfaces": ["docs", "harness"],
+  "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
+  "evidence": [
+    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/86" },
+    { "id": "pr-link", "ref": "Pendiente de PR tras aplicar y revisar el change." },
+    { "id": "adversarial-review", "ref": "evidencia/revision-adversarial.md" },
+    { "id": "docs-verification", "ref": "evidencia/validacion-documental.md" },
+    { "id": "fixtures", "ref": "evidencia/paridad-harness.md" }
+  ],
+  "rollback": {
+    "strategy": "Revertir el PR documental y ejecutar npm run agent:harness:sync para regenerar espejos desde las fuentes restauradas; no se borra evidencia ni se toca el runtime."
+  },
+  "adversarialReview": {
+    "ref": "evidencia/revision-adversarial.md"
+  },
+  "exceptions": []
+}

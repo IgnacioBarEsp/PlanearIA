@@ -16,12 +16,13 @@ This skill is the aspirational/evaluation layer. It works WITH, not instead of, 
 - `awwwards` (this) → decides intensity zone, applies the phased pipeline, and scores the result.
 - `PLAN_UXUI_NAVEGACION_GLOBAL.md` §1.9 → the binding rules (anti-slop checklist, RN translation,
   motion/performance budget). This skill NEVER overrides §1.9; it operationalizes it.
+- `Documentacion/05-context-engineering/DISENO_ANTI_SLOP.md` → mandatory preflight, refutation of generic patterns and exception contract. Read it before proposing a visual direction.
 
 ## 0. Hard guardrails (from the plan — non-negotiable)
 
 - **Stack translation.** Motion only via `react-native-reanimated` + `gesture-handler` in the app.
   Tailwind / GSAP / Framer Motion are DOM-only and PROHIBITED in the RN app; they are allowed ONLY in
-  the separate `landing-web` artifact. Glassmorphism via `expo-blur`, budgeted, overlays only.
+  the separate `landing-web` artifact. Glassmorphism is an exception for a purposeful low-frequency overlay, never a default surface.
 - **Reduce-motion + 60fps on mid-range Android.** Every effect has a static equivalent
   (`AccessibilityInfo.isReduceMotionEnabled`) and degrades (blur/gradient → solid) if it janks.
 - **Anti-alucinación.** Verify reanimated/gesture-handler/expo APIs in Context7 before writing them;
@@ -49,9 +50,9 @@ right move there is craft (rhythm, clarity, one meaningful micro-interaction), n
 1. **Intent & zone** — what is this surface for, who uses it (María/Luis/Carmen), which zone (§1).
 2. **Reference & ground truth** — gather real references; the Figma frame is the source of truth
    (pipeline D11: Stitch/Codex Design diverge → curate in Figma → Figma MCP feeds implementation).
-3. **Concept directions** — 2-3 distinct visual directions (e.g. calm-editorial vs. bold-spatial vs.
-   playful-bento). Pick one with the user; keep the best idea from the runners-up.
-4. **Composition & hierarchy** — grid, focal point, reading order, bento structure if it fits.
+3. **Concept directions** — 2-3 distinct visual directions (e.g. calm-editorial vs. restrained-spatial vs.
+   warm-analog). Refute the generic pattern each direction avoids; pick one with the user.
+4. **Composition & hierarchy** — choose document, table, list, agenda, conversation, canvas or grid because it serves the task; never start from a bento template.
    Hand fine typography/spacing/color to `impeccable`.
 5. **Signature moment** — ONE thing this surface will be remembered for (a hero reveal, a dock that
    springs to life, a checkmark that draws). Not five; one, done impeccably.
@@ -88,10 +89,11 @@ If Usability < 7 on any zone, the surface FAILS regardless of Design score. That
 - "Jaw-dropping" that breaks familiarity (an editor that stops feeling like Word/Excel).
 - Bold visuals shipped without designed loading/empty/error/offline states.
 - Inventing colors/fonts outside `src/themes` tokens.
+- Default gradients, ambient glows, glass, bento cards, pills, icon circles, generic copy or metric filler. A documented exception must meet the anti-slop guide's purpose, contrast, fallback, reduce-motion, performance and rollback contract.
 - Treating this as a substitute for `impeccable`'s per-element craft or §1.9's binding gates.
 
 ## 5. Handoff
 
-Always end by naming: the chosen zone, the single signature moment, the §3 scores, and whether the
-surface is showcase-ready or needs another QA iteration. If fine-grained craft is needed, invoke
+Always end by naming: the completed preflight, chosen zone, the single signature moment, the generic
+pattern refuted, the §3 scores, and whether the surface is showcase-ready or needs another QA iteration. If fine-grained craft is needed, invoke
 `impeccable`. If the surface is the landing, note that the DOM stack is permitted there.

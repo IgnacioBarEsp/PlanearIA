@@ -25,6 +25,8 @@ Leer en este orden para trabajo significativo:
 9. `01-planes-maestros/meta_guia_planes.md`
 10. Plan activo o spec OpenSpec relacionada.
 
+Para cualquier decisión UI visible, leer además [Diseño Anti-Slop](05-context-engineering/DISENO_ANTI_SLOP.md) antes de abrir Figma o proponer composición, color, controles o motion. El documento clasifica la zona, exige preflight y conserva las excepciones visuales como decisiones verificables.
+
 Si hay contradiccion, gana este orden:
 
 1. Codigo real.

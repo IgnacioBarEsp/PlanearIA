@@ -144,6 +144,9 @@ herramientas familiares, no en controles nuevos.
 Objetivo: que PlanearIA se vea y se sienta de nivel premium/showcase, SIN traicionar la vision
 "familiaridad y calma" ni el presupuesto de hardware de las personas (Maria usa Android gama media).
 La regla de oro: **el wow vive en el pulido (motion, ritmo, detalle), no en layouts exoticos.**
+Antes de decidir una superficie visible se completa el preflight de
+[`DISENO_ANTI_SLOP.md`](../05-context-engineering/DISENO_ANTI_SLOP.md); el nombre de un patrón no es
+una justificación de uso.
 
 #### 1.9.1 Donde aplica cada nivel de intensidad
 
@@ -151,7 +154,7 @@ La regla de oro: **el wow vive en el pulido (motion, ritmo, detalle), no en layo
 | --- | --- | --- |
 | Landing web / marketing | Maxima (Awwwards-tier, jaw-dropping) | Es una pagina web DOM; vende el producto. Change `landing-web`. |
 | Onboarding, empty states, transiciones entre experiencias | Alta (momentos memorables) | Primer impacto y momentos de baja frecuencia: pueden ser espectaculares sin estorbar. |
-| Escritorio (dock, tablero) | Media-alta (Bento premium, micro-interacciones) | Se ve a diario: premium pero calmado. |
+| Escritorio (dock, tablero) | Media (orientacion de jornada y micro-interacciones útiles) | Se ve a diario: distintivo, pero calmado y legible. |
 | Pantallas de trabajo (editores, listas, calificar) | Sobria (calma, precision, cero distraccion) | Carmen y Maria trabajan aqui horas; la elegancia es ritmo y claridad, no efectos. |
 
 #### 1.9.2 Traduccion del vocabulario premium al stack real (React Native + Expo)
@@ -160,9 +163,9 @@ La regla de oro: **el wow vive en el pulido (motion, ritmo, detalle), no en layo
 | --- | --- | --- |
 | Smooth spring physics | `react-native-reanimated` v4 (`withSpring`, config en tokens de movimiento: rigidez/amortiguacion estandar) | GSAP, Framer Motion (DOM-only; rompen la app) |
 | Micro-interactions | Catalogo reanimated: scale 0.97 en Pressable, chip que se desvanece al descartar, checkmark que dibuja, dock tile bounce sutil, pull-to-refresh custom | Animaciones >300ms en acciones frecuentes |
-| Glassmorphism | Superficies translucidas con tokens + `expo-blur` (dep opcional a evaluar en `tokens-completos`) SOLO en overlays/modales/dock; fallback solido en Android de gama baja | Blur en listas largas o superficies grandes (mata FPS) |
-| Bento Box UI | Grid del Escritorio (dock + tarjetas del dia) con radios/elevacion de tokens | Bento generico sin jerarquia de tareas |
-| Spatial UI / profundidad | Escala de elevacion (3 niveles `shadowBlue`) + transiciones de navegacion con profundidad (shared-element donde sea barato) | Parallax pesado en la app (solo landing) |
+| Translucidez, glass o blur | Excepción para un overlay/modal de baja frecuencia con propósito, contraste, fallback sólido y presupuesto medido | Usarlo como fondo, en listas largas, superficies grandes o controles frecuentes |
+| Grid o tarjetas | Solo cuando cada bloque resuelve una prioridad docente mejor que una lista, agenda, tabla o panel | Bento genérico, cards sin entrada/salida o métricas de relleno |
+| Profundidad | Bordes, superficies y elevación mínima cuando aclaran relación espacial; transiciones solo si son baratas | Capas decorativas, parallax pesado o sombras que simulan jerarquía inexistente |
 | Scroll-triggered animations | `useAnimatedScrollHandler` (reanimated): headers que colapsan, toolbars que se condensan | Librerias de scroll DOM |
 | Magnetic buttons | Solo landing web (hover no existe en touch). En app: feedback haptico + spring en press | Hover-dependencias en la app |
 | Tipografia elegante | Escala tipografica en tokens (`tokens-completos`) con jerarquia intencional; `expo-font` si se adopta una fuente de marca (decision en tokens-completos, licencia libre) | Fuentes por pantalla, tamanos magicos |
@@ -171,19 +174,21 @@ La regla de oro: **el wow vive en el pulido (motion, ritmo, detalle), no en layo
 
 Antes de aprobar un frame de Figma o cerrar la validacion visual de un change, la pantalla debe pasar:
 
-- [ ] No parece plantilla: si le quitas el logo, sigue reconocible como PlanearIA (paleta azul docente, ritmo 4pt, radios propios).
-- [ ] Cero placeholders genericos: nada de lorem ipsum, avatares grises por defecto ni cards vacias sin proposito.
-- [ ] Tipografia con jerarquia intencional (display/title/body/caption de tokens), no todo el mismo peso.
-- [ ] Cada estado (loading/empty/error/offline) esta disenado, no improvisado: skeletons con shimmer sutil, empties accionables con ilustracion o icono con intencion.
-- [ ] Al menos 1 micro-interaccion significativa por pantalla (no decorativa: comunica estado o confirma accion).
-- [ ] Densidad correcta por breakpoint: movil respira, web aprovecha el ancho (nada de columna movil estirada).
-- [ ] Pasa el checklist Nielsen (IHC seccion 6) sin severidad >=3.
+- [ ] Existe un preflight completo: tarea docente, zona, estructura, firma visual útil, riesgo genérico refutado, tokens, estados, accesibilidad y evidencia siguiente.
+- [ ] No parece plantilla: sin el wordmark conserva una jerarquía, contenido y ritmo propios de la jornada docente; no depende de una paleta o efecto de moda.
+- [ ] Cero placeholders genéricos: nada de lorem ipsum, avatares grises, métricas, cards o copy intercambiable sin propósito y salida.
+- [ ] Tipografía con jerarquía intencional (orientación/título/contenido/etiqueta/dato), no todo el mismo peso ni tamaños mágicos.
+- [ ] Cada estado loading/empty/error/offline está diseñado y aporta recuperación o siguiente paso; cada N/A está justificado.
+- [ ] Micro-interacción solo cuando comunica estado, confirmación u orientación; su alternativa estática sigue siendo útil.
+- [ ] Densidad correcta por breakpoint: móvil respira y web usa el ancho sin estirar una columna ni llenar con cards.
+- [ ] Glass, blur, gradiente, halo, bento, pill o profundidad tienen excepción documentada o fueron eliminados; nunca son el vocabulario por defecto.
+- [ ] Pasa Nielsen (IHC sección 6) sin severidad >=3 y no depende solo del color para comunicar estado.
 
 #### 1.9.4 Presupuesto de performance y accesibilidad del motion
 
 - 60fps en interacciones sobre Android gama media (el telefono de Maria); animaciones en UI thread (reanimated worklets).
 - Toda animacion respeta "reducir movimiento" del sistema (`AccessibilityInfo.isReduceMotionEnabled`): version estatica equivalente.
-- Blur/gradientes: medir antes de adoptar; si un efecto cuesta jank, se degrada a solido. El efecto nunca es mas importante que el trabajo del docente.
+- Blur/gradientes: son excepciones, no una base. Medir antes de adoptar; si un efecto cuesta jank, se degrada a sólido. El efecto nunca es más importante que el trabajo del docente.
 
 #### 1.9.5 Herramientas del estandar (verificadas en este entorno)
 
@@ -200,10 +205,10 @@ Antes de aprobar un frame de Figma o cerrar la validacion visual de un change, l
   (`.agents/` esta en `.gitignore`): reinstalar con `npx skills add pbakaus/impeccable` si falta en una
   maquina/CI. Setup opcional: `/teach-impeccable` (genera `.impeccable.md`, tambien local). Riesgo Med (Gen/Snyk):
   revisar antes de uso intensivo.
-- **awwwards** (skill local versionada en `.claude/skills/awwwards/`): capa aspiracional/evaluacion
+- **awwwards** (skill fuente versionada en `.agents/skills/awwwards/`): capa aspiracional/evaluacion
   (zona de intensidad + pipeline 9 fases + scoring). Complementa a impeccable; no sustituye los gates.
 - **Higgsfield AI** (MCP conectado): media generativa de paga; usar solo en el change `landing-web`.
-- **Regla:** estas tres alimentan los gates; el checklist anti-slop y la QA Playwright siguen decidiendo. Ver OQ6.
+- **Regla:** estas herramientas alimentan los gates; [Diseño Anti-Slop](../05-context-engineering/DISENO_ANTI_SLOP.md), la revisión humana y la QA Playwright siguen decidiendo. Ver OQ6.
 
 ### 1.10 Plan de transicion conceptual
 
@@ -583,7 +588,8 @@ Open questions:
     en `.agents/skills/impeccable/` con symlink a Claude Code (funciona en este Windows). Es la capa de
     VOCABULARIO/craft por elemento (tipografia, color, motion, anti-slop). Rating de riesgo del instalador:
     Med (Gen/Snyk), 0 alertas Socket; contiene `scripts/`, corre con permisos de agente: revisar antes de uso intensivo.
-  - **awwwards**: skill LOCAL creada en `.claude/skills/awwwards/SKILL.md` (archivo real, versionado). Capa
+  - **awwwards**: skill LOCAL fuente en `.agents/skills/awwwards/SKILL.md` (espejos generados para cada
+    harness). Capa
     ASPIRACIONAL/evaluacion: decide zona de intensidad (1.9.1), aplica el pipeline de 9 fases y puntua estilo
     Awwwards (Design/Usability/Creativity/Content), sin sobreescribir la seccion 1.9. Complementa a impeccable.
   - **Higgsfield AI**: MCP HTTP hosteado `https://mcp.higgsfield.ai/mcp`, media generativa de PAGA con OAuth
