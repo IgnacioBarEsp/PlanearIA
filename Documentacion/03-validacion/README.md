@@ -17,6 +17,7 @@
 - `GOLDEN_JOURNEYS_QA_VISUAL.md`: golden journeys y procedimiento obligatorio de QA visual por breakpoint, issue #85. Fuente de verdad de los journeys: `qa/golden-journeys.json`.
 - `CHECKLIST_VALIDACION_MANUAL_AUTH.md`: validacion manual de Auth, Seguridad y Sesion Real.
 - `repo-max-clean-context-2026-07-06/`: evidencia de limpieza maxima de contexto, issue #36.
+- `prototipo-figma-ola2/MATRIZ_NAVEGACION.md`: contrato y evidencia del grafo navegable de Figma, issue #156.
 
 ## Plantilla Recomendada
 

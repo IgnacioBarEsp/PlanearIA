@@ -1,0 +1,9 @@
+{
+  "schemaVersion": 1,
+  "flow": "corregir-navegacion-prototipo-figma",
+  "date": "2026-08-02",
+  "kind": "feature",
+  "result": "clean",
+  "candidates": [],
+  "notes": "La revisión adversarial detectó labels activos invisibles en algunos rails; las 24 instancias se restauraron y se verificaron mediante auditoría API Figma y capturas. La fidelidad semántica por módulo pertenece al epic #157 y era un no objetivo declarado de este change; no es deuda residual ni autoriza registrar un falso candidato."
+}
