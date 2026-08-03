@@ -58,6 +58,15 @@ herramientas familiares, no en controles nuevos.
 | D14 | Landing web con tratamiento showcase completo | La landing/marketing web es un artefacto separado de la app RN; ahi SI aplican verbatim los patrones Awwwards-tier (hero glassmorphism, parallax, scroll-triggered, magnetic buttons, GSAP/Framer permitidos). Change `landing-web` en Ola 4+. |
 | D15 | Anti-alucinacion de tooling | Toda fase de design/apply que use APIs de librerias (reanimated, gesture-handler, tentap, expo-*) consulta Context7 antes de escribir codigo; toda edicion parte de GitNexus para inventario/blast radius estructural y usa CodeGraph (`codegraph_explore`) solo si hace falta fuente lineada, simbolos puntuales o fallback. |
 
+### Nomenclatura operativa del prototipo (2026-08-02)
+
+Para reducir ambiguedad durante las entrevistas docentes, el prototipo navegable usa **Asistente de IA**,
+**Diseño de materiales**, **Mensajería**, **Agenda** y **Reportes** como etiquetas visibles. Los nombres
+`AsistePLAN`, `DiseñaPLAN`, `ConectaPLAN`, `AgendaPLAN` y `ReportaPLAN` permanecen como antecedentes de
+planificacion o candidatos de marca; no sustituyen ni alternan las etiquetas del grafo activo. La evidencia
+y contrato de enlaces viven en `Documentacion/03-validacion/prototipo-figma-ola2/MATRIZ_NAVEGACION.md`
+(issue #156).
+
 ### 1.3 Arquitectura de experiencias (resumen)
 
 | Experiencia | Rol | Superficie | Prioridad |
