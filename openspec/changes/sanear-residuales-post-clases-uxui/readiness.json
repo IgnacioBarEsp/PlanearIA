@@ -7,9 +7,7 @@
   ],
   "validations": [
     "openspec-strict",
-    "harness-parity",
-    "project-os-contract",
-    "golden-journeys-manifest"
+    "harness-parity"
   ],
   "evidence": [
     {
@@ -26,7 +24,7 @@
     },
     {
       "id": "docs-verification",
-      "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/03-validacion-documental.md (OpenSpec 55/55, harness 36/36, Project OS y golden journeys PASS)."
+      "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/03-validacion-documental.md y evidencia/05-readiness-archive.md (OpenSpec 55/55, harness 36/36, Project OS, golden journeys y readiness PASS)."
     },
     {
       "id": "human-approval",

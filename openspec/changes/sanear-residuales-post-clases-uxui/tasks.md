@@ -46,7 +46,7 @@ de `apply`. Cada `[x]` requiere evidencia; no se modifica el registro de deuda a
   `resolves` separados para los cuatro IDs, cada uno respaldado por evidencia.
 - [x] 4.2 Ejecutar `npm run debt:capture` solo despues de la revision; confirmar con `npm run debt:check`
   que el plan queda bajo 5 unidades y sin triggers.
-- [ ] 4.3 Ejecutar `npm run openspec:ready:archive -- --change sanear-residuales-post-clases-uxui
+- [x] 4.3 Ejecutar `npm run openspec:ready:archive -- --change sanear-residuales-post-clases-uxui
   --run-local` y exigir PASS sin excepciones silenciosas.
-- [ ] 4.4 Ejecutar `debt:sync`, publicar en #161 la evidencia y dejar el change listo para el flujo de
+- [x] 4.4 Ejecutar `debt:sync`, publicar en #161 la evidencia y dejar el change listo para el flujo de
   archive/finish separado; el registro, no una edicion manual, decide el estado del issue.
