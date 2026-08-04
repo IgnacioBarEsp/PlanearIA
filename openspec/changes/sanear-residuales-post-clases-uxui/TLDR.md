@@ -23,14 +23,14 @@ refleja el host exacto.
 
 ## Plan de trabajo — Tasks
 
-Después de la aprobación se actualizarán cuatro documentos, se reunirá evidencia por residual y se
-ejecutarán validaciones y revisión adversarial. Solo entonces se capturará un assessment de saneamiento con
-cuatro `resolves` y cero deuda nueva. El motor deberá demostrar que el plan queda bajo el umbral antes de
-archive, finish, cierre de #161 o inicio de Escritorio.
+Con la aprobación registrada se actualizaron cuatro documentos, se reunió evidencia por residual y pasaron
+las validaciones documentales y la revisión adversarial sin Blockers/Majors. Sigue la captura de un
+assessment de saneamiento con cuatro `resolves` y cero deuda nueva; después el motor debe demostrar que el
+plan queda bajo el umbral antes de readiness, archive, finish, cierre de #161 o inicio de Escritorio.
 
 ## Resumen integral
 
-El resultado esperado es un contrato transversal pequeño que impide repetir los residuales de Clases sin
+El resultado aplicado es un contrato transversal pequeño que impide repetir los residuales de Clases sin
 introducir código ni deuda. La reanudación no se declara por criterio humano: la decide `debt:check` tras
 evidencia y captura válidas. Escritorio seguirá como siguiente módulo, con artefactos propios y un nuevo
 gate humano antes de su apply.

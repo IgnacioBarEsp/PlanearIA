@@ -817,11 +817,14 @@
         }
       ],
       "issue": 161,
-      "status": "open",
+      "status": "resolved",
       "exception": null,
       "createdAt": "2026-08-04",
       "updatedAt": "2026-08-04",
-      "resolution": null
+      "resolution": {
+        "flow": "sanear-residuales-post-clases-uxui",
+        "evidence": "evidencia/01-resolucion-residuales.md y evidencia/02-revision-adversarial.md: el checkpoint nombrado fue rechazado de forma atómica; historial automático, frames históricos, sección versionada y destino documentado forman el rollback verificable."
+      }
     },
     {
       "id": "debt-281fc7a2c9b0",
@@ -849,11 +852,14 @@
         }
       ],
       "issue": 161,
-      "status": "open",
+      "status": "resolved",
       "exception": null,
       "createdAt": "2026-08-04",
       "updatedAt": "2026-08-04",
-      "resolution": null
+      "resolution": {
+        "flow": "sanear-residuales-post-clases-uxui",
+        "evidence": "evidencia/01-resolucion-residuales.md y evidencia/03-validacion-documental.md: el handoff Figma-runtime usa roles semánticos y familias candidatas de ColorTokens/useAppTheme, sin copiar hex ni declarar equivalencia 1:1."
+      }
     },
     {
       "id": "debt-5be12c1b2fa0",
@@ -881,11 +887,14 @@
         }
       ],
       "issue": 161,
-      "status": "open",
+      "status": "resolved",
       "exception": null,
       "createdAt": "2026-08-04",
       "updatedAt": "2026-08-04",
-      "resolution": null
+      "resolution": {
+        "flow": "sanear-residuales-post-clases-uxui",
+        "evidence": "evidencia/01-resolucion-residuales.md y evidencia/03-validacion-documental.md: la matriz read-only distingue localhost:8081 de 127.0.0.1:8081, fija el preflight exacto y clasifica local-only sin ampliar CORS."
+      }
     },
     {
       "id": "debt-763ed774bc1e",
@@ -913,11 +922,14 @@
         }
       ],
       "issue": 161,
-      "status": "open",
+      "status": "resolved",
       "exception": null,
       "createdAt": "2026-08-04",
       "updatedAt": "2026-08-04",
-      "resolution": null
+      "resolution": {
+        "flow": "sanear-residuales-post-clases-uxui",
+        "evidence": "evidencia/01-resolucion-residuales.md y evidencia/02-revision-adversarial.md: los estados conservan señales no-color; la validación funcional pertenece a DaltonismoContext y la reapertura exige un defecto cromático concreto."
+      }
     }
   ]
 }

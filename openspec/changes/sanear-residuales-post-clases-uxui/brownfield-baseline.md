@@ -50,6 +50,11 @@ actualizan mediante archive.
 - Lectura exacta confirma CORS default para `localhost:8081` y filtros runtime de daltonismo.
 - Prueba read-only: localhost se refleja; 127.0.0.1 cae al origen seguro por defecto.
 - Clases v1.3 aprobada conserva sección versionada, frames históricos e historial automático.
+- Apply documental aprobado en #161: `evidencia/01-resolucion-residuales.md` reúne la resolución por ID,
+  `evidencia/02-revision-adversarial.md` registra PASS CON HUECOS CONTROLADOS sin Blockers/Majors y
+  `evidencia/03-validacion-documental.md` registra OpenSpec 55/55, harness 36/36, Project OS y journeys.
+- El assessment `kind: remediation` y `debt:check` siguen pendientes de ejecución; ningún cierre nominal se
+  infiere de esta baseline.
 
 ## Fuera de alcance
 

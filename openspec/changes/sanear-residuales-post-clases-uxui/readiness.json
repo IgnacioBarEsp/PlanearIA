@@ -7,7 +7,9 @@
   ],
   "validations": [
     "openspec-strict",
-    "harness-parity"
+    "harness-parity",
+    "project-os-contract",
+    "golden-journeys-manifest"
   ],
   "evidence": [
     {
@@ -20,26 +22,26 @@
     },
     {
       "id": "adversarial-review",
-      "ref": "Pendiente de apply: evidencia/revision-adversarial.md."
+      "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/02-revision-adversarial.md (PASS CON HUECOS CONTROLADOS; 0 Blockers/Majors)."
     },
     {
       "id": "docs-verification",
-      "ref": "Pendiente de apply: evidencia/validacion-documental.md y assessment de saneamiento."
+      "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/03-validacion-documental.md (OpenSpec 55/55, harness 36/36, Project OS y golden journeys PASS)."
     },
     {
       "id": "human-approval",
-      "ref": "Pendiente: comentario explícito del owner en #161 aprobando estos artefactos antes de apply."
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/161#issuecomment-5184605462"
     },
     {
       "id": "debt-resolution",
-      "ref": "Pendiente de apply: assessment clean con resolves de debt-facadc732321, debt-281fc7a2c9b0, debt-763ed774bc1e y debt-5be12c1b2fa0."
+      "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/04-debt-capture-y-check.md; .project-os/debt/assessments/sanear-residuales-post-clases-uxui.json; debt:check PASS con 0/5 unidades y 0 flujos abiertos."
     }
   ],
   "rollback": {
     "strategy": "Revertir el PR documental. No se modifican Figma, runtime ni backend; assessments previos permanecen inmutables y cualquier ID no demostrado se omite de resolves."
   },
   "adversarialReview": {
-    "ref": "Pendiente de apply: evidencia/revision-adversarial.md."
+    "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/02-revision-adversarial.md"
   },
   "exceptions": []
 }

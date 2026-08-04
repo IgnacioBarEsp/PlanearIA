@@ -94,6 +94,18 @@ y contrato de enlaces viven en `Documentacion/03-validacion/prototipo-figma-ola2
   `COLORS` queda como fallback legacy; lint prohibe importarlo en pantallas nuevas.
 - **Bloqueo R2:** `src/utils/responsive.ts` usa `Dimensions.get()` (no reactivo). Solucion: hook
   `useBreakpoint()` sobre `useWindowDimensions()`. Breakpoints: movil <768, tablet 768-1279, web >=1280.
+- **Contrato transversal Figma -> runtime:** Figma expresa intención mediante roles semánticos
+  (`bg/canvas`, `bg/surface`, `text/primary`, `text/secondary`, `border/divider`, `action/primary`,
+  `selection`, estados y elevación); no es una fuente para copiar hex. El change runtime dueño mapea cada
+  rol a `ColorTokens` mediante `useAppTheme`, propone un token versionado si falta equivalente y valida
+  claro, oscuro, alto contraste y daltonismo antes de declarar paridad. Los estados siempre conservan
+  texto, estructura o iconografía además del color. Figma no necesita modos de variables de daltonismo por
+  defecto: la conducta funcional pertenece a `DaltonismoContext`.
+- **Rollback y QA visual:** cada ola Figma conserva historial automático, frames históricos sin inicio
+  activo, sección identificada por módulo/estado/versión y evidencia enlazada de aprobación/restauración.
+  Un checkpoint nombrado es opcional y solo se registra si el conector confirma que lo creó. La QA web
+  usa `http://localhost:8081`, espera HTTP 200 y verifica el preflight del origen exacto antes de afirmar
+  backend o sync; otro host/puerto requiere `ALLOWED_ORIGINS` explícito y evidencia propia.
 - **Biblioteca base:** AppShell, Screen, Card, Button, Input, Chip, Modal/Sheet, Toast, Banner,
   EmptyState, Skeleton, TabBar/SidebarRail/TopBar; componentes IA (AiSuggestionChip, ChatBubble,
   AiActionBar, ProviderStatusPill, BackgroundTaskCard); componentes sync (SyncStatusChip, SaveStateLabel,
@@ -380,12 +392,16 @@ Produce el material visual que las entrevistas y los changes de Ola 2-3 necesita
   (chat movil + panel web), Onboarding (3 pantallas con el copy D1.1). Sirven como estimulo de
   entrevista ("esto viene despues, que opinas?") y fijan el lenguaje visual de la Ola 3-4.
 - **Proceso:** pipeline D11 (Stitch/Claude Design divergen -> curaduria -> Figma como ground truth,
-  generable/editable via `use_figma` del Figma MCP) usando los tokens reales de `src/themes/colors.ts`.
+  generable/editable via `use_figma` del Figma MCP) usando roles semánticos y familias de tokens reales de
+  `src/themes/colors.ts`; nunca se copia un hex incidental del prototipo al runtime.
 - **Gate de aprobacion:** cada frame pasa el checklist anti-slop (1.9.3) y el vocabulario traducido
   (1.9.2) antes de marcarse "aprobado"; los aprobados se registran en `context/<modulo>-ground-truth/`
   y se referencian desde el design.md del change correspondiente.
 - **Gate manual #46:** la aprobacion de frames y el acceso autenticado al Figma MCP siguen la evidencia
   de su gate; preparar esta cronologia no los aprueba ni los cierra.
+- **Rollback:** el gate exige historial automático, frames previos, sección/version identificable y
+  destino de restauración documentado; la ausencia de checkpoint nombrado del conector no bloquea si esas
+  cuatro condiciones están verificadas.
 - **Depende de:** decisiones de shell; puede correr en paralelo a la implementacion de Ola 1.
 
 #### Hito IHC (no es change de codigo): entrevistas con docentes
