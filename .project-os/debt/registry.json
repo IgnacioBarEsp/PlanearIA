@@ -790,6 +790,134 @@
       "createdAt": "2026-07-26",
       "updatedAt": "2026-07-26",
       "resolution": null
+    },
+    {
+      "id": "debt-facadc732321",
+      "title": "El conector Figma no permite guardar una versión de historial nombrada",
+      "description": "El conector Figma no permite guardar una versión de historial nombrada",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "artifact": "Figma VBK5tK7EQS83tdTmtuBpI9#177:115",
+      "consequence": "Las olas Figma no pueden crear por automatización un checkpoint nombrado; el rollback depende del historial automático, la sección aislada y la reversión documental.",
+      "remediation": "Mantener secciones versionadas y registrar el punto de rollback en evidencia; reevaluar la API del conector antes de exigir checkpoints nombrados.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/13-aprobacion-promocion-clases.md",
+          "date": "2026-08-04"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "reconstruir-clases-experiencia",
+          "date": "2026-08-04"
+        }
+      ],
+      "issue": null,
+      "status": "open",
+      "exception": null,
+      "createdAt": "2026-08-04",
+      "updatedAt": "2026-08-04",
+      "resolution": null
+    },
+    {
+      "id": "debt-281fc7a2c9b0",
+      "title": "Figma y runtime aún no comparten un mapeo aprobado de roles semánticos de color",
+      "description": "Figma y runtime aún no comparten un mapeo aprobado de roles semánticos de color",
+      "category": "decision-required",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "artifact": "src/themes/colors.ts#roles-semánticos",
+      "consequence": "Copiar valores visuales del prototipo al runtime podría romper ThemeContext o producir una paleta incoherente entre módulos.",
+      "remediation": "El change runtime dueño debe mapear roles Figma a tokens existentes o proponer tokens versionados, con contraste y rollback; nunca copiar hex incidentalmente.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/09-revision-adversarial.md#clasificacion-debt-control-loop",
+          "date": "2026-08-04"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "reconstruir-clases-experiencia",
+          "date": "2026-08-04"
+        }
+      ],
+      "issue": null,
+      "status": "open",
+      "exception": null,
+      "createdAt": "2026-08-04",
+      "updatedAt": "2026-08-04",
+      "resolution": null
+    },
+    {
+      "id": "debt-5be12c1b2fa0",
+      "title": "El backend desplegado rechaza el origen local de Expo durante comparación visual",
+      "description": "El backend desplegado rechaza el origen local de Expo durante comparación visual",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "artifact": "backend#cors-local-expo",
+      "consequence": "La QA local de superficies que dependen del backend puede degradarse a errores CORS y ocultar estados reales si no se declara el límite.",
+      "remediation": "Definir en un change operativo los orígenes locales permitidos o un backend local documentado, sin ampliar CORS de producción de forma insegura.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/07-runtime-playwright-readonly.md",
+          "date": "2026-08-03"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "reconstruir-clases-experiencia",
+          "date": "2026-08-04"
+        }
+      ],
+      "issue": null,
+      "status": "open",
+      "exception": null,
+      "createdAt": "2026-08-04",
+      "updatedAt": "2026-08-04",
+      "resolution": null
+    },
+    {
+      "id": "debt-763ed774bc1e",
+      "title": "El archivo Figma no define un modo de variables específico para daltonismo",
+      "description": "El archivo Figma no define un modo de variables específico para daltonismo",
+      "category": "decision-required",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "artifact": "Figma VBK5tK7EQS83tdTmtuBpI9#variables",
+      "consequence": "La paridad visual por sí sola no prueba la propagación real de DaltonismoContext ni una variante equivalente del sistema de diseño.",
+      "remediation": "Definir si Figma necesita modos de variable de daltonismo o si el contrato se valida solo en runtime; cualquier decisión debe conservar señales no dependientes del color.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/06-auditoria-visual-accesibilidad.md",
+          "date": "2026-08-03"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "reconstruir-clases-experiencia",
+          "date": "2026-08-04"
+        }
+      ],
+      "issue": null,
+      "status": "open",
+      "exception": null,
+      "createdAt": "2026-08-04",
+      "updatedAt": "2026-08-04",
+      "resolution": null
     }
   ]
 }

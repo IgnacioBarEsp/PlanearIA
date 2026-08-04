@@ -20,6 +20,7 @@
 | Meta Guia de Planes | Vigente. Instructivo obligatorio. |
 | Preparacion Operativa SDD y Harness Solo-Dev | Activo. Prerrequisito transversal por umbrales R0/R1/R2; no reemplaza UX/UI. |
 | UX/UI y Navegacion Global | Activo. Blueprint + backlog de changes OpenSpec. |
+| Vision y Contrato de Experiencia #157 | Activo. v1.2; `#157-O1 Clases` aprobado en Figma y en cierre SDD; `#157-O2 Escritorio` siguiente para artefactos, sin `apply` previo a aprobación. |
 | Auth, Seguridad y Sesion Real | Activo/en cierre. |
 
 Los planes cerrados completos viven en respaldo externo. Sus reglas vigentes estan migradas a fundamentos, specs o planes activos.
