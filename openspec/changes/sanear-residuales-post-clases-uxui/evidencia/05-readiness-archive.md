@@ -17,4 +17,3 @@ Resultado: **OpenSpec readiness PASS**.
 - `debt-gate`: sin Blockers/Majors abiertos ni deuda crítica transversal.
 
 No se usaron excepciones silenciosas.
-
