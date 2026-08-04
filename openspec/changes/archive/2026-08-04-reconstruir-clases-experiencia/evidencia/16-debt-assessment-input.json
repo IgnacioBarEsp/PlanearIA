@@ -1,0 +1,108 @@
+{
+  "schemaVersion": 1,
+  "flow": "reconstruir-clases-experiencia",
+  "date": "2026-08-04",
+  "kind": "feature",
+  "result": "debt",
+  "candidates": [
+    {
+      "title": "El conector Figma no permite guardar una versión de historial nombrada",
+      "artifact": "Figma VBK5tK7EQS83tdTmtuBpI9#177:115",
+      "source": "Promoción post-gate de #159",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": false,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "Las olas Figma no pueden crear por automatización un checkpoint nombrado; el rollback depende del historial automático, la sección aislada y la reversión documental.",
+      "remediation": "Mantener secciones versionadas y registrar el punto de rollback en evidencia; reevaluar la API del conector antes de exigir checkpoints nombrados.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/13-aprobacion-promocion-clases.md",
+          "date": "2026-08-04"
+        }
+      ],
+      "verification": {
+        "method": "Se llamó saveVersionHistoryAsync durante una operación atómica de promoción.",
+        "result": "El conector devolvió 'saveVersionHistoryAsync is not a supported API' y no aplicó mutaciones; la promoción corregida funcionó sin esa llamada.",
+        "date": "2026-08-04"
+      }
+    },
+    {
+      "title": "Figma y runtime aún no comparten un mapeo aprobado de roles semánticos de color",
+      "artifact": "src/themes/colors.ts#roles-semánticos",
+      "source": "Revisión adversarial de #159",
+      "category": "decision-required",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "Copiar valores visuales del prototipo al runtime podría romper ThemeContext o producir una paleta incoherente entre módulos.",
+      "remediation": "El change runtime dueño debe mapear roles Figma a tokens existentes o proponer tokens versionados, con contraste y rollback; nunca copiar hex incidentalmente.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/09-revision-adversarial.md#clasificacion-debt-control-loop",
+          "date": "2026-08-04"
+        }
+      ],
+      "verification": {
+        "method": "Comparación del prototipo aprobado con el baseline runtime y sus contexts de tema.",
+        "result": "El prototipo usa roles terracota/verde y el runtime conserva primario azul; no existe decisión de migración en #159.",
+        "date": "2026-08-04"
+      }
+    },
+    {
+      "title": "El backend desplegado rechaza el origen local de Expo durante comparación visual",
+      "artifact": "backend#cors-local-expo",
+      "source": "Playwright read-only de #159",
+      "category": "external-risk",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "La QA local de superficies que dependen del backend puede degradarse a errores CORS y ocultar estados reales si no se declara el límite.",
+      "remediation": "Definir en un change operativo los orígenes locales permitidos o un backend local documentado, sin ampliar CORS de producción de forma insegura.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/07-runtime-playwright-readonly.md",
+          "date": "2026-08-03"
+        }
+      ],
+      "verification": {
+        "method": "Carga de Expo web por HTTP 200 y observación de red/consola en Playwright.",
+        "result": "El shell cargó, pero las solicitudes al backend desplegado desde el origen local fueron rechazadas por CORS.",
+        "date": "2026-08-03"
+      }
+    },
+    {
+      "title": "El archivo Figma no define un modo de variables específico para daltonismo",
+      "artifact": "Figma VBK5tK7EQS83tdTmtuBpI9#variables",
+      "source": "Auditoría de accesibilidad de #159",
+      "category": "decision-required",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "consequence": "La paridad visual por sí sola no prueba la propagación real de DaltonismoContext ni una variante equivalente del sistema de diseño.",
+      "remediation": "Definir si Figma necesita modos de variable de daltonismo o si el contrato se valida solo en runtime; cualquier decisión debe conservar señales no dependientes del color.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/06-auditoria-visual-accesibilidad.md",
+          "date": "2026-08-03"
+        }
+      ],
+      "verification": {
+        "method": "Inspección de colecciones/modos Figma y revisión de los estados candidatos.",
+        "result": "No existe modo de variables dedicado; los frames no dependen solo del color, pero la propagación real queda para runtime.",
+        "date": "2026-08-03"
+      }
+    }
+  ],
+  "resolves": [],
+  "exceptions": [],
+  "notes": "#159 no introdujo cambios runtime ni Blockers/Majors. Los cuatro residuales son riesgos o decisiones verificadas para olas futuras; la aprobación humana de Clases no se registra como deuda."
+}
