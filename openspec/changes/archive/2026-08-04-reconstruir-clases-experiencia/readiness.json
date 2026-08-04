@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "issue": 159,
+  "change": "reconstruir-clases-experiencia",
+  "surfaces": [
+    "docs",
+    "ui"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/RitualBoat/PlanearIA/issues/159"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish al publicar el change."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/09-revision-adversarial.md; PASS CON HUECOS, sin Blockers/Majors abiertos."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/15-validacion-cierre.md; .project-os/debt/assessments/reconstruir-clases-experiencia.json"
+    },
+    {
+      "id": "web-http-200",
+      "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/07-runtime-playwright-readonly.md; Expo web respondió HTTP 200 antes de la comparación."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/07-runtime-playwright-readonly.md; capturas 390x844, 1024x768 y 1440x960."
+    },
+    {
+      "id": "nielsen",
+      "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/06-auditoria-visual-accesibilidad.md; sin severidad 3–4 abierta."
+    },
+    {
+      "id": "human-approval",
+      "ref": "https://github.com/RitualBoat/PlanearIA/issues/159#issuecomment-5182823974; openspec/changes/reconstruir-clases-experiencia/evidencia/13-aprobacion-promocion-clases.md"
+    },
+    {
+      "id": "runtime-handoff",
+      "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/14-handoff-runtime-clases.md"
+    }
+  ],
+  "rollback": {
+    "strategy": "Restaurar la versión anterior mediante historial Figma y revertir el PR documental. Los frames históricos, runtime, rutas, datos, storage, backend y src/sync permanecen intactos."
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/reconstruir-clases-experiencia/evidencia/09-revision-adversarial.md"
+  },
+  "exceptions": []
+}
