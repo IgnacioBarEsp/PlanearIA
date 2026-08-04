@@ -11,7 +11,7 @@
   },
   "github": {
     "mode": "required",
-    "repo": "RitualBoat/PlanearIA",
+    "repo": "IgnacioBarEsp/PlanearIA",
     "remediationLabel": "debt-remediation",
     "issueTitlePrefix": "[Debt][Saneamiento]"
   },

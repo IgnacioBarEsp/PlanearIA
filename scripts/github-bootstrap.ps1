@@ -4,7 +4,7 @@
 
 $ErrorActionPreference = "Stop"
 
-$repo = "RitualBoat/PlanearIA"
+$repo = "IgnacioBarEsp/PlanearIA"
 
 $labels = @(
   @{ Name = "epic"; Color = "5319e7"; Description = "Agrupador grande de producto" },

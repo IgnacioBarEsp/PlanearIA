@@ -5,7 +5,7 @@
   "surfaces": ["docs"],
   "validations": ["openspec-strict", "harness-parity"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/156" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/156" },
     { "id": "pr-link", "ref": "Pendiente: se completa mediante opsx:finish al publicar el change." },
     { "id": "adversarial-review", "ref": "openspec/changes/corregir-navegacion-prototipo-figma/evidencia/03-revision-adversarial.md" },
     { "id": "docs-verification", "ref": "Documentacion/03-validacion/prototipo-figma-ola2/MATRIZ_NAVEGACION.md; openspec/changes/corregir-navegacion-prototipo-figma/evidencia/01-baseline-y-grafo.md; openspec/changes/corregir-navegacion-prototipo-figma/evidencia/02-qa-visual.md; openspec/changes/corregir-navegacion-prototipo-figma/evidencia/02-recorridos-manuales.md; .project-os/debt/assessments/corregir-navegacion-prototipo-figma.json" }

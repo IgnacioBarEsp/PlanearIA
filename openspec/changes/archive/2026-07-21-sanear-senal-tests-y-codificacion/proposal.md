@@ -1,6 +1,6 @@
 # Proposal: sanear-senal-tests-y-codificacion
 
-> Issue: [#132](https://github.com/RitualBoat/PlanearIA/issues/132) (child del epic de saneamiento [#129](https://github.com/RitualBoat/PlanearIA/issues/129)).
+> Issue: [#132](https://github.com/IgnacioBarEsp/PlanearIA/issues/132) (child del epic de saneamiento [#129](https://github.com/IgnacioBarEsp/PlanearIA/issues/129)).
 > Plan maestro: `Documentacion/01-planes-maestros/PLAN_PREPARACION_OPERATIVA_SDD_HARNESS_SOLO_DEV.md` (Ola 2 `limpiar-senal-tests` + parte de Ola 3 `baseline-knip-mojibake`).
 > Deuda objetivo: `debt-cbe0188191b5` (ruido de consola/act() en suites) y `debt-f466da64b58a` (mojibake en codigo y tests).
 

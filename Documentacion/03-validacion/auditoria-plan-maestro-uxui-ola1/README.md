@@ -1,6 +1,6 @@
 # Auditoria del Plan Maestro UX/UI antes de Ola 1
 
-> **Change:** `auditoria-plan-uxui-pre-ola1` (issue [#76](https://github.com/RitualBoat/PlanearIA/issues/76)).
+> **Change:** `auditoria-plan-uxui-pre-ola1` (issue [#76](https://github.com/IgnacioBarEsp/PlanearIA/issues/76)).
 > **Fecha:** 2026-07-16.
 > **Alcance:** auditoria de solo lectura del `PLAN_UXUI_NAVEGACION_GLOBAL.md` y su ecosistema (gates, IHC, harness, Product OS, codigo). No modifica el plan ni estados externos existentes.
 

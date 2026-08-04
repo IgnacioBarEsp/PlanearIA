@@ -4,7 +4,7 @@ import { buildWindowsBatchCommand, runDoctor } from './harnessDoctor.mjs';
 import { OAUTH_INTERACTIVE_REQUIRED, UNCLASSIFIED_FAILURE, classifyFailure, configuredEndpoint } from './lib/mcpFailureClassification.mjs';
 
 const config = {
-  project: { owner: 'RitualBoat', title: 'PlanearIA Product OS' },
+  project: { owner: 'IgnacioBarEsp', title: 'PlanearIA Product OS' },
   checkOrder: ['node-npm', 'git-worktree', 'openspec', 'github-projects', 'gitnexus', 'codegraph', 'harness-parity', 'mcp-parity', 'mcp-smoke', 'expo-compatibility', 'graphify'],
   oauthInteractiveServers: ['expo'],
   gitNexusFailurePatterns: ['Not a git repository', 'FTS indexes missing', 'query returned no structural context', 'impact did not resolve the expected'],

@@ -5,11 +5,11 @@
   "surfaces": ["ui", "harness"],
   "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/106" },
-    { "id": "pr-link", "ref": "https://github.com/RitualBoat/PlanearIA/pull/147" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/106" },
+    { "id": "pr-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/pull/147" },
     {
       "id": "adversarial-review",
-      "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors corregidos dentro del change: alcance de la guardia fuera de src/ y evasion por Dimensions.get; 3 Minors rastreados) en https://github.com/RitualBoat/PlanearIA/issues/106#issuecomment-5077493057"
+      "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors corregidos dentro del change: alcance de la guardia fuera de src/ y evasion por Dimensions.get; 3 Minors rastreados) en https://github.com/IgnacioBarEsp/PlanearIA/issues/106#issuecomment-5077493057"
     },
     {
       "id": "web-http-200",
@@ -33,7 +33,7 @@
     "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
   },
   "adversarialReview": {
-    "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors corregidos dentro del change) en https://github.com/RitualBoat/PlanearIA/issues/106#issuecomment-5077493057"
+    "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors corregidos dentro del change) en https://github.com/IgnacioBarEsp/PlanearIA/issues/106#issuecomment-5077493057"
   },
   "exceptions": []
 }

@@ -7,7 +7,7 @@
 > **Estado:** activo como prerrequisito transversal de UX/UI
 > **Plan consumidor:** `PLAN_UXUI_NAVEGACION_GLOBAL.md`
 > **Guia manual:** `../02-operacion/GUIA_MANUAL_PREPARACION_SDD_HARNESS.md`
-> **Epic GitHub:** `#42` - https://github.com/RitualBoat/PlanearIA/issues/42
+> **Epic GitHub:** `#42` - https://github.com/IgnacioBarEsp/PlanearIA/issues/42
 
 ## 1. Blueprint
 
@@ -138,9 +138,9 @@ Un change no se archiva hasta que:
 
 ### 1.10 Seguimiento Product OS de readiness
 
-> Verificado el 2026-07-16 con la epic [#42](https://github.com/RitualBoat/PlanearIA/issues/42),
+> Verificado el 2026-07-16 con la epic [#42](https://github.com/IgnacioBarEsp/PlanearIA/issues/42),
 > `PlanearIA Product OS` y consultas de GitHub CLI. La decision de normalizacion se registra en
-> [#65](https://github.com/RitualBoat/PlanearIA/issues/65).
+> [#65](https://github.com/IgnacioBarEsp/PlanearIA/issues/65).
 
 | Superficie | Estado operativo | Decision vigente |
 | --- | --- | --- |
@@ -148,7 +148,7 @@ Un change no se archiva hasta que:
 | Gate M | #43-#45 cerrados; #46/#47 abiertos y `Parked` | Se conserva abierto: Figma e IHC estan diferidos, pero no bloquean R0/R1. |
 | Ola 0 | #48-#52 cerrados y `Done` | El milestone se cierra como ciclo terminado; sus issues permanecen como evidencia. |
 | Ola 1 | #62, #63 y #64 cerrados; #65 normaliza la gobernanza | #65 es el unico change versionable durante su ejecucion; despues de archive, una nueva historia requiere autorizacion propia. |
-| Deuda posterior | [#66](https://github.com/RitualBoat/PlanearIA/issues/66) abierta, `Backlog`, sin milestone | Es tracking post-Ola 0 de dos remediaciones separadas: doctor/GitNexus y compatibilidad Expo. No se mezcla con #65 ni reabre Ola 0. |
+| Deuda posterior | [#66](https://github.com/IgnacioBarEsp/PlanearIA/issues/66) abierta, `Backlog`, sin milestone | Es tracking post-Ola 0 de dos remediaciones separadas: doctor/GitNexus y compatibilidad Expo. No se mezcla con #65 ni reabre Ola 0. |
 
 La normalizacion cierra solo milestones historicos sin issues abiertos: `Ciclo 0 -
 Reorientacion y GitHub`, `Ciclo 1 - Plan Classroom`, `Ciclo 2 - Fundacion Classroom`,
@@ -183,7 +183,7 @@ Estas historias se crean como issues con labels `needs-input` y `infra` o `ux-ui
 - **Historia:** Como desarrollador unico, quiero que los agentes puedan consultar y actualizar mi Project para que ningun change quede fuera del flujo SDD.
 - **Criterios de aceptacion:**
   - `gh auth status` conserva los scopes actuales y agrega `read:project` y `project`.
-  - `gh project list --owner RitualBoat` muestra `PlanearIA Product OS`.
+  - `gh project list --owner IgnacioBarEsp` muestra `PlanearIA Product OS`.
   - Se puede agregar un issue de prueba o del plan al Project sin pegar tokens en archivos o chats.
 - **Evidencia:** salida redactada de `gh auth status` y `gh project list`.
 - **Intervencion usuario:** obligatoria en el navegador/device flow.
@@ -564,7 +564,7 @@ Crear estos issues cuando Ola 0 este en curso/cierre. Son la siguiente ola, no t
 
 #### Change: `control-deuda-tecnica-sdd`
 
-- **Issue:** [#128](https://github.com/RitualBoat/PlanearIA/issues/128)
+- **Issue:** [#128](https://github.com/IgnacioBarEsp/PlanearIA/issues/128)
 - **Historia:** Como desarrollador unico asistido por agentes, quiero que todo hallazgo residual de un
   flujo SDD sea clasificado, verificado, registrado y gobernado mediante gates, para impedir que
   advertencias olvidadas acumulen deuda silenciosa y recibir una ruta guiada de saneamiento.

@@ -5,7 +5,7 @@
   "surfaces": ["docs", "harness"],
   "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/86" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/86" },
     { "id": "pr-link", "ref": "Pendiente de PR tras aplicar y revisar el change." },
     { "id": "adversarial-review", "ref": "evidencia/revision-adversarial.md" },
     { "id": "docs-verification", "ref": "evidencia/validacion-documental.md" },

@@ -5,7 +5,7 @@ Change: `reconstruir-clases-experiencia`
 Issue operativo: #159  
 Estado: validación manual del agente completada; aprobación visual humana pendiente.
 
-Gate publicado en [#159, comentario 5164346763](https://github.com/RitualBoat/PlanearIA/issues/159#issuecomment-5164346763).
+Gate publicado en [#159, comentario 5164346763](https://github.com/IgnacioBarEsp/PlanearIA/issues/159#issuecomment-5164346763).
 
 ## Método y alcance
 

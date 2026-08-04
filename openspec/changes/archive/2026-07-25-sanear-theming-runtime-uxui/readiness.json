@@ -5,11 +5,11 @@
   "surfaces": ["ui", "harness"],
   "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/145" },
-    { "id": "pr-link", "ref": "https://github.com/RitualBoat/PlanearIA/pull/146" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/145" },
+    { "id": "pr-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/pull/146" },
     {
       "id": "adversarial-review",
-      "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors y 3 Minors corregidos dentro del change; 3 Minors rastreados) en https://github.com/RitualBoat/PlanearIA/issues/145#issuecomment-5076743302"
+      "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors y 3 Minors corregidos dentro del change; 3 Minors rastreados) en https://github.com/IgnacioBarEsp/PlanearIA/issues/145#issuecomment-5076743302"
     },
     {
       "id": "web-http-200",
@@ -33,7 +33,7 @@
     "qaVisualJourneys": ["arranque-y-alcance-del-shell"]
   },
   "adversarialReview": {
-    "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors y 3 Minors corregidos dentro del change) en https://github.com/RitualBoat/PlanearIA/issues/145#issuecomment-5076743302"
+    "ref": "Veredicto PASS CON HUECOS (0 Blockers; 2 Majors y 3 Minors corregidos dentro del change) en https://github.com/IgnacioBarEsp/PlanearIA/issues/145#issuecomment-5076743302"
   },
   "exceptions": []
 }

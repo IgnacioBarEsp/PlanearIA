@@ -34,7 +34,7 @@ raíz y es owner/consumidor. No existe upstream, npm público, GitHub Release, p
 
 ## Comportamiento objetivo
 
-`RitualBoat/project-engineering-os` será upstream MIT de un solo package
+`IgnacioBarEsp/project-engineering-os` será upstream MIT de un solo package
 `create-project-engineering-os`. `project-os` expondrá constructor y namespace debt. Releases tendrán
 tarball único, checksum, provenance y CI multiplataforma. Consumidores fijarán versión/schema, usarán
 upgrade read-only/apply/PR y rollback. PlanearIA conservará solo dependencia y smokes contractuales.

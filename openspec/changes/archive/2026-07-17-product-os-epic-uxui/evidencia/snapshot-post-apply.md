@@ -4,7 +4,7 @@ Estado resultante tras ejecutar la matriz de mutaciones. Comparar con `snapshot-
 
 ## Epic creado
 
-- [#101](https://github.com/RitualBoat/PlanearIA/issues/101) `[Plan Maestro] UX/UI y Navegacion Global` (labels `epic`, `ux-ui`, `plan-maestro`), agregado al Project `PlanearIA Product OS`.
+- [#101](https://github.com/IgnacioBarEsp/PlanearIA/issues/101) `[Plan Maestro] UX/UI y Navegacion Global` (labels `epic`, `ux-ui`, `plan-maestro`), agregado al Project `PlanearIA Product OS`.
 - Sub-issues (12, via GraphQL `addSubIssue`): #78, #79, #80 (CLOSED), #81, #82, #83, #84, #85, #86, #87, #88, #89 (OPEN). `subIssues.totalCount = 12`.
 
 ## Milestones (antes -> despues)

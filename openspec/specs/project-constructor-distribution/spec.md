@@ -5,7 +5,7 @@ TBD - created by archiving change publish-project-engineering-os. Update Purpose
 ## Requirements
 ### Requirement: El upstream público es neutral y tiene licencia explícita
 
-El sistema SHALL publicar `RitualBoat/project-engineering-os` como fuente canónica bajo licencia MIT. El
+El sistema SHALL publicar `IgnacioBarEsp/project-engineering-os` como fuente canónica bajo licencia MIT. El
 tree público SHALL limitarse mediante allowlist a runtime, blueprint, schemas, documentación, tests y
 automatización propios del Engineering OS, y SHALL NOT contener código, secretos, datos, nombres, paths o
 reglas de dominio de PlanearIA. La identidad de texto SHALL usar hashes canónicos LF y el repositorio

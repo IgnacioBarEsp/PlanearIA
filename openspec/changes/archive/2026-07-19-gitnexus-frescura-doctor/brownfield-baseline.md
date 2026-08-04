@@ -70,7 +70,7 @@ Medido el 2026-07-19 sobre `development@6b6e23c`:
 
 ## Owner de spec y contexto
 
-- Owner: Ignacio Barboza Espinoza (RitualBoat), desarrollador unico.
+- Owner: Ignacio Barboza Espinoza (IgnacioBarEsp), desarrollador unico.
 - Specs propietarias: `gitnexus-index-health` y `harness-readiness-doctor`.
 - Contexto de agente: `.agents/instructions/core.md` como fuente; `AGENTS.md` y `CLAUDE.md` como
   espejos generados.

@@ -4,7 +4,7 @@ Fecha: 2026-07-14
 
 ## Alcance
 
-- Issue: [#50 Reparar indexado y consultas estructurales de GitNexus](https://github.com/RitualBoat/PlanearIA/issues/50).
+- Issue: [#50 Reparar indexado y consultas estructurales de GitNexus](https://github.com/IgnacioBarEsp/PlanearIA/issues/50).
 - Change OpenSpec: `reparar-gitnexus-fts`.
 - Rama: `codex/reparar-gitnexus-fts`.
 - Efecto permitido: indice local ignorado `.gitnexus/` y cache local de extensiones de LadybugDB. No se modificaron datos de producto, backend, sync, IA ni configuracion de agentes.

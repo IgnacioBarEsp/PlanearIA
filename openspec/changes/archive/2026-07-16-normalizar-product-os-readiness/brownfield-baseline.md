@@ -7,7 +7,7 @@
 
 ## Fuentes de verdad actuales
 
-- Epic #42, issues #44, #46 a #52 y #62 a #66, y Project `RitualBoat/1` consultados con GitHub CLI.
+- Epic #42, issues #44, #46 a #52 y #62 a #66, y Project `IgnacioBarEsp/1` consultados con GitHub CLI.
 - `Documentacion/02-operacion/GITHUB_PRODUCT_OS.md`, el plan de Preparacion Operativa y `meta_guia_planes.md`.
 - `openspec/specs/harness-readiness-doctor/spec.md` para el hecho que origina #66, sin cambiar ese contrato.
 

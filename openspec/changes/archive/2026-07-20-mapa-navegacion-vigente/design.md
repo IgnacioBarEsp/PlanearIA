@@ -134,7 +134,7 @@ Se corrigen `:67` (milestone listado entre activos) y `:134-135` (declarado abie
 describe el "estado inicial tras el change `product-os-epic-uxui` (2026-07-17)": es un registro fechado y
 correcto en su fecha, asi que se conserva y se le agrega el estado posterior en vez de sobreescribirlo.
 
-*Verificacion:* `gh api repos/RitualBoat/PlanearIA/milestones?state=all` devuelve milestone 11
+*Verificacion:* `gh api repos/IgnacioBarEsp/PlanearIA/milestones?state=all` devuelve milestone 11
 `UX/UI Ola 1 - Shell y componentes state=closed open=0 closed=4`, con #81-#84 cerrados.
 
 ### D10. `PLAN_AUTH_SEGURIDAD_SESION_REAL.md` entra durante el apply, solo en nombres de ruta

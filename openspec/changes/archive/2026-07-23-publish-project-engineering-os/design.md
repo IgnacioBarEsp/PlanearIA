@@ -58,7 +58,7 @@ no se requieren microservicios, CQRS, event sourcing, colas ni providers.
 
 La solución sostenible es híbrida:
 
-1. `RitualBoat/project-engineering-os` contiene código, blueprint, specs, docs y CI.
+1. `IgnacioBarEsp/project-engineering-os` contiene código, blueprint, specs, docs y CI.
 2. `create-project-engineering-os` distribuye el mismo tree por npm/npx.
 3. GitHub Releases publica el tarball contractual y checksum.
 4. Un template repository puede evaluarse después como espejo generado, nunca como owner.
@@ -225,7 +225,7 @@ completar la publicación.
 ### D14. MIT del Engineering OS no decide licencia del producto
 
 El repositorio y paquete usan MIT con copyright propuesto:
-`Copyright (c) 2026 RitualBoat contributors`. Dependencias/artefactos conservan inventario SPDX y notices.
+`Copyright (c) 2026 IgnacioBarEsp contributors`. Dependencias/artefactos conservan inventario SPDX y notices.
 El blueprint instala un notice para archivos administrados, pero no crea ni reemplaza el `LICENSE` del
 producto nuevo. Código y dominio del consumidor usan la licencia que su owner decida.
 

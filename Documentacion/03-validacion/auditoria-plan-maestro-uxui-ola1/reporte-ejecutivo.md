@@ -1,6 +1,6 @@
 # Reporte ejecutivo — Auditoria del Plan Maestro UX/UI antes de Ola 1
 
-> Issue [#76](https://github.com/RitualBoat/PlanearIA/issues/76) | Change `auditoria-plan-uxui-pre-ola1` | 2026-07-16
+> Issue [#76](https://github.com/IgnacioBarEsp/PlanearIA/issues/76) | Change `auditoria-plan-uxui-pre-ola1` | 2026-07-16
 
 ## Veredicto
 

@@ -2,11 +2,11 @@
 
 Date: 2026-07-07
 
-Product OS source: https://github.com/RitualBoat/PlanearIA/issues/38
+Product OS source: https://github.com/IgnacioBarEsp/PlanearIA/issues/38
 
 ### Product OS
 
-- `gh issue view 38 --repo RitualBoat/PlanearIA --json url,title,number,state,projectItems`
+- `gh issue view 38 --repo IgnacioBarEsp/PlanearIA --json url,title,number,state,projectItems`
 - Result: issue #38 is open, titled `raise-react-doctor-score-baseline`, and is in `PlanearIA Product OS` with status `Backlog`.
 
 ### React Doctor Baseline Before Scope Cleanup
@@ -136,4 +136,4 @@ React Doctor emitted its license warning about AI or ML pipeline use during loca
 
 ### GitHub Issue Update
 
-- Issue #38 evidence comment: https://github.com/RitualBoat/PlanearIA/issues/38#issuecomment-4902172376
+- Issue #38 evidence comment: https://github.com/IgnacioBarEsp/PlanearIA/issues/38#issuecomment-4902172376

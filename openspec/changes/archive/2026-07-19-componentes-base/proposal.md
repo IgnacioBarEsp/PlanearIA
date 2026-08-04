@@ -55,6 +55,6 @@ Ninguna. `theming-runtime-propagation`, `reactive-breakpoints`, `design-tokens` 
 
 ## Referencias
 
-- Issue: [#82](https://github.com/RitualBoat/PlanearIA/issues/82) (enriquecido; gate `openspec:ready:propose` en PASS el 2026-07-19).
+- Issue: [#82](https://github.com/IgnacioBarEsp/PlanearIA/issues/82) (enriquecido; gate `openspec:ready:propose` en PASS el 2026-07-19).
 - Plan maestro: `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`, secciones 1.4 (biblioteca base), 1.9.2 (catalogo de motion), 1.9.3 (checklist anti-slop) y 1.9.4 (presupuesto de motion y accesibilidad).
 - Dependencia cerrada: #80 `tokens-completos` (spec `design-tokens`).

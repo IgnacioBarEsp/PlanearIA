@@ -52,10 +52,10 @@ Fuera de estas rutas el change no edita codigo.
 
 ## Owner de spec y contexto
 
-- Owner del change y de la spec: Ignacio Barboza Espinoza (RitualBoat), desarrollador unico del proyecto.
+- Owner del change y de la spec: Ignacio Barboza Espinoza (IgnacioBarEsp), desarrollador unico del proyecto.
 - Capacidad nueva: `base-component-library`, creada por este change.
 - Capacidades consumidas sin modificar: `design-tokens`, `theming-runtime-propagation`, `reactive-breakpoints`, `adaptive-app-shell`.
-- Issue de origen: [#82](https://github.com/RitualBoat/PlanearIA/issues/82), enriquecido el 2026-07-19; gate `openspec:ready:propose` en PASS.
+- Issue de origen: [#82](https://github.com/IgnacioBarEsp/PlanearIA/issues/82), enriquecido el 2026-07-19; gate `openspec:ready:propose` en PASS.
 
 ## Evidencia actual
 

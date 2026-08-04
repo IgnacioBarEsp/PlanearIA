@@ -29,7 +29,7 @@ oficiales públicas de Google Classroom y una adaptación explícita para Planea
 
 ## Evidencia de aprobación visual
 
-- Gate humano: [comentario de aprobación en #159](https://github.com/RitualBoat/PlanearIA/issues/159#issuecomment-5182823974).
+- Gate humano: [comentario de aprobación en #159](https://github.com/IgnacioBarEsp/PlanearIA/issues/159#issuecomment-5182823974).
 - Contrato promovido: Figma `179:115`, con 83 frames propios de Clases en estado `approved`.
 - Office y los 22 puentes/fallbacks de otros hubs permanecen `candidate`; no son ground truth de esos módulos.
 - #46, entrevistas docentes y runtime no se cierran ni se aprueban por inferencia.

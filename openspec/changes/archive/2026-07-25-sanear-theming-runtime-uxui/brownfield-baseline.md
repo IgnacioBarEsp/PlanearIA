@@ -51,7 +51,7 @@ Capability owner: `theming-runtime-propagation`, modificada por este change. La 
 
 Bounded context: **Experiencia y Preferencias**, owner de tema, fuente, daltonismo y accesibilidad. El change es intra-contexto y no requiere contrato cruzado: cambia como una pantalla consume la presentacion, sin tocar entidades ni reglas de `Classroom y Organizacion Academica` ni de `Seguimiento y Evaluacion`, a los que pertenecen las pantallas migradas.
 
-Plan owner: `uxui-navegacion-global`. Issue: [#145](https://github.com/RitualBoat/PlanearIA/issues/145), Ola 2a del epic [#141](https://github.com/RitualBoat/PlanearIA/issues/141). Item de deuda: `debt-b279f64f815b`.
+Plan owner: `uxui-navegacion-global`. Issue: [#145](https://github.com/IgnacioBarEsp/PlanearIA/issues/145), Ola 2a del epic [#141](https://github.com/IgnacioBarEsp/PlanearIA/issues/141). Item de deuda: `debt-b279f64f815b`.
 
 ## Evidencia actual
 

@@ -91,7 +91,7 @@ corregirla.
   `development@4755177`.
 - `routeManifest.ts:21-122` y sus chequeos `:130-179`; `AppShell.tsx:24-30`; `types.ts:154-174`.
 - `git log --diff-filter=D -- src/components/FloatingActionIcons.tsx` -> `2e5acfb` (componente retirado).
-- `gh api repos/RitualBoat/PlanearIA/milestones?state=all` -> milestone 11 `state=closed`, `closed=4`.
+- `gh api repos/IgnacioBarEsp/PlanearIA/milestones?state=all` -> milestone 11 `state=closed`, `closed=4`.
 - `gh issue view` de #81, #82, #83, #84 -> CLOSED.
 - `openspec/changes/archive/` contiene los cuatro changes de Ola 1 archivados.
 - Evidencia a producir durante apply: busqueda de tabs legacy, verificacion de enlaces relativos

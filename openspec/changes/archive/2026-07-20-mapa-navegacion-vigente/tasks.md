@@ -34,7 +34,7 @@
 
 - [x] 5.1 Corregir `Documentacion/02-operacion/GITHUB_PRODUCT_OS.md:67` para que `UX/UI Ola 1 - Shell y componentes` no figure entre los milestones activos.
 - [x] 5.2 Actualizar `:134-135` para reflejar el milestone cerrado con #81-#84 cerrados, conservando el registro fechado del estado inicial tras `product-os-epic-uxui`.
-- [x] 5.3 Verificar el estado declarado contra `gh api repos/RitualBoat/PlanearIA/milestones?state=all` y guardar la salida como evidencia.
+- [x] 5.3 Verificar el estado declarado contra `gh api repos/IgnacioBarEsp/PlanearIA/milestones?state=all` y guardar la salida como evidencia.
 
 ## 6. Verificacion y evidencia
 

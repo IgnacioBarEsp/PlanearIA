@@ -1,6 +1,6 @@
 # Propagar tema, fuente y daltonismo en runtime
 
-Issue: [#78](https://github.com/RitualBoat/PlanearIA/issues/78).
+Issue: [#78](https://github.com/IgnacioBarEsp/PlanearIA/issues/78).
 Plan: `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`, change `theming-runtime` (Ola 0).
 Origen: auditoria #76 (H1, H2, H12a, H13).
 

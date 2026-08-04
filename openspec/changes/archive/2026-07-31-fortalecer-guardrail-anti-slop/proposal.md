@@ -1,6 +1,6 @@
 ## Why
 
-Issue de origen: [#86 — Preparar prototipos Figma Ola 2](https://github.com/RitualBoat/PlanearIA/issues/86).
+Issue de origen: [#86 — Preparar prototipos Figma Ola 2](https://github.com/IgnacioBarEsp/PlanearIA/issues/86).
 
 El estándar visual de PlanearIA ya nombraba el riesgo de diseño genérico, pero permitía interpretaciones contradictorias: paleta azul, bento y glass podían leerse como soluciones por defecto. La dirección Figma v2 aprobada demuestra que el producto necesita un criterio operativo, encontrable y verificable antes de que un agente diseñe en Figma, código u otra herramienta.
 

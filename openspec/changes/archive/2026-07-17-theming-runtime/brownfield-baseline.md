@@ -58,7 +58,7 @@ No existe mecanismo de rastreo del rollout pendiente (H12a). No existe regla de 
 - Superficie tocada en **Identidad y Cuenta** (`SesionesActivasScreen`, `AdminRolesScreen`) solo como consumidora de presentacion: no se toca `Usuario`, `Rol`, `Sesion` ni `AuthContext`, y no se requiere contrato cruzado nuevo (ver `design.md`).
 - Spec nueva: `theming-runtime-propagation` (como se consume).
 - Spec vecina, no modificada: `settings-accessibility-preferences` (que se guarda y como se restaura).
-- Issue owner: [#78](https://github.com/RitualBoat/PlanearIA/issues/78).
+- Issue owner: [#78](https://github.com/IgnacioBarEsp/PlanearIA/issues/78).
 
 ## Evidencia actual
 
