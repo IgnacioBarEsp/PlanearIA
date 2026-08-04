@@ -2,7 +2,8 @@
 
 ## Superficies tocadas
 
-- Archivo Figma PlanearIA `VBK5tK7EQS83tdTmtuBpI9`: futura sección/version candidate de Escritorio.
+- Archivo Figma PlanearIA `VBK5tK7EQS83tdTmtuBpI9`: sección/version candidate `307:965` de Escritorio,
+  con frames `307:966`, `307:1046`, `307:1078` y selectors `310:3`, `310:69`, `310:106`.
 - Launcher, atención diaria, continuidad, creación tipo-primero y estados en móvil, tablet y web.
 - Matriz de navegación, `context/escritorio-ground-truth/`, evidencia de #163 y artefactos del change.
 - Runtime Expo sólo para comparación read-only; no se edita.
@@ -50,7 +51,8 @@ tendrá issue/change propio.
 - Decisiones aprobadas de #157 y plan v1.3 vigente.
 - #159 y #161 cerrados; PR #162 integrado; #156/PR #158 histórico.
 - Gate `npm run openspec:ready:propose -- --issue 163`: PASS 10/10 el 2026-08-04.
-- Inventario Figma read-only de tres nodos, screenshots locales no versionados y drift documentado.
+- Inventario Figma read-only de tres nodos, sección candidate producida sin tocar históricos, capturas
+  visuales inspeccionadas y drift documentado en `evidencia/01-*`, `02-*` y `03-*`.
 - GitNexus primario con índice fresco en el repositorio principal; CodeGraph fallback para fuente lineada.
 - Preflight Anti-Slop y referencias oficiales de Microsoft, Android Developers y W3C.
 
