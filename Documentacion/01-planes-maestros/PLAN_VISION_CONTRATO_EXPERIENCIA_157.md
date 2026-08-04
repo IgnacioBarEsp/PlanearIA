@@ -1,12 +1,12 @@
 # Plan Maestro: Visión y Contrato de Experiencia del Prototipo — Subépica #157
 
-> **Versión:** 1.2, aprobada.
+> **Versión:** 1.3, vigente.
 > **Fecha:** 2026-08-04.
 > **Formato:** Blueprint + backlog de olas, conforme a `meta_guia_planes.md`.
 > **Autoridad operativa padre:** issue [#101](https://github.com/RitualBoat/PlanearIA/issues/101), Plan Maestro UX/UI y Navegación Global.
 > **Subépica de este plan:** issue [#157](https://github.com/RitualBoat/PlanearIA/issues/157), reconstrucción del prototipo como suite docente por módulos.
 > **Plan padre:** [`PLAN_UXUI_NAVEGACION_GLOBAL.md`](PLAN_UXUI_NAVEGACION_GLOBAL.md).
-> **Estado:** activo. `#157-O0` y el prototipo `#157-O1 Clases` están aprobados; el cierre SDD documental de Clases está en curso. `#157-O2 Escritorio` es la siguiente ola autorizada para preparar artefactos. Ningún `apply` posterior se ejecuta sin aprobación humana explícita de esos artefactos.
+> **Estado:** activo. `#157-O0` y el prototipo `#157-O1 Clases` están aprobados; el saneamiento post-Clases se ejecuta bajo #161 antes de reanudar el plan. `#157-O2 Escritorio` es la siguiente ola autorizada para preparar artefactos, pero ningún `apply` posterior se ejecuta sin aprobación humana explícita de esos artefactos.
 > **Alcance:** visión consolidada, arquitectura de experiencias, nomenclatura, fronteras, paridad, ground truth, riesgos, olas y gates para reconstruir el prototipo un módulo a la vez.
 
 ## Control de versiones
@@ -17,6 +17,7 @@
 | 1.0 | 2026-08-03 | Aprobada | El owner aprueba el contrato como baseline y habilita preparar únicamente `#157-O1 Clases`. |
 | 1.1 | 2026-08-03 | Aprobada | Integra las decisiones de la entrevista de Clases, el baseline oficial Google Classroom 0.1, los inventarios read-only de Figma/runtime y el preflight visual; habilita el gate pre-propose sin aprobar todavía una composición Figma ni implementación. |
 | 1.2 | 2026-08-04 | Aprobada | Registra la aprobación visual de Clases v1.3, conserva como candidate los puentes de otros módulos y activa únicamente la preparación de artefactos de `#157-O2 Escritorio`; `apply` requiere una aprobación posterior. |
+| 1.3 | 2026-08-04 | Vigente | Integra el contrato transversal de rollback Figma, roles semánticos Figma-runtime, frontera de daltonismo y origen canónico de QA fijado por el saneamiento #161; la reanudación depende de `debt:check` y cada ola conserva su aprobación humana separada. |
 
 Una modificación posterior de la promesa, arquitectura de experiencias, fronteras o nomenclatura incrementa
 la versión menor y registra la decisión. Una corrección editorial sin cambio de significado incrementa el
@@ -182,6 +183,23 @@ Todo contrato cruzado futuro declara owner, consumidor, dirección, IDs/proyecci
 `userId`, sync, permisos, confirmación IA y rollback. Documentar el contrato no autoriza microservicios,
 CQRS, event sourcing, colas paralelas ni providers globales nuevos.
 
+### Contrato transversal heredado por cada ola
+
+El prototipo Figma expresa roles perceptuales (`bg/canvas`, `bg/surface`, `text/primary`, `text/secondary`,
+`border/divider`, `action/primary`, `selection`, estados y elevación). El runtime dueño elige la familia
+de `ColorTokens` mediante `useAppTheme`; no copia hex ni declara paridad por coincidencia de valores.
+Cuando falta un token, el change runtime debe proponerlo con contraste, compatibilidad y rollback. Figma
+debe comunicar selección, riesgo, éxito, error, offline y sync pendiente con señales no dependientes del
+color; `DaltonismoContext` es el contrato funcional y un modo Figma solo se reabre con evidencia de un
+defecto cromático concreto.
+
+Toda ola Figma conserva historial automático, frames históricos sin inicio activo, sección identificada
+por módulo/estado/versión y evidencia enlazada del destino de restauración. Un checkpoint nombrado es
+opcional y solo se afirma cuando el conector confirma su creación. La QA web usa `http://localhost:8081`,
+confirma HTTP 200 y verifica el preflight del origen exacto antes de afirmar backend o sync; otro origen
+requiere configuración `ALLOWED_ORIGINS` explícita. La aprobación humana de cada ola sigue siendo un gate
+independiente y una aprobación previa no autoriza la siguiente.
+
 ---
 
 ## 5. Matriz de ground truth y nivel de paridad
@@ -342,7 +360,8 @@ Antes de `propose` deben existir:
 - Los golden journeys aplicables se reproducen en Present y la matriz de navegación se actualiza.
 - La aprobación visual humana queda enlazada; no se infiere.
 - La revisión adversarial no conserva Blockers ni Majors.
-- Rollback por historial Figma/PR y trazabilidad documental quedan declarados.
+- Rollback por historial Figma/PR y trazabilidad documental quedan declarados; el mínimo Figma es historial
+  automático, frames previos, sección/version identificable y destino de restauración documentado.
 
 ---
 

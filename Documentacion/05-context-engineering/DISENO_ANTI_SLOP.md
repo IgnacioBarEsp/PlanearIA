@@ -43,6 +43,26 @@ Copiar y completar este registro antes de crear o alterar composición, paleta, 
 
 Una casilla sin decisión concreta no pasa el preflight. “Se ve moderno”, “es premium” o “lo genera la herramienta” no son justificaciones.
 
+### Roles semánticos y frontera Figma-runtime
+
+El preflight nombra el rol visual, no un hex aislado. La familia de runtime es una hipótesis de handoff que
+debe validar el change dueño mediante `useAppTheme`:
+
+| Rol Figma | Familia runtime candidata | Señal obligatoria |
+| --- | --- | --- |
+| `bg/canvas`, `bg/surface` | `background*`, `surface*`, `surfaceContainer*` | jerarquía de capas |
+| `text/primary`, `text/secondary` | `text`, `onSurface`, `textSecondary`, `onSurfaceVariant` | contraste y lectura |
+| `border/divider` | `border*`, `divider`, `outlineVariant` | separación sin ruido |
+| `action/primary`, `selection` | `primary*`, `primaryContainer`, `primaryTint`, `toggleActive` | verbo/label visible |
+| `success`, `warning`, `danger` | familias de estado y tintes | texto, icono o estructura además del color |
+| `overlay/elevation` | `overlay`, `shadowBlue*`, elevación | fallback sólido y reduce motion |
+
+El prototipo no necesita modos Figma específicos de daltonismo por defecto. Sus estados deben sobrevivir
+sin color; el comportamiento funcional se prueba en runtime con `DaltonismoContext` compuesto por
+`useAppTheme`. La decisión se reabre solo con un defecto cromático concreto y un control preventivo
+demostrable. El rollback visual exige historial automático, frames históricos, sección/version identificable
+y destino documentado; una versión nombrada del conector es opcional.
+
 ## Intensidad Correcta
 
 | Zona | Decisión correcta | Se evita |

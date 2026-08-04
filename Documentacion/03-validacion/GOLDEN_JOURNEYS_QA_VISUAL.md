@@ -88,6 +88,22 @@ curl -s -o /dev/null -w "%{http_code}" http://localhost:8081
 **No navegues hasta ver 200.** El bundler tarda en responder y una pagina en blanco se ve igual que
 una pantalla vacia legitima.
 
+El origen de navegación y el origen de la petición deben coincidir. La URL canónica es
+`http://localhost:8081`; `127.0.0.1`, otro puerto o un dominio distinto requieren una entrada explícita
+en `ALLOWED_ORIGINS` y evidencia del cambio. Cuando la comparación usa backend remoto, ejecuta el preflight
+del origen exacto antes de recorrer journeys, por ejemplo:
+
+```bash
+curl -i -X OPTIONS "$EXPO_PUBLIC_API_URL/api/<ruta>" \
+  -H "Origin: http://localhost:8081" \
+  -H "Access-Control-Request-Method: GET" \
+  -H "Access-Control-Request-Headers: Authorization, Content-Type"
+```
+
+Si `Access-Control-Allow-Origin` no refleja exactamente el origen solicitado, la sesión puede aportar
+evidencia visual local, pero se clasifica `local-only` y no afirma datos remotos, backend ni sincronización.
+No se amplía el default CORS desde un change UX/UI.
+
 ### 4.2 Recorrer y medir, ancho por ancho
 
 Para cada ancho del nivel que aplique:

@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "issue": 161,
+  "change": "sanear-residuales-post-clases-uxui",
+  "surfaces": [
+    "docs"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/RitualBoat/PlanearIA/issues/161"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish después de apply, revisión y archive aprobados."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/02-revision-adversarial.md (PASS CON HUECOS CONTROLADOS; 0 Blockers/Majors)."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/03-validacion-documental.md y evidencia/05-readiness-archive.md (OpenSpec 55/55, harness 36/36, Project OS, golden journeys y readiness PASS)."
+    },
+    {
+      "id": "human-approval",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/161#issuecomment-5184605462"
+    },
+    {
+      "id": "debt-resolution",
+      "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/04-debt-capture-y-check.md; .project-os/debt/assessments/sanear-residuales-post-clases-uxui.json; debt:check PASS con 0/5 unidades y 0 flujos abiertos."
+    }
+  ],
+  "rollback": {
+    "strategy": "Revertir el PR documental. No se modifican Figma, runtime ni backend; assessments previos permanecen inmutables y cualquier ID no demostrado se omite de resolves."
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/sanear-residuales-post-clases-uxui/evidencia/02-revision-adversarial.md"
+  },
+  "exceptions": []
+}
+
