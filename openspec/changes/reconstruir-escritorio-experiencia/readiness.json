@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "issue": 163,
+  "change": "reconstruir-escritorio-experiencia",
+  "surfaces": [
+    "docs",
+    "ui"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/163"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish tras apply, aprobación visual y archive."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "Pendiente durante apply: openspec/changes/reconstruir-escritorio-experiencia/evidencia/09-revision-adversarial.md"
+    },
+    {
+      "id": "docs-verification",
+      "ref": "Gate pre-propose PASS 10/10; validación estricta final pendiente durante apply."
+    },
+    {
+      "id": "web-http-200",
+      "ref": "Pendiente durante apply: comparación runtime read-only después de HTTP 200."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "Pendiente durante apply: 390x844, 768x1024/1024x768 y 1440x960."
+    },
+    {
+      "id": "nielsen",
+      "ref": "Pendiente durante apply: auditoría sin severidad 3–4 abierta."
+    },
+    {
+      "id": "human-approval",
+      "ref": "Pendiente: el owner debe aprobar primero estos artefactos y después el candidate visual en #163."
+    },
+    {
+      "id": "runtime-handoff",
+      "ref": "Pendiente tras aprobación visual; no autoriza crear issue/change runtime."
+    }
+  ],
+  "rollback": {
+    "strategy": "Conservar nodos históricos y sección candidate; restaurar por historial Figma o frames previos y revertir artefactos por PR normal. Runtime, rutas, datos, storage, backend y src/sync permanecen intactos."
+  },
+  "adversarialReview": {
+    "ref": "Pendiente durante apply: openspec/changes/reconstruir-escritorio-experiencia/evidencia/09-revision-adversarial.md"
+  },
+  "exceptions": []
+}
