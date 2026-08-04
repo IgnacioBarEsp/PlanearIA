@@ -1,0 +1,46 @@
+{
+  "schemaVersion": 1,
+  "issue": 161,
+  "change": "sanear-residuales-post-clases-uxui",
+  "surfaces": [
+    "docs"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/RitualBoat/PlanearIA/issues/161"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish después de apply, revisión y archive aprobados."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "Pendiente de apply: evidencia/revision-adversarial.md."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "Pendiente de apply: evidencia/validacion-documental.md y assessment de saneamiento."
+    },
+    {
+      "id": "human-approval",
+      "ref": "Pendiente: comentario explícito del owner en #161 aprobando estos artefactos antes de apply."
+    },
+    {
+      "id": "debt-resolution",
+      "ref": "Pendiente de apply: assessment clean con resolves de debt-facadc732321, debt-281fc7a2c9b0, debt-763ed774bc1e y debt-5be12c1b2fa0."
+    }
+  ],
+  "rollback": {
+    "strategy": "Revertir el PR documental. No se modifican Figma, runtime ni backend; assessments previos permanecen inmutables y cualquier ID no demostrado se omite de resolves."
+  },
+  "adversarialReview": {
+    "ref": "Pendiente de apply: evidencia/revision-adversarial.md."
+  },
+  "exceptions": []
+}
+
