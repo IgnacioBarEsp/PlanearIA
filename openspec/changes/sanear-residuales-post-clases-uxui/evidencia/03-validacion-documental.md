@@ -23,4 +23,3 @@ compartida mediante una junction ignorada por Git y pasó; no se modificó `pack
 
 No se ejecutó Expo/Playwright: este change no altera UI ni runtime. La evidencia visual y de integración
 existente se conserva como contexto y el contrato de QA canónico queda documentado para la siguiente ola.
-

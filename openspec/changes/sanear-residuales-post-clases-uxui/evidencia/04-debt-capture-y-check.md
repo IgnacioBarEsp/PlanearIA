@@ -13,4 +13,3 @@ Resultado: **PASS**. Se capturó el assessment `clean` y se resolvieron exactame
 `npm run debt:check`: **PASS**. El plan `plan-uxui-navegacion-global` queda en `0/5` unidades,
 con `0` flujos con deuda abierta y sin triggers de pausa. El registro fue mutado únicamente por
 `debt:capture`; no se editó a mano y los assessments previos permanecen inmutables.
-

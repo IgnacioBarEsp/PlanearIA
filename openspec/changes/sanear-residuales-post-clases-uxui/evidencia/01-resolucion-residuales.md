@@ -1,8 +1,8 @@
 # Resolución verificable de residuales post-Clases
 
-**Fecha:** 2026-08-04  
-**Issue:** [#161](https://github.com/IgnacioBarEsp/PlanearIA/issues/161)  
-**Change:** `sanear-residuales-post-clases-uxui`  
+**Fecha:** 2026-08-04
+**Issue:** [#161](https://github.com/IgnacioBarEsp/PlanearIA/issues/161)
+**Change:** `sanear-residuales-post-clases-uxui`
 **Tipo:** saneamiento documental/gobernanza; no modifica Figma, runtime ni backend.
 
 ## Método y salud estructural

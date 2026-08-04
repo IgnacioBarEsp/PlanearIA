@@ -40,4 +40,3 @@ el assessment limpio y el readiness gate.
 2. Actualizar TLDR, baseline y readiness con la evidencia final.
 3. Capturar el assessment `kind: remediation`, confirmar `debt:check` sin triggers y ejecutar `debt:sync`.
 4. Ejecutar el gate de readiness, luego archive/finish por la CLI canónica.
-
