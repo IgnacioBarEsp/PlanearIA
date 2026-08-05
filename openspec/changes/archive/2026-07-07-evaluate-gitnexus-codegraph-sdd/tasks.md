@@ -57,7 +57,7 @@
 
 ## Evidence
 
-- Final decision comment on issue #40: https://github.com/RitualBoat/PlanearIA/issues/40#issuecomment-4909707754
+- Final decision comment on issue #40: https://github.com/IgnacioBarEsp/PlanearIA/issues/40#issuecomment-4909707754
 - Validation report: `Documentacion/03-validacion/evaluate-gitnexus-codegraph-sdd/README.md`
 - Final policy docs updated: `AGENTS.md`, `CLAUDE.md`, `openspec/config.yaml`,
   `Documentacion/02-operacion/MCP_FLUJOS_PLANEARIA.md`, `Documentacion/02-operacion/CODEGRAPH_MCP.md`,

@@ -2,15 +2,15 @@
 
 > **Estado:** distribución pública operativa.
 > **Release consumible:** `create-project-engineering-os@0.1.4`.
-> **Upstream:** [`RitualBoat/project-engineering-os`](https://github.com/RitualBoat/project-engineering-os).
-> **Issue de distribución:** [#126](https://github.com/RitualBoat/PlanearIA/issues/126).
+> **Upstream:** [`IgnacioBarEsp/project-engineering-os`](https://github.com/IgnacioBarEsp/project-engineering-os).
+> **Issue de distribución:** [#126](https://github.com/IgnacioBarEsp/PlanearIA/issues/126).
 
 ## Empezar
 
 Para una persona que crea un repositorio nuevo:
 
 1. leer el
-   [README amigable del upstream](https://github.com/RitualBoat/project-engineering-os/tree/v0.1.4#readme);
+   [README amigable del upstream](https://github.com/IgnacioBarEsp/project-engineering-os/tree/v0.1.4#readme);
 2. ejecutar `npx --yes create-project-engineering-os@0.1.4 bootstrap --target .`;
 3. instalar el lockfile generado con `npm ci`;
 4. inicializar OpenSpec y adaptar sus archivos OPSX según
@@ -18,7 +18,7 @@ Para una persona que crea un repositorio nuevo:
 5. ejecutar sync/check, doctor y debt check;
 6. completar los gates humanos de [la guía manual](GUIA_MANUAL_USUARIO.md);
 7. usar el
-   [Prompt 01 fijado en `v0.1.4`](https://github.com/RitualBoat/project-engineering-os/blob/v0.1.4/docs/prompts/PROMPT_01_DISCOVERY_PROYECTO.md)
+   [Prompt 01 fijado en `v0.1.4`](https://github.com/IgnacioBarEsp/project-engineering-os/blob/v0.1.4/docs/prompts/PROMPT_01_DISCOVERY_PROYECTO.md)
    solo después de aprobar Etapa A.
 
 El [Prompt 00](PROMPT_00_BOOTSTRAP_ENTORNO.md) prepara el entorno y no pregunta por el producto.

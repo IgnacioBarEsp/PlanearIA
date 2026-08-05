@@ -1,7 +1,7 @@
 # Evidencia de QA visual: sanear la fuente de breakpoint (Ola 2b)
 
-Change `sanear-breakpoints-uxui`. Issue [#106](https://github.com/RitualBoat/PlanearIA/issues/106).
-Epic [#141](https://github.com/RitualBoat/PlanearIA/issues/141). Item de deuda `debt-3d3ea5ba87ac`.
+Change `sanear-breakpoints-uxui`. Issue [#106](https://github.com/IgnacioBarEsp/PlanearIA/issues/106).
+Epic [#141](https://github.com/IgnacioBarEsp/PlanearIA/issues/141). Item de deuda `debt-3d3ea5ba87ac`.
 
 ## Entorno
 

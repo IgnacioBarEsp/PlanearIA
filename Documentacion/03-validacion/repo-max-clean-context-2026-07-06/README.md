@@ -4,8 +4,8 @@
 
 PASS. El repo conserva contexto minimo AI-friendly, el material pesado/legacy quedo externalizado en respaldo movido fuera del repo, CodeGraph ya no lista archivos bajo `context/`, y las validaciones principales pasan.
 
-Issue SDD: https://github.com/RitualBoat/PlanearIA/issues/36
-Project: `RitualBoat/1` (`PlanearIA Product OS`), agregado con `gh project item-add`.
+Issue SDD: https://github.com/IgnacioBarEsp/PlanearIA/issues/36
+Project: `IgnacioBarEsp/1` (`PlanearIA Product OS`), agregado con `gh project item-add`.
 Change OpenSpec: `repo-max-clean-context-externalization`.
 
 ## Backup Gate

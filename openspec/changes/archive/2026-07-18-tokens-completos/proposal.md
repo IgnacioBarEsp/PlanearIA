@@ -1,6 +1,6 @@
 # Completar el sistema de tokens: espaciado, tipografia, radios, elevacion, movimiento y z-index
 
-Issue: [#80](https://github.com/RitualBoat/PlanearIA/issues/80).
+Issue: [#80](https://github.com/IgnacioBarEsp/PlanearIA/issues/80).
 Plan: `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`, change `tokens-completos` (Ola 0).
 Origen: auditoria #76 (H9, H15; investigacion-web F4). Depende de: `theming-runtime` (#78, cerrado).
 

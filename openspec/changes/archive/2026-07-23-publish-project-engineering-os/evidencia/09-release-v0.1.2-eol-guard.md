@@ -6,8 +6,8 @@ Un checkout Windows anterior a `.gitattributes` podía estar limpio para Git y c
 canónicas. El empaquetado cambiaba bytes y SHA-256, mientras `pack:verify` declaraba `PASS`. Se clasificó
 como Major por producir un verde falso y se corrigió antes de cerrar el change.
 
-- Issue upstream: `https://github.com/RitualBoat/project-engineering-os/issues/4`.
-- PR protegido: `https://github.com/RitualBoat/project-engineering-os/pull/5`.
+- Issue upstream: `https://github.com/IgnacioBarEsp/project-engineering-os/issues/4`.
+- PR protegido: `https://github.com/IgnacioBarEsp/project-engineering-os/pull/5`.
 - Merge: `4ccfa1a874a261f3612329ca133709a8e9770fac`.
 - Corrección: preflight sobre `git ls-files --eol`; rechaza CRLF o EOL mixto donde Git exige LF,
   enumera rutas y recuperación, y conserva un caso negativo automatizado.
@@ -16,8 +16,8 @@ como Major por producir un verde falso y se corrigió antes de cerrar el change.
 ## Release pública
 
 - Tag: `v0.1.2`.
-- GitHub Release: `https://github.com/RitualBoat/project-engineering-os/releases/tag/v0.1.2`.
-- Workflow: `https://github.com/RitualBoat/project-engineering-os/actions/runs/30039932616`.
+- GitHub Release: `https://github.com/IgnacioBarEsp/project-engineering-os/releases/tag/v0.1.2`.
+- Workflow: `https://github.com/IgnacioBarEsp/project-engineering-os/actions/runs/30039932616`.
 - npm: `https://www.npmjs.com/package/create-project-engineering-os/v/0.1.2`.
 - Trusted Publisher: GitHub Actions, workflow `release.yml`, environment protegido `npm-publish`.
 - Provenance: npm expone attestations SLSA.

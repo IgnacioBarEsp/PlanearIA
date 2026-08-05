@@ -6,13 +6,13 @@ debería servir a cualquier proyecto. Publicarlos ahora como un único Engineeri
 editables, permite instalación y actualización reproducibles, y transfiere la gobernanza madura sin
 exportar la aplicación, el dominio docente ni perfiles técnicos condicionales.
 
-Issue de origen: [#126](https://github.com/RitualBoat/PlanearIA/issues/126). Plan afectado:
+Issue de origen: [#126](https://github.com/IgnacioBarEsp/PlanearIA/issues/126). Plan afectado:
 `Documentacion/01-planes-maestros/PLAN_CONSTRUCTOR_PROYECTOS_NUEVOS.md`. El saneamiento previo quedó
 cerrado por #129 y PR #139 sobre `development@2ef9a46`.
 
 ## What Changes
 
-- Crear `RitualBoat/project-engineering-os` como upstream público, neutral y licenciado bajo MIT.
+- Crear `IgnacioBarEsp/project-engineering-os` como upstream público, neutral y licenciado bajo MIT.
 - Publicar un único paquete `create-project-engineering-os` con bins
   `create-project-engineering-os` y `project-os`, usable por `npx` con versión exacta.
 - Integrar en ese mismo CLI el Debt Control Loop como `project-os debt ...`; no crear un segundo

@@ -6,7 +6,7 @@ El rollout de theming runtime quedo a medias y su registro dejo de decir la verd
 
 La causa raiz no son las pantallas, es la ausencia de guardia. La spec vigente `theming-runtime-propagation` ya exige que "la validacion del repositorio la mantiene sincronizada con el codigo real", y el propio comentario de `.eslintrc.cjs` afirma que "CI lo verifica en cada PR" y que la lista "solo puede encoger". Nada de eso existe: `LEGACY_COLORS_ROLLOUT` aparece unicamente en `.eslintrc.cjs` en todo el repositorio. **El repositorio incumple hoy una requirement archivada**, y por eso las cuatro entradas muertas se acumularon sin que nadie lo notara.
 
-Este change resuelve `debt-b279f64f815b` (issue [#145](https://github.com/RitualBoat/PlanearIA/issues/145), Ola 2a del epic [#141](https://github.com/RitualBoat/PlanearIA/issues/141)) del plan `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`.
+Este change resuelve `debt-b279f64f815b` (issue [#145](https://github.com/IgnacioBarEsp/PlanearIA/issues/145), Ola 2a del epic [#141](https://github.com/IgnacioBarEsp/PlanearIA/issues/141)) del plan `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`.
 
 ## What Changes
 

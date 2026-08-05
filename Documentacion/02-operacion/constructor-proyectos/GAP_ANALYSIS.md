@@ -7,7 +7,7 @@
 
 | Hallazgo anterior | Estado actual | Evidencia | Tratamiento |
 | --- | --- | --- | --- |
-| GitNexus podía quedar stale o producir falso verde estructural | Resuelto | issue [#112](https://github.com/RitualBoat/PlanearIA/issues/112) cerrado; `gitnexus:diagnose` fresh en `502746f`; verificación estructural compartida | No copiar el diagnóstico antiguo; transferir el contrato corregido |
+| GitNexus podía quedar stale o producir falso verde estructural | Resuelto | issue [#112](https://github.com/IgnacioBarEsp/PlanearIA/issues/112) cerrado; `gitnexus:diagnose` fresh en `502746f`; verificación estructural compartida | No copiar el diagnóstico antiguo; transferir el contrato corregido |
 | Graphify formaba parte del baseline MCP | Resuelto/retirado | spec `agent-tool-runtime-health`; issue #51; ausencia del baseline | Mantener `SKIP retirado/manual` |
 | OpenSpec dependía de rutas globales/flotantes | Resuelto | `openspec:check` PASS con CLI local `1.6.0`; lockfile | Copiar el contrato exacto, no instrucciones upstream `@latest` |
 | Harness tenía mirrors desalineados | Resuelto en snapshot | `agent:harness:check`: 36 mirrors en paridad | Usar como baseline, no como garantía del constructor futuro |

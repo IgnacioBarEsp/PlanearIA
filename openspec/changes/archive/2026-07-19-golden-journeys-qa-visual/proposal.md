@@ -1,6 +1,6 @@
 # Proposal: golden-journeys-qa-visual
 
-Issue: [#85](https://github.com/RitualBoat/PlanearIA/issues/85).
+Issue: [#85](https://github.com/IgnacioBarEsp/PlanearIA/issues/85).
 Plan: `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md` (gate R2) y
 `PLAN_PREPARACION_OPERATIVA_SDD_HARNESS_SOLO_DEV.md` (R2, change `golden-journeys-web` de Ola 2).
 Depende de: #81 (`app-shell-navegacion`), archivado el 2026-07-18.

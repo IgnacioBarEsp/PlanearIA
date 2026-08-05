@@ -1,6 +1,6 @@
 # Proposal: resolver-riesgo-y-cadencia-dependencias
 
-> Issue: [#133](https://github.com/RitualBoat/PlanearIA/issues/133) (child del epic de saneamiento [#129](https://github.com/RitualBoat/PlanearIA/issues/129)).
+> Issue: [#133](https://github.com/IgnacioBarEsp/PlanearIA/issues/133) (child del epic de saneamiento [#129](https://github.com/IgnacioBarEsp/PlanearIA/issues/129)).
 > Plan maestro: `Documentacion/01-planes-maestros/PLAN_PREPARACION_OPERATIVA_SDD_HARNESS_SOLO_DEV.md` (Ola 2 del saneamiento).
 > Deuda objetivo: `debt-6c9672a48059` (decision de riesgo `xlsx`) y `debt-d73a5844fae3` (cadencia de dependencias Expo).
 

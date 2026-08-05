@@ -1,6 +1,6 @@
 # Proposal: control-deuda-tecnica-sdd
 
-> Issue: [#128](https://github.com/RitualBoat/PlanearIA/issues/128) - [Harness][Debt] Motor verificable de control de deuda tecnica para flujos SDD
+> Issue: [#128](https://github.com/IgnacioBarEsp/PlanearIA/issues/128) - [Harness][Debt] Motor verificable de control de deuda tecnica para flujos SDD
 > Plan maestro afectado: `Documentacion/01-planes-maestros/PLAN_PREPARACION_OPERATIVA_SDD_HARNESS_SOLO_DEV.md` (linea B, harness)
 > Bloquea: #126 (publicacion open source de Project Engineering OS)
 

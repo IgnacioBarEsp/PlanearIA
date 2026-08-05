@@ -14,7 +14,7 @@
 
 > **Plan y snapshot, no estado operativo.** Este documento es el blueprint del redisenio y una fotografia
 > de su fecha de redaccion. El **estado operativo real** (que esta hecho, en curso o pendiente) se rastrea
-> en el epic [`#101`](https://github.com/RitualBoat/PlanearIA/issues/101) y sus milestones `UX/UI Ola N`.
+> en el epic [`#101`](https://github.com/IgnacioBarEsp/PlanearIA/issues/101) y sus milestones `UX/UI Ola N`.
 > Los campos **Estado** de cada change en este documento son intencion de planificacion, **no autoridad de
 > estado**: ante una discrepancia, GitHub manda. Las estimaciones, paridades y dependencias registradas
 > aqui son historicas y no se reescriben.

@@ -34,7 +34,7 @@ una superficie validable sin perder datos, contexto ni control offline-first.
 
 ## Impact
 
-- Issue: [#159](https://github.com/RitualBoat/PlanearIA/issues/159), dependiente de #156 cerrado por PR
+- Issue: [#159](https://github.com/IgnacioBarEsp/PlanearIA/issues/159), dependiente de #156 cerrado por PR
   #158 y gobernado por #157/#101.
 - Planes: `Documentacion/01-planes-maestros/PLAN_VISION_CONTRATO_EXPERIENCIA_157.md` v1.1 y
   `PLAN_UXUI_NAVEGACION_GLOBAL.md`.

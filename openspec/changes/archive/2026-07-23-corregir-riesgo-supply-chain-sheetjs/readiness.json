@@ -5,8 +5,8 @@
   "surfaces": ["docs", "harness", "ui"],
   "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/137" },
-    { "id": "pr-link", "ref": "El owner local opsx:finish crea o reutiliza el PR tras archivar; issue canónico https://github.com/RitualBoat/PlanearIA/issues/137" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/137" },
+    { "id": "pr-link", "ref": "El owner local opsx:finish crea o reutiliza el PR tras archivar; issue canónico https://github.com/IgnacioBarEsp/PlanearIA/issues/137" },
     { "id": "adversarial-review", "ref": "evidencia/revision-adversarial.md: PASS, 0 Blockers, 0 Majors" },
     { "id": "docs-verification", "ref": "THIRD_PARTY_NOTICES.md; Documentacion/02-operacion/CADENCIA_DEPENDENCIAS.md; Documentacion/README.md" },
     { "id": "fixtures", "ref": "evidencia/validacion-tecnica.md; src/__tests__/harness/spreadsheetDependency.test.ts; scripts/reproduceSheetJsHang.mjs" },

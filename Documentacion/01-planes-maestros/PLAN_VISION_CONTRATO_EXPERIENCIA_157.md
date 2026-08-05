@@ -3,8 +3,8 @@
 > **Versión:** 1.3, vigente.
 > **Fecha:** 2026-08-04.
 > **Formato:** Blueprint + backlog de olas, conforme a `meta_guia_planes.md`.
-> **Autoridad operativa padre:** issue [#101](https://github.com/RitualBoat/PlanearIA/issues/101), Plan Maestro UX/UI y Navegación Global.
-> **Subépica de este plan:** issue [#157](https://github.com/RitualBoat/PlanearIA/issues/157), reconstrucción del prototipo como suite docente por módulos.
+> **Autoridad operativa padre:** issue [#101](https://github.com/IgnacioBarEsp/PlanearIA/issues/101), Plan Maestro UX/UI y Navegación Global.
+> **Subépica de este plan:** issue [#157](https://github.com/IgnacioBarEsp/PlanearIA/issues/157), reconstrucción del prototipo como suite docente por módulos.
 > **Plan padre:** [`PLAN_UXUI_NAVEGACION_GLOBAL.md`](PLAN_UXUI_NAVEGACION_GLOBAL.md).
 > **Estado:** activo. `#157-O0` y el prototipo `#157-O1 Clases` están aprobados; el saneamiento post-Clases se ejecuta bajo #161 antes de reanudar el plan. `#157-O2 Escritorio` es la siguiente ola autorizada para preparar artefactos, pero ningún `apply` posterior se ejecuta sin aprobación humana explícita de esos artefactos.
 > **Alcance:** visión consolidada, arquitectura de experiencias, nomenclatura, fronteras, paridad, ground truth, riesgos, olas y gates para reconstruir el prototipo un módulo a la vez.
@@ -42,7 +42,7 @@ parche. Ninguna evidencia automática sustituye la aprobación del owner.
 
 ### Estado de la Ola #157-O0
 
-La matriz de decisiones previas fue publicada en [#157](https://github.com/RitualBoat/PlanearIA/issues/157#issuecomment-5162804972).
+La matriz de decisiones previas fue publicada en [#157](https://github.com/IgnacioBarEsp/PlanearIA/issues/157#issuecomment-5162804972).
 La entrevista transversal resolvió:
 
 - #157 es subépica gobernada por #101.
@@ -312,7 +312,7 @@ revisable; nunca se fusionan varias experiencias para ahorrar ceremonias.
 | Ola | Experiencia | Resultado esperado | Dependencia principal | Estado |
 | --- | --- | --- | --- | --- |
 | `#157-O0` | Visión transversal | Contrato versionado, fronteras, paridad, plan y prioridad inicial | Matriz + entrevista + aprobación humana | Aprobada 2026-08-03 |
-| `#157-O1` | Clases | Contrato y prototipo reconocible tipo Classroom, con jerarquía propia y handoffs semánticos | Versión 1.1; baseline 0.1 aprobado | Prototipo v1.3 aprobado en [#159](https://github.com/RitualBoat/PlanearIA/issues/159#issuecomment-5182823974); cierre SDD documental en curso; runtime no iniciado |
+| `#157-O1` | Clases | Contrato y prototipo reconocible tipo Classroom, con jerarquía propia y handoffs semánticos | Versión 1.1; baseline 0.1 aprobado | Prototipo v1.3 aprobado en [#159](https://github.com/IgnacioBarEsp/PlanearIA/issues/159#issuecomment-5182823974); cierre SDD documental en curso; runtime no iniciado |
 | `#157-O2` | Escritorio | Launcher + jornada accionable que representa la suite y recibe retornos de Clases | Clases validada; ground truth medio por consolidar | Siguiente ola: autorizada para issue, entrevista específica y artefactos; `apply` bloqueado hasta aprobación humana |
 | `#157-O3` | Office Home y Crear | Bandeja Office y creación tipo-primero sin absorber otros módulos | Escritorio; ground truth Office | Pendiente |
 | `#157-O4` | NotasPLAN | Editor documental familiar y conectado | Office Home/Crear; ground truth documental | Pendiente |

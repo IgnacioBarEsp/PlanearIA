@@ -1,6 +1,6 @@
 ## Why
 
-El issue canónico [#137](https://github.com/RitualBoat/PlanearIA/issues/137) corrige un falso verde
+El issue canónico [#137](https://github.com/IgnacioBarEsp/PlanearIA/issues/137) corrige un falso verde
 del cierre de #133: `XLSX.read` puede bloquear sincrónicamente el hilo JS ante un `.xlsx` ZIP
 truncado, pero el riesgo quedó fuera del registro canónico y sin excepción válida. Además, la
 dependencia sigue resolviéndose desde el CDN durante la instalación y PlanearIA no publica la

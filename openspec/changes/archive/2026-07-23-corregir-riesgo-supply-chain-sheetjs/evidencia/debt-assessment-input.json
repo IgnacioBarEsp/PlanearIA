@@ -34,8 +34,8 @@
     {
       "id": "debt-770acc1e9d53",
       "reason": "riesgo de congelamiento síncrono sin fix upstream ni aislamiento multiplataforma aprobado; archivo seleccionado manualmente y preview antes de confirmar.",
-      "owner": "RitualBoat",
-      "approvedBy": "RitualBoat",
+      "owner": "IgnacioBarEsp",
+      "approvedBy": "IgnacioBarEsp",
       "expiresOn": "2026-10-31",
       "recovery": "desactivar import `.xlsx` mediante PR normal al vencer sin solución, conservando CSV y exportación."
     }

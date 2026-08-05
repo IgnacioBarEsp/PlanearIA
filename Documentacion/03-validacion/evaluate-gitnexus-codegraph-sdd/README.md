@@ -2,7 +2,7 @@
 
 > Estado: completado.
 > Change OpenSpec: `evaluate-gitnexus-codegraph-sdd`.
-> Issue: https://github.com/RitualBoat/PlanearIA/issues/40
+> Issue: https://github.com/IgnacioBarEsp/PlanearIA/issues/40
 > Fecha de inicio: 2026-07-07.
 > Fecha de cierre: 2026-07-07.
 
@@ -11,7 +11,7 @@
 ### Issue y Project
 
 - Issue: `#40 Evaluar GitNexus vs CodeGraph para el flujo SDD de agentes IA`.
-- URL: https://github.com/RitualBoat/PlanearIA/issues/40
+- URL: https://github.com/IgnacioBarEsp/PlanearIA/issues/40
 - Estado: `OPEN`.
 - Project: `PlanearIA Product OS`.
 - Project status: `Backlog`.

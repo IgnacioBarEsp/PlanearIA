@@ -5,11 +5,11 @@
   "surfaces": ["harness", "docs"],
   "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/149" },
-    { "id": "pr-link", "ref": "https://github.com/RitualBoat/PlanearIA/pull/150" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/149" },
+    { "id": "pr-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/pull/150" },
     {
       "id": "adversarial-review",
-      "ref": "Veredicto inicial FAIL (0 Blockers; 2 Majors; 6 Minors) en revision independiente sobre el PR #150. Ambos Majors corregidos dentro del change: (1) el camino de exito escalado no reaplicaba las post-condiciones de frescura y diagnostico FTS, de modo que un rebuild podia terminar en 0 dejando el indice stale; (2) un fallo duro del CLI hacia que runStructuralVerification lanzara en vez de clasificar, saltandose la escalada entera, mientras la documentacion nueva retiraba el remedio manual. Minors atendidos: cifras corregidas a las de la evidencia capturada (973 nodos Section y 202 impactados, no 1014 y 28), payload real not-found anadido a la regresion, fallo de clean nombrado en vez de culpar al fixture, transcripcion del peldano escalado en evidencia/09, y refutacion comentada en el issue (https://github.com/RitualBoat/PlanearIA/issues/149#issuecomment-5080245617). El Minor de la guardia hasFtsDiagnostic quedo cubierto al reaplicar las post-condiciones."
+      "ref": "Veredicto inicial FAIL (0 Blockers; 2 Majors; 6 Minors) en revision independiente sobre el PR #150. Ambos Majors corregidos dentro del change: (1) el camino de exito escalado no reaplicaba las post-condiciones de frescura y diagnostico FTS, de modo que un rebuild podia terminar en 0 dejando el indice stale; (2) un fallo duro del CLI hacia que runStructuralVerification lanzara en vez de clasificar, saltandose la escalada entera, mientras la documentacion nueva retiraba el remedio manual. Minors atendidos: cifras corregidas a las de la evidencia capturada (973 nodos Section y 202 impactados, no 1014 y 28), payload real not-found anadido a la regresion, fallo de clean nombrado en vez de culpar al fixture, transcripcion del peldano escalado en evidencia/09, y refutacion comentada en el issue (https://github.com/IgnacioBarEsp/PlanearIA/issues/149#issuecomment-5080245617). El Minor de la guardia hasFtsDiagnostic quedo cubierto al reaplicar las post-condiciones."
     },
     {
       "id": "fixtures",

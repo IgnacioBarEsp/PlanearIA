@@ -1,13 +1,13 @@
 # Plan Maestro: Constructor reutilizable de proyectos nuevos
 
 > **Estado:** activo como blueprint; Ola 0 cerrada y distribución pública `0.1.4` operativa.
-> **Issues:** núcleo [#103](https://github.com/RitualBoat/PlanearIA/issues/103) y distribución
-> [#126](https://github.com/RitualBoat/PlanearIA/issues/126).
-> **Upstream:** [`RitualBoat/project-engineering-os`](https://github.com/RitualBoat/project-engineering-os).
+> **Issues:** núcleo [#103](https://github.com/IgnacioBarEsp/PlanearIA/issues/103) y distribución
+> [#126](https://github.com/IgnacioBarEsp/PlanearIA/issues/126).
+> **Upstream:** [`IgnacioBarEsp/project-engineering-os`](https://github.com/IgnacioBarEsp/project-engineering-os).
 > **Paquete:** [`create-project-engineering-os@0.1.4`](https://www.npmjs.com/package/create-project-engineering-os/v/0.1.4).
 > **Change de distribución:** `openspec/changes/publish-project-engineering-os/`.
 > **Snapshot de evidencia:** 2026-07-23.
-> **Owner:** RitualBoat.
+> **Owner:** IgnacioBarEsp.
 
 ## Estado de la Ola 0
 

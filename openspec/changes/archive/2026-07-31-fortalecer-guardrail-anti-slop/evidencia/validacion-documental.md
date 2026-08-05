@@ -1,6 +1,6 @@
 # Validación documental
 
-> Change: `fortalecer-guardrail-anti-slop` · Issue: [#86](https://github.com/RitualBoat/PlanearIA/issues/86) · Fecha: 2026-07-31.
+> Change: `fortalecer-guardrail-anti-slop` · Issue: [#86](https://github.com/IgnacioBarEsp/PlanearIA/issues/86) · Fecha: 2026-07-31.
 
 ## Alcance comprobado
 
