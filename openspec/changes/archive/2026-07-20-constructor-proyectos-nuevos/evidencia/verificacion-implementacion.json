@@ -113,8 +113,8 @@
       "status": "PASS",
       "summary": "Ubuntu Node 20.20/22.22, Windows 22.22 y macOS 22.22 aprobaron en eventos push y pull_request; checks base también en SUCCESS.",
       "refs": [
-        "https://github.com/RitualBoat/PlanearIA/actions/runs/29718552643",
-        "https://github.com/RitualBoat/PlanearIA/actions/runs/29718554338"
+        "https://github.com/IgnacioBarEsp/PlanearIA/actions/runs/29718552643",
+        "https://github.com/IgnacioBarEsp/PlanearIA/actions/runs/29718554338"
       ]
     },
     {

@@ -2,7 +2,7 @@
 
 React Doctor still reports a large issue count after the first remediation pass, but the baseline is distorted by generated output, local worktrees, and third-party reference code that is not part of PlanearIA product source. The remaining product findings include real security/configuration risks that should be resolved before UX/UI Global builds the teacher suite on top of this code.
 
-GitHub Product OS source: RitualBoat/PlanearIA#38.
+GitHub Product OS source: IgnacioBarEsp/PlanearIA#38.
 
 ## What Changes
 

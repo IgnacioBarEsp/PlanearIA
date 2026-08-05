@@ -7,8 +7,8 @@ pero el `sync --check` normal devolvía `DRIFT` con cero archivos materiales y `
 conservaba `sourceHash` de la release anterior en `package.json` y `package-lock.json`; el sync posterior
 normalizaba esa metadata mediante una segunda mutación.
 
-- Issue upstream: `https://github.com/RitualBoat/project-engineering-os/issues/6`.
-- PR protegido: `https://github.com/RitualBoat/project-engineering-os/pull/7`.
+- Issue upstream: `https://github.com/IgnacioBarEsp/project-engineering-os/issues/6`.
+- PR protegido: `https://github.com/IgnacioBarEsp/project-engineering-os/pull/7`.
 - Merge: `5534fe3ad5c3ee524da9257133891b9d9f34ca76`.
 - Corrección: el upgrade mantiene ownership `project`, pero registra `source` y `sourceHash` del
   blueprint destino desde la primera transacción.
@@ -18,8 +18,8 @@ normalizaba esa metadata mediante una segunda mutación.
 ## Release pública
 
 - Tag: `v0.1.3`.
-- GitHub Release: `https://github.com/RitualBoat/project-engineering-os/releases/tag/v0.1.3`.
-- Workflow: `https://github.com/RitualBoat/project-engineering-os/actions/runs/30041909646`.
+- GitHub Release: `https://github.com/IgnacioBarEsp/project-engineering-os/releases/tag/v0.1.3`.
+- Workflow: `https://github.com/IgnacioBarEsp/project-engineering-os/actions/runs/30041909646`.
 - npm: `https://www.npmjs.com/package/create-project-engineering-os/v/0.1.3`.
 - SHA-256 común: `b6520d4d1df55b2e356e149be87497c66ec12560c3d88a631c10934d928f8438`.
 - Tamaño: 151956 bytes.

@@ -35,8 +35,8 @@ No hay claves `@planearia:*`, datos docentes, esquema ni contrato de API involuc
 
 ## Owner de spec y contexto
 
-- Spec: `openspec/specs/harness-readiness-doctor/spec.md`, owner RitualBoat.
-- Contexto operativo: `Documentacion/02-operacion/MCP_FLUJOS_PLANEARIA.md`, owner RitualBoat.
+- Spec: `openspec/specs/harness-readiness-doctor/spec.md`, owner IgnacioBarEsp.
+- Contexto operativo: `Documentacion/02-operacion/MCP_FLUJOS_PLANEARIA.md`, owner IgnacioBarEsp.
 - Issue: #94. Tracking de origen: #66.
 
 ## Evidencia actual

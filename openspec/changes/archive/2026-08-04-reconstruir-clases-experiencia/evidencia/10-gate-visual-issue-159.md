@@ -4,7 +4,7 @@
 
 El owner aprobó explícitamente la versión v1.3 de Clases el 2026-08-04, después de las iteraciones desktop
 y de tránsito global. La evidencia quedó publicada en
-[#159](https://github.com/RitualBoat/PlanearIA/issues/159#issuecomment-5182823974). No se modificó runtime y
+[#159](https://github.com/IgnacioBarEsp/PlanearIA/issues/159#issuecomment-5182823974). No se modificó runtime y
 #156 permanece cerrado.
 
 > **Iteración desktop posterior al feedback del owner (2026-08-03):** se confirmó que los enlaces

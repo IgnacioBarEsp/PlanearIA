@@ -1,6 +1,6 @@
 ## Why
 
-El issue [#136](https://github.com/RitualBoat/PlanearIA/issues/136) cierra la Ola 3 del epic de saneamiento #129. Cuatro entrypoints del harness comparan `import.meta.url` con una URL armada manualmente: en POSIX producen una barra adicional, el bloque CLI no corre y un gate puede terminar verde sin haber comprobado nada. A la vez, todos los checks de `.github/workflows/agent-harness-parity.yml` siguen como advisory, por lo que el drift reproducible no detiene un PR.
+El issue [#136](https://github.com/IgnacioBarEsp/PlanearIA/issues/136) cierra la Ola 3 del epic de saneamiento #129. Cuatro entrypoints del harness comparan `import.meta.url` con una URL armada manualmente: en POSIX producen una barra adicional, el bloque CLI no corre y un gate puede terminar verde sin haber comprobado nada. A la vez, todos los checks de `.github/workflows/agent-harness-parity.yml` siguen como advisory, por lo que el drift reproducible no detiene un PR.
 
 El cambio vuelve verificables esas señales en Windows y Linux, endurece únicamente los checks con baseline estable y conserva el resto como advisory gobernado. Así se puede resolver `debt-2887d890144e` sin convertir ruido inestable ni cambios remotos de protección de rama en falsos bloqueos.
 

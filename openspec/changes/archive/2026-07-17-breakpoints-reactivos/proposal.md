@@ -1,8 +1,8 @@
 # Fuente reactiva unica de breakpoints
 
-Issue: [#79](https://github.com/RitualBoat/PlanearIA/issues/79).
+Issue: [#79](https://github.com/IgnacioBarEsp/PlanearIA/issues/79).
 Plan: `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`, change `breakpoints-reactivos` (Ola 0, resuelve R2 tecnico).
-Depende de: [#78](https://github.com/RitualBoat/PlanearIA/issues/78) (`theming-runtime`, cerrado).
+Depende de: [#78](https://github.com/IgnacioBarEsp/PlanearIA/issues/78) (`theming-runtime`, cerrado).
 Origen: auditoria #76 (H2; investigacion-web F7).
 
 ## Why

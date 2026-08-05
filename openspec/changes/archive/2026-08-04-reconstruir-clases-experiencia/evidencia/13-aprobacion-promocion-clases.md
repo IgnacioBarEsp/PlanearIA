@@ -7,7 +7,7 @@
 ## Evidencia humana
 
 El owner declaró: “Perfecto, doy mi aprobacion, modulo clases finalmente corregido”. La decisión quedó
-publicada y delimitada en [#159](https://github.com/RitualBoat/PlanearIA/issues/159#issuecomment-5182823974).
+publicada y delimitada en [#159](https://github.com/IgnacioBarEsp/PlanearIA/issues/159#issuecomment-5182823974).
 
 La misma instrucción establece una regla para las olas siguientes: no ejecutar `apply` hasta que el owner
 apruebe sus artefactos SDD.

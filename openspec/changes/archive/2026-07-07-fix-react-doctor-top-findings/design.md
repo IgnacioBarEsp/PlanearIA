@@ -4,7 +4,7 @@ React Doctor produced several reports for PlanearIA: a full-codebase/security pa
 
 The workspace already contains many unrelated local modifications. This change will work with those edits and keep its implementation narrow. It will not clean the full 597/632 issue reports in one pass, and it will not perform the 75-file Touchable-to-Pressable migration without explicit approval.
 
-GitHub tracking: RitualBoat/PlanearIA#37.
+GitHub tracking: IgnacioBarEsp/PlanearIA#37.
 
 ## Goals / Non-Goals
 

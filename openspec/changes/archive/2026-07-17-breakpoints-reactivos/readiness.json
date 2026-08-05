@@ -5,7 +5,7 @@
   "surfaces": ["ui"],
   "validations": ["openspec-strict"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/79" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/79" },
     { "id": "pr-link", "ref": "PENDIENTE: PR generado por opsx:finish tras archive." },
     { "id": "adversarial-review", "ref": "Revision adversarial 2026-07-17 (verificacion previa a archive): PASS CON HUECOS. Sin blockers ni majors. 2 minors rastreados: (1) la fabrica getStyles de LoginScreen emite 17 warnings react-native/no-unused-styles, falsos positivos del patron fabrica, consistentes con las fabricas de #78 (Terminos 12, Cuenta 95), 0 errores y lint --quiet en verde; (2) 4 pantallas fuera del set de 10 consumidores (EditarPerfil, BibliotecaPlantillas, ReportesGrupo, DetalleGrupo) siguen usando useWindowDimensions directo, ya reactivas, seguimiento de consistencia. Sin perdida de datos; no toca auth, userId ni sync." },
     { "id": "web-http-200", "ref": "expo start --web (config expo-web, puerto 8081) respondio con bundle compilado y pantalla renderizada; consola sin errores. Verificado 2026-07-17." },

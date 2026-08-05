@@ -1,7 +1,7 @@
 # Matriz de navegacion del prototipo Figma Ola 2
 
 > **Estado:** grafo implementado y auditado por API Figma; pendiente únicamente la reproducción humana en modo Present antes de archivar.
-> **Issue:** [#156](https://github.com/RitualBoat/PlanearIA/issues/156).
+> **Issue:** [#156](https://github.com/IgnacioBarEsp/PlanearIA/issues/156).
 > **Ground truth visual:** [archivo Figma Ola 2](https://www.figma.com/design/VBK5tK7EQS83tdTmtuBpI9/PlanearIA-%E2%80%94-UX-UI-Ola-2?node-id=87-47).
 > **Alcance:** prototipo, no runtime ni integraciones reales.
 
@@ -153,7 +153,7 @@ propios a `approved`. Office y los 22 puentes/fallbacks globales permanecen `can
 
 ### Gate humano v1.4
 
-- Evidencia: [#159, aprobación explícita](https://github.com/RitualBoat/PlanearIA/issues/159#issuecomment-5182823974).
+- Evidencia: [#159, aprobación explícita](https://github.com/IgnacioBarEsp/PlanearIA/issues/159#issuecomment-5182823974).
 - Contrato Figma: `179:115`; sección mixta `177:115` nombrada como Clases approved con puentes candidate.
 - No se modificaron los frames de #156 ni se cerró #46.
 - La aprobación corresponde al prototipo de Clases; no prueba runtime, red, persistencia, IA o sync real.

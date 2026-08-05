@@ -56,7 +56,7 @@ No se tocan: `App.tsx`, `src/navigation/`, `src/sync/`, `backend/`, ninguna pant
 - Bounded context owner: **Experiencia y Preferencias** (posee tema, fuente, daltonismo, accesibilidad y el sistema de tokens).
 - Spec nueva: `design-tokens` (que tokens existen y como se consumen).
 - Spec vecina, no modificada: `theming-runtime-propagation` (contrato de la fabrica `getStyles`) y `settings-accessibility-preferences` (que preferencias se guardan).
-- Issue owner: [#80](https://github.com/RitualBoat/PlanearIA/issues/80).
+- Issue owner: [#80](https://github.com/IgnacioBarEsp/PlanearIA/issues/80).
 
 ## Evidencia actual
 

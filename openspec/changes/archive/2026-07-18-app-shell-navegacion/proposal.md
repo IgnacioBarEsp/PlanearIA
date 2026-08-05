@@ -1,6 +1,6 @@
 # Proposal: app-shell-navegacion
 
-Issue: [#81](https://github.com/RitualBoat/PlanearIA/issues/81).
+Issue: [#81](https://github.com/IgnacioBarEsp/PlanearIA/issues/81).
 Plan: `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`, Ola 1, change `app-shell-navegacion`.
 Depende de: #78 (`theming-runtime`) y #79 (`breakpoints-reactivos`), ambos archivados; consume tambien los tokens de #80.
 

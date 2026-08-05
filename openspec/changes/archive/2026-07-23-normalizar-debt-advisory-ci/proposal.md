@@ -2,7 +2,7 @@
 
 La pausa legítima y trazada de UX/UI hace fallar el job `Project Constructor Advisory`, aunque ese
 workflow se declara advisory y el plan constructor sigue activo. Esto bloquea indebidamente #126.
-Este change implementa el issue [#142](https://github.com/RitualBoat/PlanearIA/issues/142).
+Este change implementa el issue [#142](https://github.com/IgnacioBarEsp/PlanearIA/issues/142).
 
 ## What Changes
 

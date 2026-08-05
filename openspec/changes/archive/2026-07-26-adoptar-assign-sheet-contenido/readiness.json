@@ -7,7 +7,7 @@
   "qaVisualNivel": "N1",
   "qaVisualJourneys": ["arranque-y-alcance-del-shell"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/114" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/114" },
     { "id": "pr-link", "ref": "PR hacia development creado por npm run opsx:finish desde la rama feat/adoptar-assign-sheet-contenido." },
     {
       "id": "adversarial-review",

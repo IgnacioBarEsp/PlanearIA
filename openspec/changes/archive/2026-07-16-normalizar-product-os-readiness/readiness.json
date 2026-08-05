@@ -7,11 +7,11 @@
   "evidence": [
     {
       "id": "issue-link",
-      "ref": "https://github.com/RitualBoat/PlanearIA/issues/65"
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/65"
     },
     {
       "id": "pr-link",
-      "ref": "https://github.com/RitualBoat/PlanearIA/pull/73"
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/pull/73"
     },
     {
       "id": "docs-verification",
@@ -19,14 +19,14 @@
     },
     {
       "id": "adversarial-review",
-      "ref": "https://github.com/RitualBoat/PlanearIA/issues/65#issuecomment-4997456347"
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/65#issuecomment-4997456347"
     }
   ],
   "rollback": {
     "strategy": "Revertir los documentos y artefactos de este change en un commit aislado; reabrir exclusivamente milestones cerrados por este change usando el snapshot de evidencia, sin borrar issues, items ni #66."
   },
   "adversarialReview": {
-    "ref": "https://github.com/RitualBoat/PlanearIA/issues/65#issuecomment-4997456347"
+    "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/65#issuecomment-4997456347"
   },
   "exceptions": []
 }

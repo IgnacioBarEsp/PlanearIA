@@ -20,7 +20,7 @@ Se conservan API de SheetJS, import CSV/XLS/XLSX, exportación, Términos, Priva
 
 ## Owner de spec y contexto
 
-Owner: `RitualBoat`. Operación/Engineering OS posee artefacto y registro; Cuenta posee presentación legal. Sin contrato de datos académicos cruzado.
+Owner: `IgnacioBarEsp`. Operación/Engineering OS posee artefacto y registro; Cuenta posee presentación legal. Sin contrato de datos académicos cruzado.
 
 ## Evidencia actual
 

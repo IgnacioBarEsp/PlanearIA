@@ -1,6 +1,6 @@
 # Proposal: auditoria-plan-uxui-pre-ola1
 
-Issue: [#76](https://github.com/RitualBoat/PlanearIA/issues/76) — [UX/UI][Spike] Auditar y preparar Plan Maestro antes de Ola 1.
+Issue: [#76](https://github.com/IgnacioBarEsp/PlanearIA/issues/76) — [UX/UI][Spike] Auditar y preparar Plan Maestro antes de Ola 1.
 Plan maestro afectado (solo lectura): `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`.
 
 ## Why

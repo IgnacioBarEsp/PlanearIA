@@ -6,7 +6,7 @@
 > `.project-os/debt/` (estado consumidor), specs
 > `openspec/specs/debt-control-*`.
 > **No usar para:** convertir warnings en deuda sin verificacion, o "reanudar" planes editando el registro.
-> **Issue de origen:** [#128](https://github.com/RitualBoat/PlanearIA/issues/128).
+> **Issue de origen:** [#128](https://github.com/IgnacioBarEsp/PlanearIA/issues/128).
 
 ## Que resuelve
 

@@ -5,8 +5,8 @@
   "surfaces": ["docs", "harness"],
   "validations": ["openspec-strict", "harness-parity", "opsx-patch"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/62" },
-    { "id": "pr-link", "ref": "https://github.com/RitualBoat/PlanearIA/pull/70" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/62" },
+    { "id": "pr-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/pull/70" },
     { "id": "adversarial-review", "ref": "PASS: revisión adversarial del diff y casos negativos el 2026-07-15" },
     { "id": "docs-verification", "ref": "npm run openspec:check y rutas de Documentacion actualizadas" },
     { "id": "fixtures", "ref": "npm run test:openspec-readiness" }

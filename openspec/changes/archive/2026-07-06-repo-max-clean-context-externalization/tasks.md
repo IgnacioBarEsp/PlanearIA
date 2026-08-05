@@ -1,6 +1,6 @@
 ﻿## 1. SDD Tracking And Artifacts
 
-- [x] 1.1 Create GitHub issue #36, enrich it with `## Original` / `## Enriquecida`, and add it to GitHub Project `RitualBoat/1`.
+- [x] 1.1 Create GitHub issue #36, enrich it with `## Original` / `## Enriquecida`, and add it to GitHub Project `IgnacioBarEsp/1`.
 - [x] 1.2 Create and validate OpenSpec artifacts for `repo-max-clean-context-externalization`.
 - [x] 1.3 Record pre-backup Git/OpenSpec state before filesystem cleanup work begins.
 

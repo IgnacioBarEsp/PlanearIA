@@ -14,7 +14,7 @@
   "evidence": [
     {
       "id": "issue-link",
-      "ref": "https://github.com/RitualBoat/PlanearIA/issues/126"
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/126"
     },
     {
       "id": "master-plan",
@@ -26,7 +26,7 @@
     },
     {
       "id": "pr-link",
-      "ref": "https://github.com/RitualBoat/PlanearIA/pull/140 (consumer cutover v0.1.4; awaiting archive/finish)"
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/pull/140 (consumer cutover v0.1.4; awaiting archive/finish)"
     },
     {
       "id": "pre-apply-review",

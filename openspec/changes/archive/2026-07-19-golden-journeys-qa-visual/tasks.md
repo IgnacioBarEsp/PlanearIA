@@ -1,6 +1,6 @@
 # Tasks: golden-journeys-qa-visual
 
-Issue: [#85](https://github.com/RitualBoat/PlanearIA/issues/85). Un bloque a la vez; `[x]` solo con evidencia.
+Issue: [#85](https://github.com/IgnacioBarEsp/PlanearIA/issues/85). Un bloque a la vez; `[x]` solo con evidencia.
 
 ## 1. Manifiesto de journeys
 

@@ -15,7 +15,7 @@ Documenta solo la superficie que este change tocara. No inventaria el resto de l
 - `scripts/opsxFinishChange.mjs`: comportamiento real del cierre.
 - `CLAUDE.md` y `AGENTS.md`, seccion OpenSpec SDD: contrato declarado de `opsx:finish` ("publica la rama, crea o reutiliza un PR hacia `development`, espera los checks requeridos y ordena el merge a GitHub. Nunca hace push directo al target protegido").
 - `cli/cli`, `pkg/cmd/pr/checks/checks.go` (gh 2.96.0): contrato observable de `gh pr checks`.
-- `gh api repos/RitualBoat/PlanearIA/branches/development/protection`: checks requeridos vigentes.
+- `gh api repos/IgnacioBarEsp/PlanearIA/branches/development/protection`: checks requeridos vigentes.
 - `scripts/lib/mcpFailureClassification.mjs` y `scripts/testHarnessDoctor.mjs`: precedente de logica pura extraida con dependencias inyectadas.
 
 ## Comportamiento vigente
