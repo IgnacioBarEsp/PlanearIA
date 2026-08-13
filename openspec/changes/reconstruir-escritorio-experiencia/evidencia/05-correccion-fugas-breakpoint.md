@@ -212,3 +212,78 @@ Captura del frame movil corregido: `capturas-breakpoint/escritorio-movil-307-107
 de los puentes quedan corregidas y las 8 del draft dejan de ser alcanzables desde el candidate, aunque
 siguen existiendo en el recorrido legacy. El item permanece **abierto** porque su alcance no se resolvio por
 completo; el motor de deuda no admite resoluciones parciales y no se fuerza un cierre que no ocurrio.
+
+---
+
+# Tercera iteracion — coherencia en los tres breakpoints
+
+**Fecha:** 2026-08-13. El owner autorizo cerrar tablet y todo lo pendiente que no dependa de su gate.
+
+## 1. Tablet: 106 saltos aguas abajo de Clases
+
+El Escritorio tablet candidate ya no fugaba, pero entrar a Clases tablet reabria el problema: `T0`-`T4`,
+sus estados, filtros y el lanzador `T-1` entregaban los siete frames `T-G`, que se llaman tablet y miden
+1440x960.
+
+Se repuntaron **91 aristas en 13 frames aprobados de Clases tablet** mas la accion de prioridad de `T-1`.
+Todo control cuyo destino era un `T-G` resuelve ahora en el estado honesto `345:1006`. Solo cambia el
+destino: ningun frame aprobado se movio, redimensiono ni reescribio.
+
+Consecuencia deliberada: los siete `T-G` quedan fuera del recorrido de tablet. Siguen existiendo en el
+lienzo y conservan seis aristas entrantes desde superficies de escritorio, asi que no son huerfanos ni se
+borran; su sustitucion por superficies tablet reales pertenece a la ola SDD de cada modulo.
+
+## 2. Seis fichas de continuidad muertas
+
+`Continuidad owner · tablet · 1..4` y las dos de movil no tenian ninguna reaccion: el journey E-03 solo
+funcionaba en escritorio. Se conectaron respetando el owner de cada objeto y el breakpoint:
+
+| Ficha | Breakpoint | Destino |
+| --- | --- | --- |
+| Planeacion · Ciencias 2B, Asistencia · 3A, Material visual, Mensaje · familias | tablet | `345:1006` (no existe superficie tablet de esos owners) |
+| Planeacion · Clases | movil | `192:292`, entrada de Clases movil aprobada |
+| Mensaje · familias | movil | `274:1147`, puente de Mensajeria movil |
+
+## 3. Areas de toque por debajo de 44 pt
+
+La spec exige 44 pt o justificacion documentada. Se corrigieron **22 controles del lado candidate** sin
+mover un solo glifo, ampliando la caja y centrando verticalmente el texto:
+
+- Diez fichas de continuidad: escritorio de 40 a 44, tablet y movil de 36 a 44.
+- Cuatro `Back target` de los selectores y de los estados de limite: de 140x19 a 140x44.
+- Ocho `Wordmark · movil` de los puentes `M-G`, que actuan como control de inicio: de 180x24 a 180x44.
+
+## Verificacion final por alcanzabilidad
+
+| Entrada | Frames alcanzables | Saltos de breakpoint | Puertas al draft | Destinos rotos | Controles muertos reales | Controles < 44 pt (candidate) |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| Escritorio `307:966` | 39 | **0** | 27 intencionales | **0** | **0** | **0** |
+| Tablet `307:1046` | 29 | **0** | **0** | **0** | **0** | **0** |
+| Movil `307:1078` | 38 | **0** | **0** | **0** | **0** | **0** |
+
+Comprobaciones adicionales: cero secuencias `\n` literales en toda la pagina y cero solapamientos reales en
+las cinco superficies candidate; los dos pares que la deteccion marca son un rectangulo de accion y su
+propia etiqueta.
+
+Los cinco controles sin reaccion que quedan dentro del candidate son legitimos: tres `Nav hit · <bp> ·
+escritorio`, que son el modulo activo y por contrato no navegan a si mismos, y dos contenedores
+`Continuidad · <bp> · owners`, cuyas fichas hijas si llevan la reaccion.
+
+Capturas: `capturas-breakpoint/escritorio-tablet-307-1046-final.png` y
+`capturas-breakpoint/escritorio-movil-307-1078-corregido.png`.
+
+## Lo que queda fuera y por que
+
+- **Diecisiete controles por debajo de 44 pt en frames del draft `#156`** alcanzables desde el recorrido de
+  escritorio (`Volver a Escritorio` y `Volver a Office` de 140x20, `Acción · Exportar PDF` de 154x36,
+  `Abrir texto` de 108x20). Viven en la linea base archivada de `#156`, que el candidate de escritorio
+  reutiliza de forma deliberada. Corregirlos altera el prototipo legacy para todos sus recorridos y
+  pertenece a la ola del modulo que los posee.
+- **Nueve aristas del Escritorio tablet del draft `162:115`** y las ocho de los hubs moviles `158:x`, ya no
+  alcanzables desde el candidate pero vivas en el recorrido legacy.
+- Ambos grupos siguen cubiertos por `debt-a40b2b029a63`, `debt-b1d35a5b5915` y
+  [#166](https://github.com/IgnacioBarEsp/PlanearIA/issues/166).
+
+Las dos deudas permanecen **abiertas**. Su enunciado de fondo no cambio: el prototipo sigue sin tener
+superficies propias de tablet ni objetos en movil. Esta iteracion no las construyo, hizo honesto el limite.
+Cerrarlas exige las olas `#157-O3` a `#157-O12`.

@@ -26,10 +26,11 @@ contraste, fuente ampliada y reducir movimiento aún requieren Present.
 El apply revalidó Figma, creó la sección candidate, construyó las tres variantes y selectors, conectó los
 entry actions y ejecutó validación estricta, harness parity, runtime HTTP read-only y revisión adversarial.
 Una auditoría posterior halló 19 hotspots que cruzaban de breakpoint contra la propia SHALL del change; se
-corrigieron con estados honestos. El primer recorrido humano del owner encontró que móvil seguía saliendo al
-prototipo antiguo y tenía texto encimado: se corrigieron etiquetas, layout, doce chips sin reacción y los
-retornos, y móvil quedó cerrado. Quedan Present de confirmación, matriz maestra, promoción, handoff y
-archive, detenidos por la aprobación visual humana.
+corrigieron con estados honestos. El recorrido humano del owner encontró que móvil salía al prototipo
+antiguo y tenía texto encimado. Se corrigieron etiquetas, layout, dieciocho controles sin reacción, los
+retornos y las áreas de toque, y se cerró tablet aguas abajo de Clases. Los tres breakpoints quedan sin
+saltos, sin destinos rotos y sin controles muertos. Quedan Present de confirmación, matriz maestra,
+promoción, handoff y archive, detenidos por la aprobación visual humana.
 
 ## Resumen integral
 

@@ -25,7 +25,7 @@
     },
     {
       "id": "breakpoint-integrity",
-      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/05-correccion-fugas-breakpoint.md — auditoria por alcanzabilidad (BFS desde cada frame de entrada) tras el primer recorrido humano del owner: movil 0 saltos de breakpoint, 0 puertas al draft y 0 chips muertos; escritorio 0 saltos; tablet conserva 106 aguas abajo de Clases tablet, cubiertos por debt-a40b2b029a63 y el issue 166."
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/05-correccion-fugas-breakpoint.md — auditoria por alcanzabilidad (BFS desde cada frame de entrada) tras el recorrido humano del owner. Los tres breakpoints quedan coherentes: 0 saltos de breakpoint, 0 destinos rotos, 0 controles muertos reales y 0 controles candidate bajo 44 pt en escritorio, tablet y movil; ademas 0 secuencias \\n literales y 0 solapamientos en las cinco superficies candidate. Quedan fuera, documentados y cubiertos por debt-a40b2b029a63, debt-b1d35a5b5915 y el issue 166: 17 controles bajo 44 pt en frames del draft #156 y las aristas legacy ya no alcanzables desde el candidate."
     },
     {
       "id": "docs-verification",
