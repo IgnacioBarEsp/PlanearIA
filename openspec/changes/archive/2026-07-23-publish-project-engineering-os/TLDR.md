@@ -1,7 +1,7 @@
 ## La propuesta publica el sistema de ingeniería, no PlanearIA
 
 PlanearIA ya probó un constructor neutral y un motor de control de deuda, pero ambos siguen embebidos y
-privados. El change crea `RitualBoat/project-engineering-os`, publica
+privados. El change crea `IgnacioBarEsp/project-engineering-os`, publica
 `create-project-engineering-os` bajo MIT y convierte PlanearIA en consumidor de una release exacta.
 Constructor y Debt Control Loop viajan en un solo paquete. Quedan fuera la aplicación docente, sus datos,
 React/Expo, perfiles de producto y cualquier servicio hospedado.

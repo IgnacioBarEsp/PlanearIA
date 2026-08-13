@@ -4,11 +4,11 @@ Fecha: 2026-07-23.
 
 ## Identidad y publicación
 
-- Upstream: `https://github.com/RitualBoat/project-engineering-os`.
+- Upstream: `https://github.com/IgnacioBarEsp/project-engineering-os`.
 - Merge protegido: `cae44279f57d48bb1fa4a42682ae22c11eb82ac1`.
 - Tag protegido: `v0.1.1`.
-- GitHub Release: `https://github.com/RitualBoat/project-engineering-os/releases/tag/v0.1.1`.
-- Workflow: `https://github.com/RitualBoat/project-engineering-os/actions/runs/30037017279`.
+- GitHub Release: `https://github.com/IgnacioBarEsp/project-engineering-os/releases/tag/v0.1.1`.
+- Workflow: `https://github.com/IgnacioBarEsp/project-engineering-os/actions/runs/30037017279`.
 - npm: `https://www.npmjs.com/package/create-project-engineering-os/v/0.1.1`.
 - SHA-256 común de tarball npm/GitHub/`SHA256SUMS`:
   `9a164870a923605b81c84d505a98e2f1d6eb85e34e40a3aa11e6b88d7cbcec22`.
@@ -24,7 +24,7 @@ descarga independiente de ambos canales confirmó igualdad byte a byte.
 
 - Tipo: GitHub Actions.
 - Relación npm: `0b6b6c8e-49cd-49e4-8d42-bb03415bb4c3`.
-- Repositorio: `RitualBoat/project-engineering-os`.
+- Repositorio: `IgnacioBarEsp/project-engineering-os`.
 - Workflow: `release.yml`.
 - Environment: `npm-publish`.
 - Permiso: `publish`.

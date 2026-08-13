@@ -1,6 +1,6 @@
 # Hacer determinista la espera de checks en opsx:finish
 
-Issue: [#96](https://github.com/RitualBoat/PlanearIA/issues/96)
+Issue: [#96](https://github.com/IgnacioBarEsp/PlanearIA/issues/96)
 
 ## Why
 

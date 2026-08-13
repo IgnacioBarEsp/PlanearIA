@@ -58,7 +58,7 @@ Verificado 2026-07-17 sobre `src/`:
 - Superficie tocada en otros modulos (`biblioteca`, `grupos`, `plantillas`, `auth`) solo como consumidora de presentacion: no se toca dominio, `userId`, `src/sync` ni `AuthContext`; no requiere contrato cruzado (ver `design.md`).
 - Spec nueva: `reactive-breakpoints` (como se reacciona al ancho).
 - Spec vecina, no modificada: `theming-runtime-propagation` (#78, como se consume el tema).
-- Issue owner: [#79](https://github.com/RitualBoat/PlanearIA/issues/79).
+- Issue owner: [#79](https://github.com/IgnacioBarEsp/PlanearIA/issues/79).
 
 ## Evidencia actual
 

@@ -7,7 +7,7 @@
   "qaVisualNivel": "N1",
   "qaVisualJourneys": ["arranque-y-alcance-del-shell"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/152" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/152" },
     { "id": "pr-link", "ref": "PR hacia development creado por npm run opsx:finish desde la rama feat/corregir-defectos-hoja-compartida." },
     {
       "id": "adversarial-review",

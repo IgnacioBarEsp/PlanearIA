@@ -1,6 +1,6 @@
 # Proposal: product-os-epic-uxui
 
-Issue: [#89](https://github.com/RitualBoat/PlanearIA/issues/89). Plan maestro afectado: `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md` (seguimiento en Product OS, no su contenido).
+Issue: [#89](https://github.com/IgnacioBarEsp/PlanearIA/issues/89). Plan maestro afectado: `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md` (seguimiento en Product OS, no su contenido).
 
 ## Why
 

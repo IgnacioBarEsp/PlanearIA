@@ -94,13 +94,13 @@ Regla practica para no llenar el tablero de ruido:
 
 ### Seguimiento de Preparacion Operativa SDD
 
-La epic [#42](https://github.com/RitualBoat/PlanearIA/issues/42) permanece abierta en
+La epic [#42](https://github.com/IgnacioBarEsp/PlanearIA/issues/42) permanece abierta en
 `In progress`. Gate M mantiene #46 y #47 abiertos en `Parked`: estan diferidos y bloquean
 R2, no R0/R1. La Ola 0 termino con #48 a #52 cerrados; la Ola 1 registra #62 a #64
-cerrados y [#65](https://github.com/RitualBoat/PlanearIA/issues/65) como change de
+cerrados y [#65](https://github.com/IgnacioBarEsp/PlanearIA/issues/65) como change de
 gobernanza con cierre controlado por archive y PR.
 
-La issue [#66](https://github.com/RitualBoat/PlanearIA/issues/66) es deuda operacional
+La issue [#66](https://github.com/IgnacioBarEsp/PlanearIA/issues/66) es deuda operacional
 post-Ola 0: conserva `Backlog`, no recibe el milestone cerrado de Ola 0 y no se cierra
 por normalizar Product OS. Sus hallazgos de doctor/GitNexus y compatibilidad Expo se
 resuelven mediante changes OpenSpec futuros e independientes.
@@ -108,11 +108,11 @@ resuelven mediante changes OpenSpec futuros e independientes.
 ### Seguimiento del plan UX/UI
 
 Convencion adoptada el 2026-07-17 (decision DA1/OQ-A de la auditoria #76, resuelta en
-[#89](https://github.com/RitualBoat/PlanearIA/issues/89) via el change `product-os-epic-uxui`).
+[#89](https://github.com/IgnacioBarEsp/PlanearIA/issues/89) via el change `product-os-epic-uxui`).
 Es la plantilla reutilizable para todas las olas del plan
 `Documentacion/01-planes-maestros/PLAN_UXUI_NAVEGACION_GLOBAL.md`.
 
-- **Epic unico del plan.** [`[Plan Maestro] UX/UI y Navegacion Global` #101](https://github.com/RitualBoat/PlanearIA/issues/101)
+- **Epic unico del plan.** [`[Plan Maestro] UX/UI y Navegacion Global` #101](https://github.com/IgnacioBarEsp/PlanearIA/issues/101)
   (labels `epic`, `ux-ui`, `plan-maestro`) agrupa como sub-issues nativos todos los issues del
   plan, ola por ola. La vista Roadmap se agrupa por parent issue. No se crea un epic por ola.
 - **Milestone por ola, nomenclatura `UX/UI Ola N - <nombre de la ola en el plan>`.** Los nombres

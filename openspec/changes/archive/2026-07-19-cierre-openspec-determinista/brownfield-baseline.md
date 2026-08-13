@@ -51,7 +51,7 @@ solo deja de recomendarlo. `--skip-specs` conserva el soporte de changes que ya 
 
 Capacidad `opsx-change-closure`, que hoy cubre el cierre por PR y pasa a cubrir tambien el paso de
 archive que lo precede. Contexto operativo en `Documentacion/02-operacion/OPENSPEC_CLI.md`. Owner
-humano: RitualBoat, via issue #113 en PlanearIA Product OS.
+humano: IgnacioBarEsp, via issue #113 en PlanearIA Product OS.
 
 ## Evidencia actual
 

@@ -5,7 +5,7 @@
   "surfaces": ["ui"],
   "validations": ["openspec-strict"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/80" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/80" },
     { "id": "pr-link", "ref": "PENDIENTE: PR generado por opsx:finish tras archive." },
     { "id": "adversarial-review", "ref": "Revision adversarial 2026-07-17 (verificacion previa a archive): PASS CON HUECOS. Sin blockers ni majors. 3 minors/preguntas rastreados y mitigados: (1) el barrel tokens.ts arrastra reanimated y AccessibilityPreferencesContext, mitigado porque los modulos estaticos (spacing/radii/zIndex) siguen importables sin contexto; (2) el test de escala ascendente de spacing depende del orden de Object.values, aceptable para una constante; (3) el mock de reanimated del preset no incluye useReducedMotion, pero el test del hook mockea reanimated y produccion usa el export real. Verificado que el change es puramente aditivo (diff vacio en los 4 contextos, types.ts, App.tsx y package.json) y sin regresion (98 suites / 646 tests)." },
     { "id": "web-http-200", "ref": "La preview de tokens (evidencia/tokens-preview.html) se cargo y renderizo en el Browser pane sin errores de consola en los tres breakpoints (2026-07-17)." },

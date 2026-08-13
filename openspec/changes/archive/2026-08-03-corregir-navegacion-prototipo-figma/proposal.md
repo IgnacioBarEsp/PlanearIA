@@ -1,6 +1,6 @@
 ## Why
 
-**Issue:** [#156](https://github.com/RitualBoat/PlanearIA/issues/156).
+**Issue:** [#156](https://github.com/IgnacioBarEsp/PlanearIA/issues/156).
 
 El prototipo Figma ya tiene una sola entrada, pero los enlaces todavía obedecen a subflujos accidentales: al abrir una experiencia se pierde el retorno a Escritorio, las acciones rápidas heredan el historial de Office y la navegación cambia de nombre o desaparece. Esto impide usarlo como estímulo confiable en entrevistas docentes y puede hacer que una persona interprete mal la arquitectura de PlanearIA.
 

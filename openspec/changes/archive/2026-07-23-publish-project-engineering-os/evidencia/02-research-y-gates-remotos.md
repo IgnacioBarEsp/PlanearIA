@@ -6,7 +6,7 @@ Fecha de revalidación: 2026-07-23.
 
 | Check | Resultado | Consecuencia |
 | --- | --- | --- |
-| `RitualBoat/project-engineering-os` | No existe; nombre disponible | Puede crearse después del release candidate |
+| `IgnacioBarEsp/project-engineering-os` | No existe; nombre disponible | Puede crearse después del release candidate |
 | `create-project-engineering-os` en npm | `E404`; nombre disponible | No está reservado; revalidar inmediatamente antes de publicar |
 | GitHub CLI | Sesión válida con scopes de repo/workflow/project | Permite crear upstream y configurar gobernanza aprobada |
 | npm CLI | `ENEEDAUTH` | Primera publicación queda bloqueada hasta intervención humana |
@@ -15,7 +15,7 @@ No se imprimieron tokens ni se creó estado remoto durante estas comprobaciones.
 
 ## Licencias y costo
 
-- Código nuevo: MIT, copyright `2026 RitualBoat contributors`.
+- Código nuevo: MIT, copyright `2026 IgnacioBarEsp contributors`.
 - `ajv@8.20.0`: MIT, desarrollo/tests.
 - `@fission-ai/openspec@1.6.0`: MIT, dependencia de desarrollo del consumidor.
 - GitHub público, GitHub Actions y npm público se diseñan para free tiers; no hay SaaS, telemetría,

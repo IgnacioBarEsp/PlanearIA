@@ -52,4 +52,4 @@ El owner aprobó Clases v1.3 el 2026-08-04. La promoción alcanzó los launchers
 el contenido provisional de los hubs puente. Los 22 puentes/fallbacks listados aquí siguen `candidate` y
 deben ser sustituidos por superficies responsive gobernadas cuando se ejecute el SDD de cada módulo.
 
-Evidencia: [comentario de aprobación en #159](https://github.com/RitualBoat/PlanearIA/issues/159#issuecomment-5182823974).
+Evidencia: [comentario de aprobación en #159](https://github.com/IgnacioBarEsp/PlanearIA/issues/159#issuecomment-5182823974).

@@ -3,7 +3,7 @@
 > **Estado:** vigente.
 > **Tipo:** ADR operativo (decision de cadencia de actualizacion de dependencias).
 > **Owner:** plan `preparacion-operativa-sdd-harness`.
-> **Origen:** issue [#133](https://github.com/RitualBoat/PlanearIA/issues/133), epic de saneamiento [#129](https://github.com/RitualBoat/PlanearIA/issues/129); deuda `debt-6c9672a48059` (xlsx) y `debt-d73a5844fae3` (cadencia Expo).
+> **Origen:** issue [#133](https://github.com/IgnacioBarEsp/PlanearIA/issues/133), epic de saneamiento [#129](https://github.com/IgnacioBarEsp/PlanearIA/issues/129); deuda `debt-6c9672a48059` (xlsx) y `debt-d73a5844fae3` (cadencia Expo).
 > **No usar para:** justificar `npm audit fix`/`--force`, subir Expo SDK sin su propio change, ni declarar verde un scanner por riesgo solo aceptado.
 
 ## Por que existe

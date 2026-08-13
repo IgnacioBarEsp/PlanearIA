@@ -95,7 +95,7 @@ Que ocurrira:
 1. GitHub CLI mostrara un codigo de un solo uso y, con `--clipboard`, intentara copiarlo.
 2. Se abrira el navegador. Si no abre, entra manualmente a [GitHub Device Activation](https://github.com/login/device).
 3. Pega el codigo de un solo uso.
-4. Confirma que la cuenta mostrada sea `RitualBoat`.
+4. Confirma que la cuenta mostrada sea `IgnacioBarEsp`.
 5. Autoriza GitHub CLI.
 6. Regresa a PowerShell y espera la confirmacion.
 
@@ -121,18 +121,18 @@ No es problema que conserve también `repo`, `workflow`, `read:org` y `gist`.
 ### 3.3 Verificar el Project
 
 ```powershell
-gh project list --owner RitualBoat --limit 20
+gh project list --owner IgnacioBarEsp --limit 20
 ```
 
 Debe aparecer `PlanearIA Product OS`.
 
-Tambien puedes abrir [Projects de RitualBoat](https://github.com/users/RitualBoat/projects) en el navegador. No crees un Project duplicado si ya existe uno con ese nombre.
+Tambien puedes abrir [Projects de IgnacioBarEsp](https://github.com/users/IgnacioBarEsp/projects) en el navegador. No crees un Project duplicado si ya existe uno con ese nombre.
 
 ### 3.4 Si falla
 
 - `missing required scopes`: repite el paso 3.1 y confirma ambos scopes.
 - Cuenta incorrecta: ejecuta `gh auth status`, luego `gh auth switch` si tienes varias cuentas.
-- El Project no aparece: abre la pagina de Projects y confirma que pertenece al usuario `RitualBoat`, no a otra organizacion.
+- El Project no aparece: abre la pagina de Projects y confirma que pertenece al usuario `IgnacioBarEsp`, no a otra organizacion.
 - Error de red o browser: cierra la operacion y repite; no crees manualmente un token salvo que el flujo oficial sea imposible.
 
 ### 3.5 Que delegar despues
@@ -153,7 +153,7 @@ GitHub permite exigir pull requests, checks verdes, historial lineal y bloquear 
 
 ### 4.1 Antes de configurar
 
-Abre [Actions de PlanearIA](https://github.com/RitualBoat/PlanearIA/actions) y confirma que existe una ejecucion reciente del workflow `CI`. GitHub solo permite seleccionar comodamente checks que se hayan reportado recientemente.
+Abre [Actions de PlanearIA](https://github.com/IgnacioBarEsp/PlanearIA/actions) y confirma que existe una ejecucion reciente del workflow `CI`. GitHub solo permite seleccionar comodamente checks que se hayan reportado recientemente.
 
 Los cuatro checks base actuales son:
 
@@ -166,8 +166,8 @@ No marques todavía `Harness parity (soft)` como requerido; primero debe retirar
 
 ### 4.2 Configuracion recomendada mediante la interfaz
 
-1. Abre [Settings > Rules](https://github.com/RitualBoat/PlanearIA/settings/rules).
-2. Selecciona crear un `Branch ruleset`. Si tu interfaz solo muestra la proteccion clasica, abre [Settings > Branches](https://github.com/RitualBoat/PlanearIA/settings/branches) y crea una branch protection rule.
+1. Abre [Settings > Rules](https://github.com/IgnacioBarEsp/PlanearIA/settings/rules).
+2. Selecciona crear un `Branch ruleset`. Si tu interfaz solo muestra la proteccion clasica, abre [Settings > Branches](https://github.com/IgnacioBarEsp/PlanearIA/settings/branches) y crea una branch protection rule.
 3. Nombre: `development-protection`.
 4. Enforcement status: `Active`.
 5. Target branches: incluye por nombre exacto `development`.
@@ -203,7 +203,7 @@ Cuando el PR pase:
 ### 4.4 Verificacion por terminal
 
 ```powershell
-gh api repos/RitualBoat/PlanearIA/branches/development/protection
+gh api repos/IgnacioBarEsp/PlanearIA/branches/development/protection
 ```
 
 Resultado esperado: JSON y codigo HTTP 200. Un 404 significa que la regla no existe, no aplica a esa branch o el token no puede verla.

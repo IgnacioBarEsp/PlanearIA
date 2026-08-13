@@ -14,15 +14,15 @@
   "evidence": [
     {
       "id": "issue-link",
-      "ref": "https://github.com/RitualBoat/PlanearIA/issues/113"
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/113"
     },
     {
       "id": "pr-link",
-      "ref": "https://github.com/RitualBoat/PlanearIA/pull/120"
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/pull/120"
     },
     {
       "id": "adversarial-review",
-      "ref": "https://github.com/RitualBoat/PlanearIA/issues/113#issuecomment-5017482847"
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/113#issuecomment-5017482847"
     },
     {
       "id": "fixtures",
@@ -37,7 +37,7 @@
     "strategy": "Revertir el commit del PR restaura el flujo actual sin migraciones ni datos persistidos que deshacer: el archive vuelve a ser manual y vuelve a poder abortar por sincronizacion previa. Las piezas son independientes y admiten desactivacion parcial: se puede revertir solo la normalizacion de workflows conservando el comando, o solo el comando conservando la documentacion del orden canonico. Los changes ya archivados no se tocan en ningun escenario de rollback, y la logica de espera de checks de opsx:finish no participa del revert."
   },
   "adversarialReview": {
-    "ref": "https://github.com/RitualBoat/PlanearIA/issues/113#issuecomment-5017482847"
+    "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/113#issuecomment-5017482847"
   },
   "exceptions": []
 }

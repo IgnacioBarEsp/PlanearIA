@@ -5,7 +5,7 @@
   "surfaces": ["ui"],
   "validations": ["openspec-strict"],
   "evidence": [
-    { "id": "issue-link", "ref": "https://github.com/RitualBoat/PlanearIA/issues/78" },
+    { "id": "issue-link", "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/78" },
     { "id": "pr-link", "ref": "PENDIENTE: PR posterior a archive." },
     { "id": "adversarial-review", "ref": "Revision adversarial 2026-07-17 (verificacion previa a archive): PASS CON HUECOS. 3 minors rastreados y mitigados (hueco teorico de lint en namespace imports inexistentes hoy; colores de rol literales mitigados por etiqueta de texto WCAG y diferidos a tokens-completos; Sesiones/AdminRoles sin captura por 401 backend, daltonismo cubierto por useAppTheme.test.tsx). Sin blockers ni majors; guard de permisos y aislamiento intactos." },
     { "id": "web-http-200", "ref": "PENDIENTE: salida de expo start --web con HTTP 200 antes de navegar (tarea 5.1)." },

@@ -73,8 +73,8 @@ en PASS; el único gate externo pendiente es la decisión humana de merge.
 - `npm run gitnexus:diagnose`: índice fresco.
 - `npm run harness:doctor -- --json`: `ok=true`, cero FAIL.
 - GitHub Actions: runs
-  [29718552643](https://github.com/RitualBoat/PlanearIA/actions/runs/29718552643) y
-  [29718554338](https://github.com/RitualBoat/PlanearIA/actions/runs/29718554338) en SUCCESS para la matriz
+  [29718552643](https://github.com/IgnacioBarEsp/PlanearIA/actions/runs/29718552643) y
+  [29718554338](https://github.com/IgnacioBarEsp/PlanearIA/actions/runs/29718554338) en SUCCESS para la matriz
   Ubuntu/Windows/macOS; checks base del PR #125 también en SUCCESS.
 
 ## Recomendación

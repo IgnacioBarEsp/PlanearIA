@@ -4,8 +4,8 @@ El overhaul AI-friendly anterior dejo el repo mejor encaminado: front doors alin
 
 Estado actual relevante:
 
-- `gh` esta instalado, autenticado como `RitualBoat` y tiene scope `project`.
-- GitHub Project destino: `RitualBoat` Project `1`, `PlanearIA Product OS`.
+- `gh` esta instalado, autenticado como `IgnacioBarEsp` y tiene scope `project`.
+- GitHub Project destino: `IgnacioBarEsp` Project `1`, `PlanearIA Product OS`.
 - CodeGraph actual: 376 archivos, 4,607 nodos, 11,965 edges, DB 15.89 MB; bajo `context` solo aparecen 2 manifests YAML.
 - Carpetas pesadas/candidatas: `context/stitch-results` (~33 MB no trackeado), `context/referencias-app-similares-a-planearia` (~25 MB trackeado), ground truth visual pesado, infraestructura historica, repos/estudio OpenSpec y legacy documental.
 - La rama actual ya tiene borrados staged/working tree de `context/referencias-opensource/**/source/**`; el respaldo debe recuperarlos desde `HEAD`.

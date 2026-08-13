@@ -5,7 +5,7 @@ Fecha: 2026-07-23.
 ## Estado observado
 
 - Tag inmutable: `v0.1.0` → `5532f76425e03b4217306d62c2ac140a8fbc67d2`.
-- Run: `https://github.com/RitualBoat/project-engineering-os/actions/runs/30036132915`.
+- Run: `https://github.com/IgnacioBarEsp/project-engineering-os/actions/runs/30036132915`.
 - Build exacto: PASS.
 - GitHub Release, tarball, manifest y checksum: PASS.
 - npm Trusted Publishing: FAIL antes de publicar.
@@ -41,7 +41,7 @@ silenciosos y evitar una futura retirada.
 - GitHub Release pasa a ser idempotente: si ya existe, compara tarball, manifest y checksum byte por byte.
 - Actions se actualizan a releases actuales fijadas por SHA.
 - La verificación de provenance reintenta de forma acotada la propagación del registry.
-- PR de recuperación: `https://github.com/RitualBoat/project-engineering-os/pull/3`.
+- PR de recuperación: `https://github.com/IgnacioBarEsp/project-engineering-os/pull/3`.
 
 ## Validación local del patch
 
@@ -56,6 +56,6 @@ silenciosos y evitar una futura retirada.
 
 El PR #3 pasó las seis combinaciones de CI y el agregador requerido; se fusionó en
 `cae44279f57d48bb1fa4a42682ae22c11eb82ac1`. `v0.1.1` se creó desde ese merge y el run
-`https://github.com/RitualBoat/project-engineering-os/actions/runs/30037017279` publicó correctamente
+`https://github.com/IgnacioBarEsp/project-engineering-os/actions/runs/30037017279` publicó correctamente
 GitHub Release y npm mediante Trusted Publishing. La identidad exacta y la fixture de registry están en
 `07-release-v0.1.1-y-registry.md`.

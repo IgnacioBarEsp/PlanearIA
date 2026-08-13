@@ -2,7 +2,7 @@
 
 GitNexus reports the PlanearIA index as current while its FTS extension is unavailable, so structural queries return no useful definitions even though `status` appears healthy. This breaks the repository's primary code-intelligence route at the point where agents need dependable MVVM and dependency evidence before editing.
 
-The change comes from [GitHub issue #50](https://github.com/RitualBoat/PlanearIA/issues/50) in the `Readiness Ola 0` milestone and implements the focused GitNexus FTS item in `Documentacion/01-planes-maestros/PLAN_PREPARACION_OPERATIVA_SDD_HARNESS_SOLO_DEV.md`.
+The change comes from [GitHub issue #50](https://github.com/IgnacioBarEsp/PlanearIA/issues/50) in the `Readiness Ola 0` milestone and implements the focused GitNexus FTS item in `Documentacion/01-planes-maestros/PLAN_PREPARACION_OPERATIVA_SDD_HARNESS_SOLO_DEV.md`.
 
 ## What Changes
 

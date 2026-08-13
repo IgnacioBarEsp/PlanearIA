@@ -1,6 +1,6 @@
 # Sanear la fuente de breakpoint: unificar los 27 consumidores directos (Ola 2b)
 
-Issue: [#106](https://github.com/RitualBoat/PlanearIA/issues/106). Epic de saneamiento: [#141](https://github.com/RitualBoat/PlanearIA/issues/141).
+Issue: [#106](https://github.com/IgnacioBarEsp/PlanearIA/issues/106). Epic de saneamiento: [#141](https://github.com/IgnacioBarEsp/PlanearIA/issues/141).
 Item de deuda: `debt-3d3ea5ba87ac`. Plan: `uxui-navegacion-global`.
 
 ## Why

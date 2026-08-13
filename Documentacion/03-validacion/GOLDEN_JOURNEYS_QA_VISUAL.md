@@ -5,7 +5,7 @@
 > **Fuente de verdad:** `qa/golden-journeys.json`. Este documento explica y cita; si discrepan, manda el manifiesto.
 > **No usar para:** dar por cerrado el gate R2, ni para sustituir typecheck, lint, tests o el gate de readiness.
 
-Origen: issue [#85](https://github.com/RitualBoat/PlanearIA/issues/85), hallazgo H3 de la auditoria #76.
+Origen: issue [#85](https://github.com/IgnacioBarEsp/PlanearIA/issues/85), hallazgo H3 de la auditoria #76.
 
 ## 1. Que resuelve esto
 

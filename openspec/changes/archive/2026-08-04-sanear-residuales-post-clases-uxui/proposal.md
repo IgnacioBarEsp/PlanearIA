@@ -1,6 +1,6 @@
 # Proposal: sanear-residuales-post-clases-uxui
 
-Issue: [#161](https://github.com/RitualBoat/PlanearIA/issues/161), saneamiento del plan
+Issue: [#161](https://github.com/IgnacioBarEsp/PlanearIA/issues/161), saneamiento del plan
 `uxui-navegacion-global` gobernado por #101 y por la subepica #157.
 
 ## Why

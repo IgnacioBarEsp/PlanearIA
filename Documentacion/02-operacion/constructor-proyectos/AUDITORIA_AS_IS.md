@@ -26,7 +26,7 @@ fallback lineado.
 | --- | --- | --- |
 | Harness | `OK`, 36 mirrors en paridad | `npm run agent:harness:check`; `scripts/syncAgentHarness.mjs`. |
 | OpenSpec | CLI local `1.6.0`, Node `26.4.0`, 1 change y 34 items válidos | `npm run openspec:check`; `package.json`; lockfile. |
-| GitNexus | índice `up-to-date` en commit `502746f` | `npm run gitnexus:diagnose`; issue [#112](https://github.com/RitualBoat/PlanearIA/issues/112) cerrado. |
+| GitNexus | índice `up-to-date` en commit `502746f` | `npm run gitnexus:diagnose`; issue [#112](https://github.com/IgnacioBarEsp/PlanearIA/issues/112) cerrado. |
 | Change activo | `constructor-proyectos-nuevos`, 0/48 al iniciar apply documental | `npm exec --yes=false -- openspec instructions apply --change constructor-proyectos-nuevos --json`. |
 | Branch | `feat/constructor-proyectos-nuevos` | `git status --short --branch`. |
 | Protección `development` | TypeScript, ESLint, Jest y Backend smoke requeridos; force push/deletion deshabilitados | GitHub REST `branches/development/protection`. |
