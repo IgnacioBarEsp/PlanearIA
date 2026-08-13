@@ -55,6 +55,12 @@ tendrá issue/change propio.
   visuales inspeccionadas y drift documentado en `evidencia/01-*`, `02-*` y `03-*`.
 - GitNexus primario con índice fresco en el repositorio principal; CodeGraph fallback para fuente lineada.
 - Preflight Anti-Slop y referencias oficiales de Microsoft, Android Developers y W3C.
+- Cierre 2026-08-13: auditoría por alcanzabilidad y correcciones en `evidencia/05-*`, handoff en
+  `evidencia/06-*`, gate visual aprobado por el owner y 8 frames promovidos. La superficie tocada creció
+  respecto a lo previsto en propose: además de la sección propia, se repuntaron destinos de retorno en
+  frames aprobados de Clases y en frames del draft `#156`. Fueron cambios de destino únicamente, con
+  autorización explícita del owner registrada en #163; ningún frame ajeno se movió, redimensionó,
+  reescribió ni cambió de estado de promoción.
 
 ## Fuera de alcance
 

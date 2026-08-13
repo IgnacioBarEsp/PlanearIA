@@ -23,20 +23,17 @@ contraste, fuente ampliada y reducir movimiento aún requieren Present.
 
 ## Plan de trabajo — Tasks
 
-El apply revalidó Figma, creó la sección candidate, construyó las tres variantes y selectors, conectó los
-entry actions y ejecutó validación estricta, harness parity, runtime HTTP read-only y revisión adversarial.
-Una auditoría posterior halló 19 hotspots que cruzaban de breakpoint contra la propia SHALL del change; se
-corrigieron con estados honestos. El recorrido humano del owner encontró que móvil salía al prototipo
-antiguo y tenía texto encimado. Se corrigieron etiquetas, layout, dieciocho controles sin reacción, los
-retornos y las áreas de toque, y se cerró tablet aguas abajo de Clases. Los tres breakpoints quedan sin
-saltos, sin destinos rotos y sin controles muertos. El owner recorrió Present y emitió aprobación con dos
-condiciones; ambas tenían la misma raíz —el retorno a Escritorio no apuntaba al candidate— y quedaron
-corregidas en 44 controles. Quedan el recorrido de confirmación, la matriz maestra, promoción, handoff y
-archive, detenidos por el veredicto definitivo.
+El apply creó la sección candidate, las tres variantes y los selectores. Cuatro iteraciones de corrección
+siguieron: 19 hotspots que cruzaban de breakpoint contra la propia SHALL, el texto y el layout de móvil,
+dieciocho controles sin reacción, las áreas de toque, tablet aguas abajo de Clases y 44 retornos que
+apuntaban al Escritorio antiguo. Cambió también el método: auditar por alcanzabilidad desde cada entrada,
+no por sección. El owner recorrió Present dos veces y emitió el veredicto sin hallazgos. Se promovieron los
+ocho frames propios, se actualizaron matriz, plan y ground truth, y se documentó el handoff runtime.
 
 ## Resumen integral
 
-#163 deja un candidate reversible y navegable donde el docente reconoce herramientas, decide qué atender y
-retoma trabajo con contexto, incluso offline, sin convertir Escritorio en dashboard genérico. No se editó
-runtime ni se promovieron frames. La siguiente acción válida es recorrer Figma Present y emitir aprobación o
-hallazgos humanos antes de actualizar la matriz, promover o archivar.
+#163 deja un Escritorio aprobado y navegable donde el docente reconoce herramientas, decide qué atender y
+retoma trabajo con contexto, incluso offline, sin convertir Escritorio en dashboard genérico. Los tres
+breakpoints resuelven en su propio tamaño y, donde una superficie aún no existe, el prototipo lo dice en vez
+de saltar a escritorio. No se editó runtime. Quedan abiertas dos deudas de superficies responsive bajo #166
+y la siguiente ola es #157-O3 Office.

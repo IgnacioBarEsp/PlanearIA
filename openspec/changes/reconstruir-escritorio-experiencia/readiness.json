@@ -29,7 +29,7 @@
     },
     {
       "id": "docs-verification",
-      "ref": "openspec validate --all --strict --no-interactive: 55/55 PASS; git diff --check PASS; agent:harness:check PASS (36 mirrors)."
+      "ref": "2026-08-13: openspec validate --all --strict --no-interactive 55/55 PASS; checkOpenSpecTldr OK; checkSourceEncoding OK; agent:harness:check OK con 36 mirrors; git diff --check limpio. No se ejecutan typecheck ni tests: el change no toca src/, backend/ ni dependencias."
     },
     {
       "id": "web-http-200",
@@ -37,19 +37,27 @@
     },
     {
       "id": "playwright-breakpoints",
-      "ref": "No ejecutado: @playwright/test no está instalado en este worktree; queda gate explícito, sin afirmar QA automática."
+      "ref": "No ejecutado y no requerido para el cierre: este change no modifica runtime. La verificacion de navegacion se hizo por alcanzabilidad sobre el grafo Figma (evidencia/05) y el gate visual fue el recorrido humano en Present, no una captura automatica."
     },
     {
       "id": "nielsen",
-      "ref": "evidencia/03-qa-anti-slop-adversarial.md — revisión estática PASS CON HUECOS DE PRESENT; no hay severidad 3–4 abierta."
+      "ref": "evidencia/03-qa-anti-slop-adversarial.md (revision estatica) y evidencia/05-correccion-fugas-breakpoint.md (correcciones). Los huecos que dependian de Present los cerro el recorrido del owner. Sin severidad 3-4 abierta."
     },
     {
       "id": "human-approval",
-      "ref": "Parcial: el owner ejecuto el recorrido en Present el 2026-08-13 y emitio APROBADO CON CONDICIONES en #163, con dos hallazgos. Ambos se corrigieron y reauditaron (evidencia/05-correccion-fugas-breakpoint.md, cuarta iteracion). Falta el recorrido corto de confirmacion y el veredicto definitivo; no se promueve ningun frame hasta entonces."
+      "ref": "APROBADO. El owner recorrio Figma Present en los tres breakpoints, emitio APROBADO CON CONDICIONES con dos hallazgos, ambos se corrigieron y reauditaron, y emitio el veredicto definitivo sin hallazgos el 2026-08-13: https://github.com/IgnacioBarEsp/PlanearIA/issues/163#issuecomment-5286904053"
     },
     {
       "id": "runtime-handoff",
-      "ref": "Pendiente tras aprobación visual; no autoriza crear issue/change runtime."
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/06-handoff-runtime.md — roles perceptuales mapeados a familias candidatas de ColorTokens sin copiar hex, drift terracota/azul declarado como decision del change runtime, contratos MVVM/AppShell/useBreakpoint/44pt/sync/userId/IA/legacy y proyecciones cross-context. No autoriza crear issue ni change de runtime."
+    },
+    {
+      "id": "figma-promotion",
+      "ref": "Seccion 307:965 renombrada 'Escritorio · approved v1.0 · #163 · puentes de otros modulos candidate'; promovidos 8 frames propios (307:966, 307:1046, 307:1078, 310:3, 310:69, 310:106, 345:968, 345:1006). Los puentes M-G, T-G, D-G, D-2 y Office 257:951 siguen candidate."
+    },
+    {
+      "id": "debt-assessment",
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/debt-assessment-input.json capturado con debt:capture; dos items minor transversales abiertos (debt-a40b2b029a63, debt-b1d35a5b5915) con seguimiento en el issue 166. Sin Blockers ni Majors."
     }
   ],
   "rollback": {

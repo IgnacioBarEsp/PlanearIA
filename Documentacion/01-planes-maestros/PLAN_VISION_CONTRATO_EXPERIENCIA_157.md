@@ -1,12 +1,12 @@
 # Plan Maestro: Visión y Contrato de Experiencia del Prototipo — Subépica #157
 
-> **Versión:** 1.3, vigente.
-> **Fecha:** 2026-08-04.
+> **Versión:** 1.4, vigente.
+> **Fecha:** 2026-08-13.
 > **Formato:** Blueprint + backlog de olas, conforme a `meta_guia_planes.md`.
 > **Autoridad operativa padre:** issue [#101](https://github.com/IgnacioBarEsp/PlanearIA/issues/101), Plan Maestro UX/UI y Navegación Global.
 > **Subépica de este plan:** issue [#157](https://github.com/IgnacioBarEsp/PlanearIA/issues/157), reconstrucción del prototipo como suite docente por módulos.
 > **Plan padre:** [`PLAN_UXUI_NAVEGACION_GLOBAL.md`](PLAN_UXUI_NAVEGACION_GLOBAL.md).
-> **Estado:** activo. `#157-O0` y el prototipo `#157-O1 Clases` están aprobados; el saneamiento post-Clases se ejecuta bajo #161 antes de reanudar el plan. `#157-O2 Escritorio` es la siguiente ola autorizada para preparar artefactos, pero ningún `apply` posterior se ejecuta sin aprobación humana explícita de esos artefactos.
+> **Estado:** activo. `#157-O0`, `#157-O1 Clases` y `#157-O2 Escritorio` tienen aprobación visual humana y frames promovidos. `#157-O3 Office Home y Crear` es la siguiente ola autorizada para issue, entrevista específica y artefactos; ningún `apply` posterior se ejecuta sin aprobación humana explícita de esos artefactos.
 > **Alcance:** visión consolidada, arquitectura de experiencias, nomenclatura, fronteras, paridad, ground truth, riesgos, olas y gates para reconstruir el prototipo un módulo a la vez.
 
 ## Control de versiones
@@ -17,7 +17,8 @@
 | 1.0 | 2026-08-03 | Aprobada | El owner aprueba el contrato como baseline y habilita preparar únicamente `#157-O1 Clases`. |
 | 1.1 | 2026-08-03 | Aprobada | Integra las decisiones de la entrevista de Clases, el baseline oficial Google Classroom 0.1, los inventarios read-only de Figma/runtime y el preflight visual; habilita el gate pre-propose sin aprobar todavía una composición Figma ni implementación. |
 | 1.2 | 2026-08-04 | Aprobada | Registra la aprobación visual de Clases v1.3, conserva como candidate los puentes de otros módulos y activa únicamente la preparación de artefactos de `#157-O2 Escritorio`; `apply` requiere una aprobación posterior. |
-| 1.3 | 2026-08-04 | Vigente | Integra el contrato transversal de rollback Figma, roles semánticos Figma-runtime, frontera de daltonismo y origen canónico de QA fijado por el saneamiento #161; la reanudación depende de `debt:check` y cada ola conserva su aprobación humana separada. |
+| 1.3 | 2026-08-04 | Superada | Integra el contrato transversal de rollback Figma, roles semánticos Figma-runtime, frontera de daltonismo y origen canónico de QA fijado por el saneamiento #161; la reanudación depende de `debt:check` y cada ola conserva su aprobación humana separada. |
+| 1.4 | 2026-08-13 | Vigente | Registra la aprobación visual de Escritorio v1.0 en #163, la promoción de sus 8 frames y la corrección del retorno a Escritorio en 44 controles; fija la auditoría por alcanzabilidad y clasificación por ancho de frame como método válido, y activa la preparación de `#157-O3`. |
 
 Una modificación posterior de la promesa, arquitectura de experiencias, fronteras o nomenclatura incrementa
 la versión menor y registra la decisión. Una corrección editorial sin cambio de significado incrementa el
@@ -313,8 +314,8 @@ revisable; nunca se fusionan varias experiencias para ahorrar ceremonias.
 | --- | --- | --- | --- | --- |
 | `#157-O0` | Visión transversal | Contrato versionado, fronteras, paridad, plan y prioridad inicial | Matriz + entrevista + aprobación humana | Aprobada 2026-08-03 |
 | `#157-O1` | Clases | Contrato y prototipo reconocible tipo Classroom, con jerarquía propia y handoffs semánticos | Versión 1.1; baseline 0.1 aprobado | Prototipo v1.3 aprobado en [#159](https://github.com/IgnacioBarEsp/PlanearIA/issues/159#issuecomment-5182823974); cierre SDD documental en curso; runtime no iniciado |
-| `#157-O2` | Escritorio | Launcher + jornada accionable que representa la suite y recibe retornos de Clases | Clases validada; ground truth medio por consolidar | Siguiente ola: autorizada para issue, entrevista específica y artefactos; `apply` bloqueado hasta aprobación humana |
-| `#157-O3` | Office Home y Crear | Bandeja Office y creación tipo-primero sin absorber otros módulos | Escritorio; ground truth Office | Pendiente |
+| `#157-O2` | Escritorio | Launcher + jornada accionable que representa la suite y recibe retornos de Clases | Clases validada; ground truth medio por consolidar | Prototipo v1.0 aprobado en [#163](https://github.com/IgnacioBarEsp/PlanearIA/issues/163#issuecomment-5286904053); 8 frames promovidos; cierre SDD documental en curso; runtime no iniciado |
+| `#157-O3` | Office Home y Crear | Bandeja Office y creación tipo-primero sin absorber otros módulos | Escritorio; ground truth Office | Siguiente ola: hereda el rodeo por plantillas del selector propio de Office y la construcción de superficies de 768 y 390 px |
 | `#157-O4` | NotasPLAN | Editor documental familiar y conectado | Office Home/Crear; ground truth documental | Pendiente |
 | `#157-O5` | CalcuPLAN | Hoja familiar con importación/mapeo confirmable | Office Home/Crear; ground truth tabular | Pendiente |
 | `#157-O6` | PresentaPLAN | Láminas lineales y frontera demostrable con Diseño | Office Home/Crear; ground truth presentaciones | Pendiente |
@@ -396,7 +397,27 @@ Se promovieron solo los frames de Clases; Office y los puentes/fallbacks de los 
 - Creación académica breve en Clases; creación profunda por handoff a Office/Diseño.
 - Una actividad puede existir sin archivo; adjuntar o crear un recurso es opcional.
 
-### Siguiente módulo: `#157-O2 Escritorio`
+### Resultado de `#157-O2 Escritorio`
+
+El owner aprobó Escritorio el 2026-08-13 tras recorrer los tres breakpoints en Figma Present. Se promovieron
+los 8 frames propios y se corrigió el retorno a Escritorio en 44 controles: 20 de escritorio que devolvían al
+Escritorio antiguo, 12 del rail de Clases tablet que estaban muertos y 12 de Clases móvil que apuntaban al
+lanzador antiguo. La ola dejó dos estados de límite por breakpoint (`345:968` y `345:1006`) que declaran
+honestamente que una superficie no existe todavía en ese tamaño, en vez de saltar a escritorio.
+
+La ola también corrigió el método de auditoría: contar por sección y clasificar frames por nombre producía
+falsos verdes. El método válido es un BFS desde cada frame de entrada, clasificando por ancho de frame.
+
+La aprobación no incluye runtime, `#46`, entrevistas IHC ni los módulos puente.
+
+### Siguiente módulo: `#157-O3 Office Home y Crear`
+
+Office sigue porque ya recibe la mayor parte de los handoffs de Escritorio y porque hereda dos deudas
+concretas: su selector propio conserva un rodeo por plantillas en `Documento` que rompe la simetría con los
+otros cuatro tipos, y no tiene superficies propias en 768 ni 390 px. Esa ola debe construirlas y sustituir
+los puentes `T-G` y `M-G` de Office por superficies gobernadas.
+
+### Contexto histórico de la autorización de `#157-O2`
 
 Escritorio sigue porque ya es el origen y retorno de Clases, pero su launcher candidate todavía no prueba
 una jornada docente propia. Esta ola deberá convertirlo en dock de herramientas más tablero accionable
@@ -453,7 +474,7 @@ Cerrar #157 no significa que todo el runtime esté implementado ni que la suite 
 
 ## 15. Gate de aprobación de esta versión
 
-**Estado:** versión 1.2 aprobada por instrucción explícita del owner el 2026-08-04.
+**Estado:** versión 1.4 vigente. La v1.2 fue aprobada por instrucción explícita del owner el 2026-08-04.
 
 La v1.2 registra la aprobación visual de Clases v1.3 enlazada en #159 y habilita preparar la ola
 `#157-O2 Escritorio`. No aprueba los puentes visuales de otros módulos, runtime de Clases, #46 ni

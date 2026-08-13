@@ -1,6 +1,6 @@
 # Matriz de navegacion del prototipo Figma Ola 2
 
-> **Estado:** grafo implementado y auditado por API Figma; pendiente únicamente la reproducción humana en modo Present antes de archivar.
+> **Estado:** vigente en v1.5. Clases (#159) y Escritorio (#163) tienen aprobación visual humana y frames promovidos; los módulos puente siguen `candidate` hasta su propia ola.
 > **Issue:** [#156](https://github.com/IgnacioBarEsp/PlanearIA/issues/156).
 > **Ground truth visual:** [archivo Figma Ola 2](https://www.figma.com/design/VBK5tK7EQS83tdTmtuBpI9/PlanearIA-%E2%80%94-UX-UI-Ola-2?node-id=87-47).
 > **Alcance:** prototipo, no runtime ni integraciones reales.
@@ -21,6 +21,12 @@
 > **Gate v1.4 (2026-08-04):** el owner aprobó Clases v1.3. Se promovieron 83 frames propios y se
 > conservaron 22 puentes/fallbacks externos como `candidate`. La aprobación no incluye runtime, #46 ni
 > validación IHC de campo.
+
+> **Gate v1.5 (2026-08-13):** el owner aprobó Escritorio en
+> [#163](https://github.com/IgnacioBarEsp/PlanearIA/issues/163#issuecomment-5286904053) tras recorrer los
+> tres breakpoints en Present. Se promovieron los 8 frames propios de Escritorio y se corrigió el retorno a
+> Escritorio en 44 controles. El método de auditoría cambió: alcanzabilidad desde cada frame de entrada, no
+> conteo por sección. La aprobación no incluye runtime, #46, entrevistas IHC ni los módulos puente.
 
 ## Contrato canonico
 
@@ -157,6 +163,86 @@ propios a `approved`. Office y los 22 puentes/fallbacks globales permanecen `can
 - Contrato Figma: `179:115`; sección mixta `177:115` nombrada como Clases approved con puentes candidate.
 - No se modificaron los frames de #156 ni se cerró #46.
 - La aprobación corresponde al prototipo de Clases; no prueba runtime, red, persistencia, IA o sync real.
+
+## Ampliacion v1.5 - Escritorio approved #163
+
+### Superficies
+
+| Breakpoint | Escritorio | Selector Nuevo archivo | Estado de limite |
+| --- | --- | --- | --- |
+| Escritorio 1440x960 | `307:966` | `310:3` | N/A: los editores existen en 1440 |
+| Tablet 768x1024 | `307:1046` | `310:69` | `345:1006` |
+| Movil 390x844 | `307:1078` | `310:106` | `345:968` |
+
+Los ocho frames viven en la seccion `307:965`, renombrada
+`Escritorio · approved v1.0 · #163 · puentes de otros modulos candidate`. Los puentes `M-G`, `T-G`, `D-G`,
+`D-2` y Office `257:951` siguen `candidate`: su repunte de destinos no los aprueba visualmente.
+
+### E-01 iniciar y atender
+
+| Breakpoint | Control | Destino | Retorno |
+| --- | --- | --- | --- |
+| Escritorio | Rail: Office, Clases, Asistente, Reportes, Diseno, Mensajeria, Agenda, Cuenta | `61:2`, `90:48`, `94:122`, `108:126`, `97:50`, `106:51`, `107:125`, `109:127` | `Nav hit · escritorio` de cada hub a `307:966` |
+| Escritorio | Tres filas de `Atencion` y `Ver agenda` | `151:123`, `151:203`, `94:122`, `107:125` | `Volver a Escritorio` a `307:966` |
+| Escritorio | Dock de seis herramientas | `151:123`, `151:203`, `151:366`, `97:50`, `90:48`, `94:122` | Rail del destino |
+| Tablet | Rail: Clases | `189:207` | `Nav hit · tablet · escritorio` a `307:1046` |
+| Tablet | Rail: los otros siete, y `abrir prioridad` | `345:1006` | `Volver` (BACK) e `Ir al Escritorio` a `307:1046` |
+| Movil | Barra: Office, Clases, Asistente, Mas | `274:958`, `192:292`, `274:983`, `274:1008` | `Nav hit · móvil · escritorio` y encabezado a `307:1078` |
+| Movil | `abrir prioridad` | `274:958` | Igual |
+
+El modulo activo se resalta y no navega a si mismo en los tres breakpoints.
+
+### E-02 crear tipo-primero
+
+| Breakpoint | Entrada | Selector | Cinco tipos | Retorno |
+| --- | --- | --- | --- | --- |
+| Escritorio | `307:998` | `310:3` | `151:123`, `151:203`, `151:366`, `97:50`, `94:122` | Cabecera a `307:966` |
+| Tablet | `310:143` | `310:69` | Los cinco a `345:1006` | `Back target` a `307:1046` |
+| Movil | `310:146` | `310:106` | Los cinco a `345:968` | `Back target` a `307:1078` |
+
+El chip de intencion escolar es descartable y aparece despues del tipo, no antes.
+
+### E-03 continuar y volver
+
+| Breakpoint | Fichas | Destino |
+| --- | --- | --- |
+| Escritorio | Planeacion, Asistencia, Material visual, Mensaje | `151:123`, `151:203`, `97:50`, `106:51` |
+| Tablet | Las cuatro | `345:1006` |
+| Movil | Planeacion y Mensaje | `192:292`, `274:1147` |
+
+### E-04 offline y sync
+
+Contrato textual sin hotspot en los tres breakpoints: el estado declara que el trabajo del dia queda
+disponible sin conexion y no afirma envio, guardado remoto, IA ni sincronizacion. La matriz proporcional de
+loading, vacio, error parcial, offline, sync pendiente y datos insuficientes vive en
+`openspec/changes/archive/*-reconstruir-escritorio-experiencia/evidencia/02-candidate-fidelity-and-navigation.md`.
+
+### Estado de limite por breakpoint
+
+`345:968` y `345:1006` son la respuesta honesta cuando el destino no existe en ese tamano. Declaran el
+limite, no simulan un editor y ofrecen `Volver` como accion `BACK` al origen exacto mas `Ir al Escritorio`
+del mismo breakpoint. Se sustituyen cuando la ola del modulo dueno construya su superficie real.
+
+### Verificacion por alcanzabilidad
+
+| Entrada | Frames alcanzables | Saltos de breakpoint | Destinos rotos | Controles candidate < 44 pt |
+| --- | ---: | ---: | ---: | ---: |
+| `307:966` | 36 | 0 | 0 | 0 |
+| `307:1046` | 29 | 0 | 0 | 0 |
+| `307:1078` | 37 | 0 | 0 | 0 |
+
+El metodo valido es un BFS desde cada frame de entrada siguiendo cada `reactions[].actions[]`, clasificando
+el dispositivo **por ancho de frame**: 390 movil, 768 tablet, 1440 escritorio. Contar por seccion o
+clasificar por nombre produce falsos verdes; los frames `T-G · <modulo> · tablet · desktop-fallback` se
+llaman tablet y miden 1440x960.
+
+### Limites que conserva esta version
+
+- Fuera de Clases no existe ninguna superficie de 768 px, y no existe ningun objeto ni editor en 390 px.
+- El selector propio de Office conserva un rodeo por plantillas en `Documento`; pertenece a `#157-O3`.
+- Diecisiete controles por debajo de 44 pt viven en frames del draft `#156` que el escritorio reutiliza.
+- Todo lo anterior esta en `debt-a40b2b029a63`, `debt-b1d35a5b5915` y
+  [#166](https://github.com/IgnacioBarEsp/PlanearIA/issues/166).
 
 ## Validaciones y limites honestos
 
