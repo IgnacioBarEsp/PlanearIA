@@ -62,6 +62,6 @@ Las tres vistas usan el HTML producido por el renderer oficial de GitHub y una h
 - SDD y GitNexus se trasladaron a la breve sección final como prácticas usadas por Ignacio.
 - Autor y contacto quedaron como información complementaria al final.
 
-## Limitación de publicación
+## Publicación
 
-La vista final dentro de `github.com` solo existirá después de publicar la rama. La evidencia actual usa el renderer oficial y assets locales; no afirma que el contenido no publicado ya sea visible en el repositorio remoto.
+La rama quedó publicada y el resultado puede revisarse en el [PR #168](https://github.com/IgnacioBarEsp/PlanearIA/pull/168). La evidencia Playwright previa conserva la comprobación en tres anchos; GitHub es la verificación remota final antes del merge.

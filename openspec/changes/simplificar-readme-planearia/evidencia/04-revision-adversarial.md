@@ -30,7 +30,7 @@
 | Severidad | Área | Hallazgo | Evidencia | Arreglo |
 |---|---|---|---|---|
 | Minor — resuelto | Readiness | La primera versión simplificada del Issue #167 no conservó los encabezados exactos requeridos por el gate. | Primer `openspec:ready:propose` en FAIL. | Se agregaron `Historia Original`, `Enriquecida`, `No objetivos` y `Rollback`; la repetición terminó en PASS. |
-| Pregunta/suposición | Publicación | La vista exacta dentro de github.com no existe mientras la rama siga local. | No hay commit, push o PR. | Verificar la página remota al publicar y adjuntar el `pr-link` antes de archive. |
+| Pregunta/suposición — resuelta | Publicación | La vista exacta dentro de github.com no existía mientras la rama seguía local. | Rama publicada y [PR #168](https://github.com/IgnacioBarEsp/PlanearIA/pull/168) disponible. | `pr-link` registrado en `readiness.json`. |
 
 No quedan Blockers, Majors o Minors abiertos.
 
@@ -40,4 +40,4 @@ No quedan Blockers, Majors o Minors abiertos.
 
 **PASS.** La implementación satisface la nueva spec y las tareas documentales sin cambiar runtime.
 
-El archive todavía no es aconsejable: falta publicar la rama, verificar el render dentro de github.com y registrar el `pr-link`. Esta frontera operativa no invalida el resultado local ni autoriza commit, push o PR por inferencia.
+El change queda listo para ejecutar el gate de archive. El PR #168 conserva la revisión remota y la integración hacia `development` sin mezclar la rama independiente de Escritorio/Figma.
