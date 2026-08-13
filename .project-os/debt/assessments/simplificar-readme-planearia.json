@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "flow": "simplificar-readme-planearia",
+  "date": "2026-08-13",
+  "kind": "feature",
+  "result": "clean",
+  "candidates": [],
+  "resolves": [],
+  "notes": "Assessment limpio de #167. El change modifica únicamente README, assets públicos y artefactos OpenSpec; no introduce deuda verificada en runtime, Figma, backend, datos, storage, sync, dependencias o seguridad. Los 401 del modo invitado y la verificación futura en github.com son límites preexistentes/operativos, no deuda creada por este flujo."
+}

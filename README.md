@@ -1,132 +1,108 @@
 # PlanearIA
 
-> **Estado:** desarrollo activo.
-> **Uso:** puerta de entrada para humanos e IAs.
-> **Fuente de verdad:** `CLAUDE.md`, `AGENTS.md`, `Documentacion/README.md`, `openspec/config.yaml`, codigo real.
-> **No usar para:** sustituir OpenSpec, specs archivadas o validacion tecnica.
+Creé PlanearIA para ayudar a los docentes a reducir su carga de trabajo, evitar tareas repetitivas y mantener todo organizado en un solo lugar.
 
-PlanearIA es una suite docente offline-first para profesores mexicanos. Integra herramientas familiares de trabajo escolar: Office Docente, Clases, AsistePLAN, DiseñaPLAN, ConectaPLAN, AgendaPLAN, ReportaPLAN, cuenta, seguridad y accesibilidad.
+## ¿Qué es PlanearIA?
 
-La promesa de producto es simple:
+PlanearIA es una plataforma para docentes que reúne planeaciones, materiales, clases, calendario y herramientas de inteligencia artificial dentro de una misma aplicación.
 
-> Creo algo, PlanearIA entiende que es, me sugiere donde va, lo asigno, le doy seguimiento y obtengo reportes sin salir de la app.
+La idea es que un profesor pueda crear un recurso, organizarlo, asignarlo y darle seguimiento sin tener que pasar por varias aplicaciones o volver a capturar la misma información. La IA funciona como apoyo: puede detectar contexto y proponer el siguiente paso, pero el docente conserva siempre la decisión final.
 
-## Stack
+La visión de PlanearIA es sencilla: que los docentes sigan trabajando como ya lo hacen, pero mucho mejor.
 
-- React Native 0.81.5 + Expo SDK 54 + TypeScript 5.9.
-- React Navigation 7.
-- Context + hooks como ViewModels.
-- AsyncStorage como persistencia local default.
-- Expo SQLite instalado como infraestructura opt-in, no default.
-- Backend Node serverless en `backend/api/index.js` + `backend/routes`.
-- MongoDB Atlas M0.
-- JWT con refresh sessions.
-- IA centralizada en `backend/lib/aiGateway.js`.
-- GitHub Actions para CI/CD y Vercel para demo/backend.
+## Capturas
 
-## Mapa Rapido
+### Aplicación actual
 
-```text
-PlanearIA/
-  App.tsx
-  src/                    App Expo: screens, hooks, context, services, sync, navigation, themes, tests
-  backend/                API serverless, rutas, auth, MongoDB, IA gateway
-  types/                  Tipos compartidos
-  Documentacion/          Fundamentos, planes, operacion, validacion, context engineering, archivo
-  context/                Ground truth, referencias, ejemplos reales y material de estudio
-  openspec/               Specs, changes y config SDD
-  .github/                Workflows, templates e instrucciones Copilot
-  .claude/ .codex/        Skills y comandos SDD versionados para agentes
-```
+La versión pública permite recorrer PlanearIA como invitado y conocer las áreas que ya forman parte de la aplicación.
 
-## Flujo De Trabajo Obligatorio
+![Inicio y onboarding de PlanearIA](assets/readme/planearia-actual-onboarding.webp)
 
-PlanearIA usa OpenSpec SDD para trabajo no trivial:
+_Inicio de PlanearIA y acceso a la creación de planeaciones con ayuda de IA._
 
-```text
-Issue GitHub
-  -> enrich con criterios observables
-  -> OpenSpec propose/design/spec/tasks
-  -> apply tarea por tarea
-  -> evidencia tecnica y visual
-  -> adversarial review
-  -> archive
-```
+![Sección Mi Contenido de PlanearIA](assets/readme/planearia-actual-contenido.webp)
 
-Reglas del flujo:
+_Mi Contenido reúne planeaciones, recursos y plantillas._
 
-- Todo trabajo formal nace como issue.
-- El issue se enriquece antes de proponer.
-- Las specs usan `SHALL` y escenarios WHEN/THEN.
-- Las tareas se marcan `[x]` solo con evidencia.
-- UI visible requiere QA con Playwright por breakpoint.
-- `openspec/specs/` es verdad de comportamiento; no se edita a mano.
+![Sección Clases de PlanearIA](assets/readme/planearia-actual-clases.webp)
 
-## Lectura Para IAs
+_Clases permite organizar grupos, alumnos, actividades y pendientes._
 
-1. `AGENTS.md` o `CLAUDE.md`.
-2. `Documentacion/README.md`.
-3. `Documentacion/05-context-engineering/README.md`.
-4. `openspec/config.yaml`.
-5. El plan, spec o carpeta `context/` correspondiente.
+### Visión en desarrollo
 
-## Reglas Criticas
+Estas pantallas pertenecen al prototipo beta de Figma. Muestran la dirección visual en la que estoy trabajando y todavía no representan la interfaz final de la aplicación.
 
-- Mantener monolito modular y MVVM pragmatico.
-- Datos academicos sincronizables usan `src/sync`.
-- Toda entidad multiusuario filtra por `userId`.
-- Toda IA pasa por backend y `backend/lib/aiGateway.js`.
-- Correcciones IA generan copia, borrador, diff o resumen revisable; no sobrescriben originales sin confirmacion.
-- SQLite sigue opt-in; no activar como default sin aprobacion, validacion y rollback.
-- No borrar claves `@planearia:*` sin migracion controlada.
-- Presupuesto bajo/cero: free tiers y soluciones simples primero.
-- No copiar codigo open source sin revisar licencia, stack y compatibilidad.
+![Visión del Escritorio Docente en computadora](assets/readme/planearia-vision-beta-escritorio.webp)
 
-## Comandos Locales
+_Propuesta del Escritorio Docente para computadora._
 
-```bash
-npm install
-npm run backend:install
-npm run web
-npm run backend:dev
-```
+![Visión del Escritorio Docente en tablet](assets/readme/planearia-vision-beta-tablet.webp)
 
-Validacion:
+_Adaptación del mismo escritorio para tablet._
 
-```bash
-npm run typecheck
-npm run lint -- --quiet
-npm test -- --runInBand
-npm run backend:check
-```
+![Visión del Escritorio Docente en móvil](assets/readme/planearia-vision-beta-movil.webp)
 
-CodeGraph:
+_Vista móvil con accesos rápidos, prioridades y trabajo reciente._
 
-```bash
-npm run codegraph:status
-npm run codegraph:explore -- "how does SyncContext reach entitySync and syncEngine?"
-```
+Puedes recorrer la propuesta completa en el [prototipo de Figma](https://www.figma.com/proto/VBK5tK7EQS83tdTmtuBpI9/PlanearIA-%E2%80%94-UX-UI-Ola-2?node-id=307-966&scaling=scale-down&content-scaling=fixed&page-id=60%3A2&hide-ui=1).
 
-## Documentos Principales
+## Funciones principales
 
-- `Documentacion/README.md`: mapa documental.
-- `Documentacion/05-context-engineering/README.md`: rutas de lectura para IAs.
-- `Documentacion/00-fundamentos/ARQUITECTURA.md`: arquitectura vigente.
-- `Documentacion/00-fundamentos/FLUJO_SINCRONIZACION.md`: sync offline-first.
-- `Documentacion/00-fundamentos/IA_CHATBOT_LLM.md`: IA y gateway.
-- `Documentacion/01-planes-maestros/meta_guia_planes.md`: SDD con OpenSpec.
-- `Documentacion/02-operacion/MCP_FLUJOS_PLANEARIA.md`: MCPs y QA Playwright.
+PlanearIA reúne distintas partes del trabajo docente:
+
+- Creación y organización de planeaciones.
+- Biblioteca de materiales, recursos y plantillas.
+- Gestión de clases, grupos, alumnos y actividades.
+- Herramientas para documentos, hojas de cálculo y presentaciones.
+- Asistente de IA con resultados revisables antes de guardar o asignar.
+- Trabajo offline y sincronización cuando vuelve la conexión.
+- Preferencias de tema, tamaño de texto y accesibilidad visual.
+
+Algunas de estas funciones ya se pueden recorrer en la demo y otras continúan en desarrollo como parte de la visión completa del producto.
+
+## Cómo probar PlanearIA
+
+### Desde el navegador
+
+Entra a [planearai.com](https://planearai.com) y selecciona el acceso como invitado. No necesitas crear una cuenta para recorrer la experiencia pública.
+
+### En Android
+
+Puedes instalar la versión más reciente desde [GitHub Releases](https://github.com/IgnacioBarEsp/PlanearIA/releases/latest). Abre la publicación más reciente y descarga el archivo con extensión `.apk`.
+
+Android puede pedir autorización para instalar aplicaciones que no provienen de Google Play. El APK se publica directamente desde este repositorio.
+
+## Tecnologías
+
+- React Native, Expo y TypeScript para la aplicación multiplataforma.
+- React Navigation, Context y hooks para navegación y estado.
+- Node.js para el backend y MongoDB para persistencia remota.
+- AsyncStorage y SecureStore para almacenamiento local y sesiones.
+- Jest y Testing Library para pruebas automatizadas.
+- Figma y Playwright para diseño y comprobación visual.
+- GitHub Actions y Vercel para integración, entregas y despliegue web.
+
+La arquitectura, las decisiones técnicas y la documentación de desarrollo se encuentran en [`Documentacion/README.md`](Documentacion/README.md).
+
+## Estado actual y próximos pasos
+
+PlanearIA se encuentra en desarrollo activo. La aplicación pública muestra el estado funcional actual, mientras que el prototipo de Figma sirve como guía para la siguiente etapa de su interfaz.
+
+Los próximos pasos están centrados en:
+
+- Llevar el Escritorio Docente del prototipo a la aplicación.
+- Conectar mejor las herramientas de creación, las clases y el asistente de IA.
+- Mantener una experiencia consistente en computadora, tablet y móvil.
+- Seguir mejorando el trabajo offline, la accesibilidad y las pruebas.
 
 ## Licencia
 
-Todos los derechos reservados. Copyright (c) 2026 Ignacio Barboza Espinoza.
+Este repositorio es público para consulta, pero no es open source. El código y los recursos conservan todos sus derechos.
 
-Este repositorio es publico para consulta y evaluacion, no es open source. La ausencia de un archivo
-`LICENSE` es deliberada: PlanearIA es un producto con intencion comercial y no se concede permiso
-para usar, copiar, modificar, distribuir ni crear obras derivadas del codigo o de los recursos.
-Para cualquier uso, escribe a itic_ibarboza@accitesz.com.
+## Autor
 
-## Version
+Soy **Ignacio Barboza Espinoza**, Desarrollador de Software Junior especializado en React Native, TypeScript y Node.js.
 
-- Actualizado: 2026-07-06.
-- Version documental: AI-Friendly First.
+Desarrollé PlanearIA como un proyecto personal en el que también adopté prácticas de diseño UX/UI, pruebas automatizadas y desarrollo guiado por especificaciones (SDD). Utilizo GitNexus para dar mejor contexto del código a mis herramientas de IA y hacer más eficiente mi flujo de trabajo.
+
+Contacto: [IgnacioBar.esp@gmail.com](mailto:IgnacioBar.esp@gmail.com)
