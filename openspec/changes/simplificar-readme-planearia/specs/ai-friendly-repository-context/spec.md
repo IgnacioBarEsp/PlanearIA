@@ -12,6 +12,10 @@ The repository SHALL provide separate, progressive entrypoints: `README.md` for 
 - **THEN** the first sections explain in plain Spanish why the author created PlanearIA, what the product is, how it looks, and which problems it is intended to reduce
 - **AND** the visitor is not addressed as a recruiter, evaluator, collaborator, or AI agent
 
+#### Scenario: Collaborator starts from README
+- **WHEN** a collaborator opens `README.md`
+- **THEN** it describes PlanearIA as a current connected teacher suite and links to active documentation without referencing missing documents
+
 #### Scenario: Technical reader needs more detail
 - **WHEN** a reader wants architecture, development, or operational information
 - **THEN** `README.md` links to `Documentacion/README.md` instead of duplicating the internal runbook
