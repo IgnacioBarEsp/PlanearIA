@@ -24,6 +24,10 @@
       "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/03-qa-anti-slop-adversarial.md — PASS CON HUECOS; no archive"
     },
     {
+      "id": "breakpoint-integrity",
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/05-correccion-fugas-breakpoint.md — auditoria por Plugin API con clasificacion estricta por ancho de frame: la seccion 307:965 pasa de 19 fugas a 0 en 61 aristas, 0 destinos rotos; Clases (113) y draft raiz (17) sin cambios, no se tocaron."
+    },
+    {
       "id": "docs-verification",
       "ref": "openspec validate --all --strict --no-interactive: 55/55 PASS; git diff --check PASS; agent:harness:check PASS (36 mirrors)."
     },
