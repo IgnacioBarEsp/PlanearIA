@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "issue": 163,
+  "change": "reconstruir-escritorio-experiencia",
+  "surfaces": [
+    "docs",
+    "ui"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/163"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish tras apply, aprobación visual y archive."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/03-qa-anti-slop-adversarial.md — PASS CON HUECOS; no archive"
+    },
+    {
+      "id": "breakpoint-integrity",
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/05-correccion-fugas-breakpoint.md — auditoria por alcanzabilidad (BFS desde cada frame de entrada) tras el recorrido humano del owner. Los tres breakpoints quedan coherentes: 0 saltos de breakpoint, 0 destinos rotos, 0 controles muertos reales y 0 controles candidate bajo 44 pt en escritorio, tablet y movil; ademas 0 secuencias \\n literales y 0 solapamientos en las cinco superficies candidate. Quedan fuera, documentados y cubiertos por debt-a40b2b029a63, debt-b1d35a5b5915 y el issue 166: 17 controles bajo 44 pt en frames del draft #156 y las aristas legacy ya no alcanzables desde el candidate."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "2026-08-13: openspec validate --all --strict --no-interactive 55/55 PASS; checkOpenSpecTldr OK; checkSourceEncoding OK; agent:harness:check OK con 36 mirrors; git diff --check limpio. No se ejecutan typecheck ni tests: el change no toca src/, backend/ ni dependencias."
+    },
+    {
+      "id": "web-http-200",
+      "ref": "evidencia/03-qa-anti-slop-adversarial.md y evidencia/04-runtime-http-200.log — HTTP 200 en 127.0.0.1:8081; runtime no editado."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "No ejecutado y no requerido para el cierre: este change no modifica runtime. La verificacion de navegacion se hizo por alcanzabilidad sobre el grafo Figma (evidencia/05) y el gate visual fue el recorrido humano en Present, no una captura automatica."
+    },
+    {
+      "id": "nielsen",
+      "ref": "evidencia/03-qa-anti-slop-adversarial.md (revision estatica) y evidencia/05-correccion-fugas-breakpoint.md (correcciones). Los huecos que dependian de Present los cerro el recorrido del owner. Sin severidad 3-4 abierta."
+    },
+    {
+      "id": "human-approval",
+      "ref": "APROBADO. El owner recorrio Figma Present en los tres breakpoints, emitio APROBADO CON CONDICIONES con dos hallazgos, ambos se corrigieron y reauditaron, y emitio el veredicto definitivo sin hallazgos el 2026-08-13: https://github.com/IgnacioBarEsp/PlanearIA/issues/163#issuecomment-5286904053"
+    },
+    {
+      "id": "runtime-handoff",
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/06-handoff-runtime.md — roles perceptuales mapeados a familias candidatas de ColorTokens sin copiar hex, drift terracota/azul declarado como decision del change runtime, contratos MVVM/AppShell/useBreakpoint/44pt/sync/userId/IA/legacy y proyecciones cross-context. No autoriza crear issue ni change de runtime."
+    },
+    {
+      "id": "figma-promotion",
+      "ref": "Seccion 307:965 renombrada 'Escritorio · approved v1.0 · #163 · puentes de otros modulos candidate'; promovidos 8 frames propios (307:966, 307:1046, 307:1078, 310:3, 310:69, 310:106, 345:968, 345:1006). Los puentes M-G, T-G, D-G, D-2 y Office 257:951 siguen candidate."
+    },
+    {
+      "id": "debt-assessment",
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/debt-assessment-input.json capturado con debt:capture; dos items minor transversales abiertos (debt-a40b2b029a63, debt-b1d35a5b5915) con seguimiento en el issue 166. Sin Blockers ni Majors."
+    }
+  ],
+  "rollback": {
+    "strategy": "Conservar nodos históricos y sección candidate; restaurar por historial Figma o frames previos y revertir artefactos por PR normal. Runtime, rutas, datos, storage, backend y src/sync permanecen intactos."
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/03-qa-anti-slop-adversarial.md"
+  },
+  "exceptions": []
+}

@@ -930,6 +930,75 @@
         "flow": "sanear-residuales-post-clases-uxui",
         "evidence": "evidencia/01-resolucion-residuales.md y evidencia/02-revision-adversarial.md: los estados conservan señales no-color; la validación funcional pertenece a DaltonismoContext y la reapertura exige un defecto cromático concreto."
       }
+    },
+    {
+      "id": "debt-a40b2b029a63",
+      "title": "El prototipo Figma no tiene superficies propias de tablet: 115 hotspots de tablet resuelven en frames de 1440 px",
+      "description": "El prototipo Figma no tiene superficies propias de tablet: 115 hotspots de tablet resuelven en frames de 1440 px",
+      "category": "technical-debt",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "artifact": "Figma VBK5tK7EQS83tdTmtuBpI9#seccion-177:115 y draft raiz 162:115",
+      "consequence": "Ningun modulo salvo Clases tiene una superficie de 768 px. Los siete frames T-G que sirven de puente para Office, Asistente, Reportes, Diseno, Mensajeria, Agenda y Cuenta se llaman tablet pero miden 1440x960, de modo que cada rail de una pantalla tablet aprobada de Clases entrega una superficie de escritorio: 92 aristas desde los doce frames tablet de la seccion de Clases, 14 aristas de regreso desde los propios puentes y 9 desde el Escritorio tablet del draft raiz. En una entrevista IHC con el prototipo, un docente en tablet cambiaria de tamano de pantalla al navegar, lo que contamina la lectura de cualquier hallazgo de navegacion. La limitacion estaba declarada en MATRIZ_NAVEGACION.md como fallback temporal, pero su escala no estaba medida ni el conteo era correcto: la auditoria previa clasificaba los frames por nombre.",
+      "remediation": "Cada ola de modulo (#157-O3 a #157-O12) construye la superficie de 768 px de su propio modulo y sustituye el puente T-G correspondiente. Mientras tanto, ninguna evidencia puede declarar paridad responsive de tablet, y toda auditoria de breakpoint debe clasificar por ancho de frame, nunca por nombre.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/05-correccion-fugas-breakpoint.md",
+          "date": "2026-08-13"
+        },
+        {
+          "type": "doc",
+          "ref": "openspec/changes/archive/2026-08-04-reconstruir-clases-experiencia/evidencia/12-puentes-globales-candidate.md declara el fallback desktop de tablet como temporal y visible, sin cuantificarlo.",
+          "date": "2026-08-04"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "reconstruir-escritorio-experiencia",
+          "date": "2026-08-13"
+        }
+      ],
+      "issue": null,
+      "status": "open",
+      "exception": null,
+      "createdAt": "2026-08-13",
+      "updatedAt": "2026-08-13",
+      "resolution": null
+    },
+    {
+      "id": "debt-b1d35a5b5915",
+      "title": "Quince hotspots moviles del prototipo abren un objeto de escritorio",
+      "description": "Quince hotspots moviles del prototipo abren un objeto de escritorio",
+      "category": "technical-debt",
+      "severity": "minor",
+      "transversal": true,
+      "critical": false,
+      "planOwner": "uxui-navegacion-global",
+      "artifact": "Figma VBK5tK7EQS83tdTmtuBpI9#274:958,274:983,274:1122,274:1147,274:1172,274:1197,274:1222 y 158:125..158:325",
+      "consequence": "Los hubs de modulo si existen en 390 px, pero ningun objeto ni editor existe en movil. El control Accion abrir prioridad movil de los siete puentes M-G de la seccion de Clases y de los ocho hubs moviles del draft raiz entrega frames de 1440x960. El docente entra a un modulo en movil, toca la primera accion util y sale del tamano. Esto no incumple la SHALL archivada de Clases, cuyas superficies propias M0 a M4 estan limpias, porque los puentes M-G se declararon candidate y fuera de la aprobacion de #159; por eso se registra como deuda y no como defecto de una spec aprobada.",
+      "remediation": "Cada ola de modulo construye en 390 px el objeto que su hub promete abrir, o sustituye la accion por un estado honesto de limite con salida al origen, como el que #163 introdujo en 345:968 para su propio alcance. Ninguna ola puede marcar como cumplido un destino de movil sin verificar el ancho del frame de destino.",
+      "evidence": [
+        {
+          "type": "doc",
+          "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/05-correccion-fugas-breakpoint.md",
+          "date": "2026-08-13"
+        }
+      ],
+      "occurrences": [
+        {
+          "flow": "reconstruir-escritorio-experiencia",
+          "date": "2026-08-13"
+        }
+      ],
+      "issue": null,
+      "status": "open",
+      "exception": null,
+      "createdAt": "2026-08-13",
+      "updatedAt": "2026-08-13",
+      "resolution": null
     }
   ]
 }
