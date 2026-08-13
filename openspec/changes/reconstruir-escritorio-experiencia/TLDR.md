@@ -29,8 +29,10 @@ Una auditoría posterior halló 19 hotspots que cruzaban de breakpoint contra la
 corrigieron con estados honestos. El recorrido humano del owner encontró que móvil salía al prototipo
 antiguo y tenía texto encimado. Se corrigieron etiquetas, layout, dieciocho controles sin reacción, los
 retornos y las áreas de toque, y se cerró tablet aguas abajo de Clases. Los tres breakpoints quedan sin
-saltos, sin destinos rotos y sin controles muertos. Quedan Present de confirmación, matriz maestra,
-promoción, handoff y archive, detenidos por la aprobación visual humana.
+saltos, sin destinos rotos y sin controles muertos. El owner recorrió Present y emitió aprobación con dos
+condiciones; ambas tenían la misma raíz —el retorno a Escritorio no apuntaba al candidate— y quedaron
+corregidas en 44 controles. Quedan el recorrido de confirmación, la matriz maestra, promoción, handoff y
+archive, detenidos por el veredicto definitivo.
 
 ## Resumen integral
 

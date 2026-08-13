@@ -45,7 +45,7 @@
     },
     {
       "id": "human-approval",
-      "ref": "Pendiente: el owner debe aprobar primero estos artefactos y después el candidate visual en #163."
+      "ref": "Parcial: el owner ejecuto el recorrido en Present el 2026-08-13 y emitio APROBADO CON CONDICIONES en #163, con dos hallazgos. Ambos se corrigieron y reauditaron (evidencia/05-correccion-fugas-breakpoint.md, cuarta iteracion). Falta el recorrido corto de confirmacion y el veredicto definitivo; no se promueve ningun frame hasta entonces."
     },
     {
       "id": "runtime-handoff",

@@ -287,3 +287,76 @@ Capturas: `capturas-breakpoint/escritorio-tablet-307-1046-final.png` y
 Las dos deudas permanecen **abiertas**. Su enunciado de fondo no cambio: el prototipo sigue sin tener
 superficies propias de tablet ni objetos en movil. Esta iteracion no las construyo, hizo honesto el limite.
 Cerrarlas exige las olas `#157-O3` a `#157-O12`.
+
+---
+
+# Cuarta iteracion — hallazgos del gate visual del owner
+
+**Fecha:** 2026-08-13.
+**Veredicto recibido:** `APROBADO CON CONDICIONES` en
+[#163](https://github.com/IgnacioBarEsp/PlanearIA/issues/163), con dos hallazgos. Movil se reporto sin
+errores.
+
+Los dos hallazgos resultaron ser **el mismo defecto de fondo**: el retorno a Escritorio seguia apuntando al
+Escritorio antiguo, o no apuntaba a ninguna parte.
+
+## Hallazgo A — "al elegir documento, el DOCX me regresa a Nuevo archivo"
+
+El sintoma es real y la cadena que lo produce es esta:
+
+1. El recorrido empieza tocando el rail. Cada modulo de escritorio tenia su control `Nav hit · escritorio`
+   apuntando a `87:47`, el **Escritorio de escritorio antiguo**, no al candidate `307:966`.
+2. Desde ese Escritorio antiguo, `Nuevo archivo` abre el **selector antiguo**, no el candidate `310:3`.
+3. En el selector antiguo, `Crear Documento nuevo` no abre el documento: pasa por
+   `Documento nuevo · plantillas · desde Escritorio`, cuya unica salida es `Volver al selector`.
+4. Los otros cuatro tipos si abren su editor directamente, que ofrece `Volver a Escritorio`.
+
+De ahi la asimetria que el owner observo. El selector **candidate** nunca tuvo ese rodeo: sus cinco tipos
+abren su destino directo.
+
+**Correccion:** 20 controles que devolvian a `87:47` ahora devuelven a `307:966`: los ocho `Nav hit ·
+escritorio` de los hubs, los ocho de las pantallas de detalle y los cuatro `Volver a Escritorio` del
+selector antiguo y de los tres editores. Con eso el Escritorio antiguo y el selector antiguo dejan de ser
+alcanzables desde el candidate, y el rodeo por plantillas desaparece del recorrido.
+
+Verificado despues del cambio: `Volver a Escritorio` del documento apunta a
+`Escritorio Docente · día · escritorio · candidate · #163`.
+
+## Hallazgo B — "en tablet, a Escritorio no deja darle clic"
+
+Son dos cosas distintas y solo una es defecto.
+
+**No es defecto:** en el frame de Escritorio tablet, `Escritorio` es el modulo activo. El contrato de
+navegacion dice que el modulo actual se indica con resaltado y **no navega a si mismo**. Comportamiento
+correcto; el resaltado esta presente.
+
+**Si es defecto:** en los **doce frames de Clases tablet** (`T0`-`T4`, sus estados y filtros) el control
+`Nav hit · tablet · escritorio` **no tenia ninguna reaccion**. Estaba muerto. Por eso la unica forma de
+volver era el rodeo que el owner describe: entrar a la pantalla de limite y usar `Ir al Escritorio`.
+
+**Correccion:** los doce controles apuntan ahora a `307:1046`.
+
+## Hallazgo adicional detectado al verificar
+
+En los doce frames de Clases movil, `Nav hit · móvil · escritorio` seguia apuntando a `198:809`, el
+lanzador antiguo, mientras `Header back hit · móvil · 44pt` ya apuntaba al candidate. Dos controles de
+inicio en la misma pantalla llevaban a Escritorios distintos. Unificados a `307:1078`.
+
+## Verificacion final
+
+| Entrada | Frames alcanzables | Saltos de breakpoint | Destinos rotos | Escritorio antiguo alcanzable | Aristas al Escritorio antiguo | Controles candidate < 44 pt |
+| --- | ---: | ---: | ---: | --- | ---: | ---: |
+| Escritorio `307:966` | 36 | **0** | **0** | no | **0** | **0** |
+| Tablet `307:1046` | 29 | **0** | **0** | no | **0** | **0** |
+| Movil `307:1078` | 37 | **0** | **0** | no | **0** | **0** |
+
+Los 50 controles sin reaccion que quedan en frames candidate y de Clases son, uno por uno, el **modulo
+activo** de su propia pantalla, mas un frame de auditoria A11Y que no forma parte del recorrido. Ninguno es
+un control muerto: por contrato el modulo actual no navega a si mismo.
+
+## Lo que queda fuera y por que
+
+`Nuevo archivo · selector · escritorio · draft` —el selector propio de **Office**, no el de Escritorio—
+conserva el rodeo por `Documento nuevo · plantillas · escritorio`. Se alcanza estando dentro de Office y
+pulsando `Nuevo archivo`, que es el flujo interno de Office. Corregirlo pertenece a `#157-O3 Office Home y
+Crear`, no a esta ola: #163 no rediseña Office. Queda anotado aqui para que esa ola lo herede.
