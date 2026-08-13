@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "issue": 167,
+  "change": "simplificar-readme-planearia",
+  "surfaces": ["docs", "ui"],
+  "validations": ["openspec-strict", "harness-parity"],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/167"
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "evidencia/04-revision-adversarial.md"
+    },
+    {
+      "id": "docs-verification",
+      "ref": "evidencia/02-readme-implementacion-y-qa.md"
+    },
+    {
+      "id": "web-http-200",
+      "ref": "evidencia/01-fuentes-y-capturas.md"
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "evidencia/playwright/readme-desktop-1440.webp, evidencia/playwright/readme-tablet-768.webp, evidencia/playwright/readme-mobile-390.webp"
+    },
+    {
+      "id": "nielsen",
+      "ref": "evidencia/02-readme-implementacion-y-qa.md"
+    }
+  ],
+  "rollback": {
+    "strategy": "Revertir el commit/PR documental y retirar únicamente los assets nuevos; runtime, Figma, datos y deploy permanecen intactos."
+  },
+  "adversarialReview": {
+    "ref": "evidencia/04-revision-adversarial.md"
+  },
+  "exceptions": []
+}
