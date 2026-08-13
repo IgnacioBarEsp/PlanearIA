@@ -25,7 +25,7 @@
     },
     {
       "id": "breakpoint-integrity",
-      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/05-correccion-fugas-breakpoint.md — auditoria por Plugin API con clasificacion estricta por ancho de frame: la seccion 307:965 pasa de 19 fugas a 0 en 61 aristas, 0 destinos rotos; Clases (113) y draft raiz (17) sin cambios, no se tocaron."
+      "ref": "openspec/changes/reconstruir-escritorio-experiencia/evidencia/05-correccion-fugas-breakpoint.md — auditoria por alcanzabilidad (BFS desde cada frame de entrada) tras el primer recorrido humano del owner: movil 0 saltos de breakpoint, 0 puertas al draft y 0 chips muertos; escritorio 0 saltos; tablet conserva 106 aguas abajo de Clases tablet, cubiertos por debt-a40b2b029a63 y el issue 166."
     },
     {
       "id": "docs-verification",

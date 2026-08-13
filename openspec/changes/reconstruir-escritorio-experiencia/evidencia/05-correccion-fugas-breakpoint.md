@@ -122,3 +122,93 @@ reporta PASS sin pausa. Una tercera deuda transversal dispararia saneamiento.
 - Los frames siguen `candidate`. No se promovio ninguno.
 - El rollback no cambia: historial automatico de Figma, frames historicos sin inicio activo, seccion
   `307:965` identificada por modulo, estado y version, y reversion documental por PR.
+
+---
+
+# Segunda iteracion — hallazgos del recorrido humano del owner
+
+**Fecha:** 2026-08-13.
+
+El owner recorrio los tres breakpoints en Figma Present. Desktop y tablet se comportaron bien; **movil
+seguia entregando rutas de escritorio** y el frame movil tenia texto encimado. Los hallazgos eran reales y
+la primera iteracion no los cubria: se habia auditado por seccion, no por recorrido.
+
+## Cambio de metodo: auditar por alcanzabilidad, no por seccion
+
+Contar fugas por seccion mide si el change ensucia su propio patio. No mide lo que el docente vive, porque
+el recorrido sale de la seccion en el primer toque. La auditoria valida es un BFS desde cada frame de
+entrada siguiendo cada `reactions[].actions[]`, que responde: partiendo de aqui, ¿existe algun camino que
+me saque de mi tamano de pantalla?
+
+## Defectos encontrados y corregidos
+
+### 1. Texto del frame movil `307:1078`
+
+- Seis etiquetas del launcher contenian la secuencia literal `\n` en vez de un salto de linea real
+  (`308:28`, `308:30`, `308:32`, `308:34`, `308:36`, `308:38`). Se renderizaban como
+  `Notas\nDocumento`. Corregidas a saltos reales.
+- `Presenta / Presentacion` era redundante; ahora es `Presenta / Laminas`, alineado con el lenguaje del
+  plan para PresentaPLAN.
+- `Subtitulo · movil` y la accion `Nuevo archivo` se solapaban en el eje x entre 250 y 354 px. Resuelto
+  reflowando la cabecera completa.
+- La accion `Nuevo archivo · movil` medía 116x32: por debajo del minimo de 44 pt que exige la propia spec.
+  Ahora mide 168x44.
+- El titulo bajó de 32 a 28 px con altura real de dos lineas, y toda la columna se recalculo. Verificacion
+  automatica de solapamientos: cero pares que se cruzan, descontando contenedores y sus hijos.
+
+### 2. Doce chips del launcher sin ninguna reaccion
+
+`Launcher · movil · 1..6` y `Launcher · tablet · 1..6` no tenian reacciones: eran controles muertos. La
+spec del change exige que activar una herramienta del launcher lleve al modulo correspondiente del mismo
+breakpoint. Se conectaron los doce; los que no tienen superficie propia en su tamano resuelven en el estado
+honesto de su breakpoint.
+
+### 3. El recorrido movil salia al prototipo antiguo
+
+Tres puertas encadenadas, ninguna visible desde un conteo por seccion:
+
+| Puerta | Antes | Ahora |
+| --- | --- | --- |
+| Rail movil del candidate | hubs del draft `158:x`, cuya accion principal abre escritorio | puentes candidate `274:x` y Clases movil aprobado `192:292` |
+| Accion principal de los 7 puentes `M-G` | frames de escritorio 1440x960 | estado honesto `345:968` |
+| `Wordmark` e `Inicio` de los 8 puentes `M-G` | lanzador `198:809`, que reabre el draft | Escritorio candidate `307:1078` |
+
+### 4. Ampliacion de superficie autorizada por el owner
+
+Doce pantallas moviles **aprobadas** de Clases (`M0`–`M4`, sus estados y filtros), un frame de auditoria
+de accesibilidad y la accion del lanzador `M-1` devolvian al Escritorio movil **antiguo** `164:115`. No fue
+un error de #159: cuando Clases se aprobo, `164:115` era el unico Escritorio movil. Es un desfase que
+aparece porque #163 introduce un Escritorio nuevo.
+
+El owner autorizo explicitamente repuntar esas 15 aristas a `307:1078`. **Solo cambia el destino del
+retorno**: no se movio, redimensiono ni reescribio ningun frame aprobado, y ninguna promocion cambio de
+estado. El gate visual de #163 cubre por tanto tambien el retorno de Clases movil.
+
+## Verificacion final por alcanzabilidad
+
+BFS desde cada frame de entrada del candidate:
+
+| Entrada | Frames alcanzables | Saltos de breakpoint | Puertas al draft `#156` | Chips muertos |
+| --- | ---: | ---: | ---: | ---: |
+| Movil `307:1078` | 38 | **0** | **0** | **0** |
+| Escritorio `307:966` | 39 | **0** | 27 | **0** |
+| Tablet `307:1046` | 74 | **106** | 36 | **0** |
+
+- **Movil queda cerrado**: ningun camino sale del tamano ni del conjunto candidate. Los frames alcanzables
+  bajaron de 86 a 38 justamente porque ya no se cae al prototipo antiguo.
+- **Escritorio no tiene fugas.** Sus 27 entradas al draft `#156` son intencionales y todas de 1440 px: el
+  candidate reutiliza deliberadamente las superficies de escritorio existentes.
+- **Tablet conserva 106 saltos**, todos aguas abajo de Clases tablet: `T0`–`T4` y sus estados entregan los
+  siete frames `T-G`, que se llaman tablet y miden 1440x960. El Escritorio tablet candidate ya no fuga por
+  si mismo. Cerrar esto exige repuntar 7 controles en 13 frames aprobados de Clases tablet, lo que cambia
+  lo que el docente ve al navegar entre modulos, no solo un retorno. Queda como decision abierta del owner
+  y sigue cubierto por `debt-a40b2b029a63` y [#166](https://github.com/IgnacioBarEsp/PlanearIA/issues/166).
+
+Captura del frame movil corregido: `capturas-breakpoint/escritorio-movil-307-1078-corregido.png`.
+
+## Efecto sobre la deuda registrada
+
+`debt-b1d35a5b5915` cubria 15 aristas moviles: 7 en los puentes `M-G` y 8 en los hubs del draft raiz. Las 7
+de los puentes quedan corregidas y las 8 del draft dejan de ser alcanzables desde el candidate, aunque
+siguen existiendo en el recorrido legacy. El item permanece **abierto** porque su alcance no se resolvio por
+completo; el motor de deuda no admite resoluciones parciales y no se fuerza un cierre que no ocurrio.
