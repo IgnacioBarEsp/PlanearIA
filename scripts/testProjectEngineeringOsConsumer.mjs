@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 import { preArchiveGate, preProposeGate } from "create-project-engineering-os/debt";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const EXPECTED_VERSION = "0.1.5";
+const EXPECTED_VERSION = "0.1.6";
 // Declaracion unica del contrato de consumo: no se deriva del owner de este repositorio, que puede diferir
 // en un fork legitimo. Si el upstream se renombra, esta constante deja de coincidir y el contrato falla.
 const EXPECTED_UPSTREAM = "IgnacioBarEsp/project-engineering-os";

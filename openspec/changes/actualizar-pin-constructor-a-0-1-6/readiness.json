@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "issue": 171,
+  "change": "actualizar-pin-constructor-a-0-1-6",
+  "surfaces": [
+    "docs",
+    "harness"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity",
+    "opsx-patch"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/171"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish tras el archive."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "La verificacion previa a fijar el pin funciono como revision adversarial del propio change: comparo los tarballs publicados 0.1.4 y 0.1.5, detuvo la subida al encontrar que 0.1.5 rompe el bootstrap y forzo cambiar el destino a 0.1.6. Ademas corrigio una decision de design equivocada: derivar el owner esperado de una fuente unica del repositorio habria hecho fallar en falso a un fork legitimo. Registrado en design.md decision 2 y en tasks 1.4."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "2026-08-17: openspec validate --all --strict --no-interactive 56/56 PASS; checkOpenSpecTldr OK; checkSourceEncoding OK; agent:harness:check OK con 36 mirrors; constructor:check PASS con 12 artefactos y 50 filas; test:constructor-docs PASS; git diff --check limpio."
+    },
+    {
+      "id": "harness-verification",
+      "ref": "test:project-os-contract PASS con 0.1.6: cuatro fuentes de version coherentes, bins, exports, bootstrap, idempotencia, sync/check, doctor en PASS y debt en PASS. La verificacion nueva de identidad del upstream pasa en positivo y falla en los dos casos negativos probados: owner anterior y campos ausentes."
+    },
+    {
+      "id": "dependency-cadence",
+      "ref": "Documentacion/02-operacion/CADENCIA_DEPENDENCIAS.md, seccion 'Subidas deliberadas de pins directos (fuera de los tres buckets)': el salto no se disfraza de parche de seguridad porque los tres buckets tipifican advisories y este es por identidad. Registra motivo, por que no fue a 0.1.5, evidencia y control instalado."
+    },
+    {
+      "id": "upstream-findings",
+      "ref": "Dos defectos del proyecto upstream reportados con reproduccion: project-engineering-os#16 (la release 0.1.5 deja blueprint/core/package-lock.json en 0.1.4 y todo proyecto arrancado con ella falla su propio release.identity) y project-engineering-os#17 (el gate de aprobacion de npm-publish puede superar la retencion de 7 dias del artefacto y dejar la release impublicable). El primero se resolvio publicando 0.1.6."
+    },
+    {
+      "id": "debt-assessment",
+      "ref": "openspec/changes/actualizar-pin-constructor-a-0-1-6/evidencia/debt-assessment-input.json capturado con debt:capture, resultado clean, sin candidatos. Registro y presupuesto por plan sin cambios."
+    },
+    {
+      "id": "human-approval",
+      "ref": "El owner eligio la opcion de publicar 0.1.6 en vez de conservar 0.1.4 o aceptar una excepcion temporal, y ejecuto la publicacion aprobando el entorno npm-publish. Decision registrada en el hilo de #171."
+    },
+    {
+      "id": "fixtures",
+      "ref": "El contrato de consumidor ejercita dos clases de fixture. Uno de extremo a extremo: arranca un proyecto real en un directorio temporal con project-os bootstrap, enlaza el paquete, repite el bootstrap para probar idempotencia y le exige sync/check IN_SYNC, doctor en PASS con release.identity en PASS y debt check en PASS. Ese fixture es el que detecto el defecto de 0.1.5. Y dos fixtures sinteticos en negativo para la verificacion de identidad nueva: un paquete con el owner anterior en repository, homepage y bugs, que debe fallar nombrando el campo, y un paquete sin esos campos, que tampoco puede pasar en silencio. Ambos se afirman con assert.throws y un patron de mensaje, no solo comprobando que lance."
+    }
+  ],
+  "rollback": {
+    "strategy": "Revertir el PR restaura el pin 0.1.4, el lockfile previo y la version esperada del contrato de consumidor. Los campos nuevos del contrato son aditivos y su retiro no altera las aserciones existentes. Ningun estado de .project-os cambia por la subida: registro y assessments permanecen en git. La documentacion de cadencia y de planes se revierte con el mismo PR."
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/actualizar-pin-constructor-a-0-1-6/design.md decision 2 y tasks.md 1.4"
+  },
+  "exceptions": []
+}

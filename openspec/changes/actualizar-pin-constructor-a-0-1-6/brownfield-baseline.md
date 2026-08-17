@@ -30,18 +30,21 @@ nada señalara la discrepancia.
 
 ## Comportamiento objetivo
 
-El pin queda en `0.1.5`, cuya identidad publicada corresponde al owner vigente. El contrato de consumidor
-verifica, además de la versión, que `repository.url`, `homepage` y `bugs.url` del paquete instalado resuelvan
-al owner vigente, derivando el valor esperado de una fuente única y sin consultar la red. Una discrepancia
-produce `FAIL`.
+El pin queda en `0.1.6`, cuya identidad publicada corresponde al owner vigente y cuya plantilla de bootstrap
+es internamente coherente. El contrato de consumidor verifica, además de la versión, que `repository.url`,
+`homepage` y `bugs.url` del paquete instalado resuelvan al upstream esperado, declarado una sola vez como
+constante y sin consultar la red. Una discrepancia produce `FAIL`.
 
-Si `0.1.5` altera el comportamiento de gates, harness o motor de deuda, el objetivo válido es conservar
-`0.1.4` con la limitación documentada y la verificación de identidad igualmente implementada.
+El destino no fue `0.1.5`, que era la última publicada al proponer el change. La verificación previa
+encontró que esa release fija `blueprint/core/package.json` en `0.1.5` y deja su lockfile en `0.1.4`, de modo
+que todo proyecto arrancado con ella falla su propio `release.identity`. Se reportó upstream, el owner
+publicó `0.1.6` y el destino se movió.
 
 ## Compatibilidad legacy
 
 El pin exacto se conserva como práctica: no se abre a rango ni a `latest`, que el contrato prohíbe como
-identidad reproducible. No se salta a `0.1.6`, presente en el repositorio upstream pero no publicada en npm.
+identidad reproducible. `0.1.6` estaba en el repositorio upstream sin publicar cuando se propuso el change; se
+publicó durante la implementación y por eso pudo fijarse.
 El estado de `.project-os/` no se migra ni se reescribe; los assessments y el registro de deuda permanecen
 tal cual. Los archivos administrados por el constructor conservan su ownership.
 
@@ -62,6 +65,13 @@ tal cual. Los archivos administrados por el constructor conservan su ownership.
   Espinoza"`.
 - El repositorio upstream va en `0.1.6` y una búsqueda de código no devuelve referencias a `RitualBoat`.
 - Gate `npm run openspec:ready:propose -- --issue 171`: PASS 10/10.
+- Comparación de los tarballs publicados `0.1.4` y `0.1.5`: sólo difieren seis archivos y ninguno está en
+  `bin/`, `src/`, `scripts/` ni `schema/`.
+- Defecto de `0.1.5` reportado en
+  [project-engineering-os#16](https://github.com/IgnacioBarEsp/project-engineering-os/issues/16) y corregido
+  con la publicación de `0.1.6`.
+- Con `0.1.6` fijada: `test:project-os-contract`, `constructor:check` y `debt:check` en PASS, con el
+  presupuesto de deuda por plan sin cambios.
 
 ## Fuera de alcance
 

@@ -107,6 +107,38 @@ Estado 2026-07-23 (13 moderate, todas gated por `expo@57` / `expo-dev-client@57`
 `expo-notifications`, `jest-expo`, `uuid`, `xcode`. Todas son tooling dev/build/CLI o
 runtime que solo se mueve con el bump de SDK; no se corrigen con overrides sin romper SDK 54.
 
+## Subidas deliberadas de pins directos (fuera de los tres buckets)
+
+Los tres buckets tipifican advisories de seguridad. Una subida de un pin directo motivada por otra cosa
+—identidad, corrección de la propia release, contrato roto— no encaja en ninguno y tampoco debe colarse
+como si fuera un parche de seguridad. Se registra aquí, con la misma exigencia de evidencia.
+
+Procedimiento: instalar la versión destino **sin consolidar el pin**, comparar el contenido publicado contra
+la versión vigente, correr las verificaciones de contrato que apliquen y sólo entonces fijar. Una diferencia
+de comportamiento detiene la subida y se reporta upstream.
+
+### `create-project-engineering-os`: `0.1.4` -> `0.1.6` (#171, 2026-08-17)
+
+**Motivo.** La release `0.1.4` declaraba `repository`, `homepage`, `bugs` y `author` con el handle de GitHub
+anterior. La migración de handle (#165) no podía tocar un paquete ya publicado en npm, así que el pin era el
+último punto de la cadena de herramientas apuntando a una identidad inexistente.
+
+**Por qué no fue a `0.1.5`.** Era la última publicada al proponer el change y corregía la identidad, pero la
+verificación previa encontró un defecto propio: fija `blueprint/core/package.json` en `0.1.5` y deja
+`blueprint/core/package-lock.json` en `0.1.4`. Como el bootstrap escribe ambos archivos en el proyecto
+generado, todo proyecto arrancado con esa versión falla su propio `release.identity`. Reportado en
+[project-engineering-os#16](https://github.com/IgnacioBarEsp/project-engineering-os/issues/16); el owner
+publicó `0.1.6` con ambos archivos coherentes.
+
+**Evidencia.** La comparación de los tarballs publicados `0.1.4` y `0.1.5` muestra seis archivos distintos y
+ninguno en `bin/`, `src/`, `scripts/` ni `schema/`: son releases de identidad, sin cambio de comportamiento
+del CLI. Con `0.1.6` fijada, `npm run test:project-os-contract`, `npm run constructor:check` y
+`npm run debt:check` pasan, y el presupuesto de deuda por plan queda idéntico al previo.
+
+**Control que deja instalado.** El contrato de consumidor ahora verifica que `repository.url`, `homepage` y
+`bugs.url` de la release instalada resuelvan al upstream esperado, declarado una sola vez como constante.
+Coincidir en el número de versión deja de ser prueba suficiente de identidad.
+
 ## Dependencia xlsx (fuera del registro npm)
 
 `xlsx` se instala desde la copia vendorizada `vendor/sheetjs/xlsx-0.20.3.tgz`, descargada del tarball

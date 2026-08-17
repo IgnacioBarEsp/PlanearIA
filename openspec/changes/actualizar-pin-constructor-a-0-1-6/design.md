@@ -10,8 +10,9 @@ El hueco está en otra dimensión: ninguna de esas comprobaciones mira `reposito
 coincide en las cuatro fuentes, todos los checks pasan en verde. El renombrado de handle atravesó el
 repositorio entero sin que nada señalara que la dependencia fijada seguía apuntando a un owner inexistente.
 
-El upstream ya publicó `0.1.5` con la identidad corregida, así que la parte de datos está resuelta. Lo que
-queda es la subida deliberada y la verificación que impide que esto vuelva a pasar callado.
+El upstream corrigió la identidad en `0.1.5`, pero esa release llegó con un defecto propio en la plantilla
+de bootstrap, así que el destino terminó siendo `0.1.6`. Lo que queda es la subida deliberada y la
+verificación que impide que esto vuelva a pasar callado.
 
 ## Goals / Non-Goals
 
@@ -67,14 +68,16 @@ declarada no corresponde al owner vigente, el contrato falla.
 
 **5. La subida se verifica antes de fijarse.**
 El orden es instalar, correr `constructor:check`, `test:project-os-contract` y `debt:check`, y sólo entonces
-consolidar. Si algo cambia de comportamiento, el resultado válido del change es documentar la limitación y
-quedarse en `0.1.4`, no forzar el número.
+consolidar. Esta decisión se pagó sola: `0.1.5` pasaba `debt:check` y era idéntica en `bin/`, `src/`,
+`scripts/` y `schema/`, pero rompía el bootstrap de cualquier proyecto nuevo. Sin verificar antes de fijar,
+el pin habría entrado en verde aparente. El resultado válido ante un bloqueo sigue siendo documentar la
+limitación y no forzar el número; aquí el owner publicó una release correcta y el change avanzó a `0.1.6`.
 
 ## Risks / Trade-offs
 
 | Riesgo | Trade-off asumido |
 | --- | --- |
-| `0.1.5` altera gates, harness o motor de deuda | Se acepta que el change pueda cerrar sin subir la versión, documentando por qué. Un pin viejo con identidad stale es peor que un cierre honesto, pero mucho mejor que un cierre que rompe el motor de deuda |
+| La release destino altera gates, harness o motor de deuda | Ocurrió con `0.1.5`, aunque no en el motor de deuda sino en la plantilla de bootstrap. Se aceptó detener la subida, reportar upstream y esperar `0.1.6` en vez de forzar el número |
 | La aserción de identidad puede fallar en un fork legítimo | Se acepta: un fork que quiera otro owner ajusta la fuente única de la que se deriva el valor esperado, y ese ajuste es visible en el diff |
 | Verificar sólo lo instalado no detecta una release futura mal publicada | Se acepta: detectarlo exigiría red en CI. El contrato cubre lo que este repositorio realmente consume |
 | Un salto de patch parece trivial y podría normalizar subir sin verificar | Mitigado porque el registro de cadencia exige razón y evidencia por salto, y el criterio de aceptación obliga a correr los tres checks |
