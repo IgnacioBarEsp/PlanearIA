@@ -5,9 +5,11 @@
 El contrato de consumidor SHALL verificar que los metadatos de identidad de la release instalada
 —`repository`, `homepage` y `bugs`— apunten al owner vigente del upstream que administra los archivos.
 La verificación SHALL ejecutarse sobre el paquete instalado en el árbol de dependencias, sin consultar la
-red, y SHALL derivar el owner esperado de una fuente única del repositorio en vez de repetirlo como literal.
-Una discrepancia SHALL producir `FAIL`. El contrato SHALL NOT tratar la coincidencia de número de versión
-entre manifiesto, lockfile, instalación y CLI como prueba suficiente de identidad.
+red. El upstream esperado SHALL declararse una sola vez en el contrato de consumidor, junto a la versión
+esperada, y SHALL NOT derivarse de la identidad del propio repositorio consumidor, que puede diferir en un
+fork legítimo. Una discrepancia SHALL producir `FAIL` nombrando el campo y el valor encontrado. El contrato
+SHALL NOT tratar la coincidencia de número de versión entre manifiesto, lockfile, instalación y CLI como
+prueba suficiente de identidad.
 
 #### Scenario: La release fijada declara un owner que ya no existe
 

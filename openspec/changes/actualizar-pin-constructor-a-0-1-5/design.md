@@ -38,10 +38,24 @@ afirma "esta es exactamente la release que administra mis archivos". La identida
 afirmación. Además el test ya lee `publicPackage`, así que la aserción se suma a tres líneas de distancia de
 las que existen.
 
-**2. El owner esperado se deriva, no se escribe a mano en dos sitios.**
-Escribir `IgnacioBarEsp` como literal en el script crearía la misma clase de deuda que este change corrige:
-un dato de identidad duplicado que un renombrado futuro dejaría stale. El valor esperado se toma de una
-única fuente ya presente en el repositorio y se compara contra los campos del paquete instalado.
+**2. El upstream esperado se declara una vez, como constante, en el contrato de consumidor.**
+
+La intención original era derivarlo de una fuente única ya presente en el repositorio, para no repetir un
+dato de identidad. Al implementar quedó claro que esa fuente no existe: `package.json` no declara
+`repository`, y lo único disponible es `.project-os/debt/config.json` con `github.repo`, que identifica a
+**PlanearIA**, no al upstream. Derivarlo de ahí haría fallar en falso a cualquier fork que cambie su propio
+owner y siga consumiendo el mismo CLI, porque confunde "de quién es este repositorio" con "de quién es la
+herramienta que consumo".
+
+El upstream se declara entonces como constante nombrada junto a `EXPECTED_VERSION`, en el archivo cuyo
+trabajo es exactamente afirmar qué release se consume. No es identidad duplicada: es la declaración única
+del contrato de consumo, igual que el número de versión, que ya vive ahí como literal sin que nadie lo
+considere deuda.
+
+El temor original —que un renombrado futuro dejara la constante stale— se invierte al mirarlo bien: si el
+upstream se renombra, la constante deja de coincidir y **el contrato falla ruidosamente**. Eso es la alarma
+que este change busca instalar, no la deuda que buscaba evitar. Un literal que provoca un fallo visible es
+lo contrario de un dato stale silencioso.
 
 **3. La comprobación es sobre el paquete instalado, no sobre el registro npm.**
 Consultar npm en cada corrida haría el test dependiente de red y lo volvería inestable en CI. Lo que importa
