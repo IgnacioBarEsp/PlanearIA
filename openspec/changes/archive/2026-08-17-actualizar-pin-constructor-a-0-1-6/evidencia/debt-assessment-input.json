@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "flow": "actualizar-pin-constructor-a-0-1-6",
+  "date": "2026-08-17",
+  "kind": "feature",
+  "result": "clean",
+  "candidates": [],
+  "resolves": [],
+  "notes": "Subida deliberada del pin del constructor de 0.1.4 a 0.1.6 y verificacion de identidad del upstream en el contrato de consumidor. No se introduce deuda en PlanearIA: el registro y los assessments quedan byte a byte identicos y el presupuesto por plan no cambia. Los dos defectos encontrados durante el flujo pertenecen al proyecto upstream, no a este repositorio, y se reportaron ahi como project-engineering-os#16 (blueprint/core/package-lock.json quedo en 0.1.4 en la release 0.1.5) y project-engineering-os#17 (el gate de aprobacion de npm-publish puede superar la retencion del artefacto). Registrarlos como deuda de PlanearIA seria atribuir a este repositorio un problema que no puede resolver ni gobernar."
+}

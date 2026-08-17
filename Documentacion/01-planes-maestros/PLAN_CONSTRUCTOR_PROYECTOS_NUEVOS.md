@@ -1,10 +1,10 @@
 # Plan Maestro: Constructor reutilizable de proyectos nuevos
 
-> **Estado:** activo como blueprint; Ola 0 cerrada y distribución pública `0.1.4` operativa.
+> **Estado:** activo como blueprint; Ola 0 cerrada y distribución pública operativa. Consumidor fijado en `0.1.6` desde #171.
 > **Issues:** núcleo [#103](https://github.com/IgnacioBarEsp/PlanearIA/issues/103) y distribución
 > [#126](https://github.com/IgnacioBarEsp/PlanearIA/issues/126).
 > **Upstream:** [`IgnacioBarEsp/project-engineering-os`](https://github.com/IgnacioBarEsp/project-engineering-os).
-> **Paquete:** [`create-project-engineering-os@0.1.4`](https://www.npmjs.com/package/create-project-engineering-os/v/0.1.4).
+> **Paquete:** [`create-project-engineering-os@0.1.6`](https://www.npmjs.com/package/create-project-engineering-os/v/0.1.6).
 > **Change de distribución:** `openspec/changes/publish-project-engineering-os/`.
 > **Snapshot de evidencia:** 2026-07-23.
 > **Owner:** IgnacioBarEsp.

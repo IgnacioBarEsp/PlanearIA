@@ -17,7 +17,10 @@ import { fileURLToPath } from "node:url";
 import { preArchiveGate, preProposeGate } from "create-project-engineering-os/debt";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
-const EXPECTED_VERSION = "0.1.4";
+const EXPECTED_VERSION = "0.1.6";
+// Declaracion unica del contrato de consumo: no se deriva del owner de este repositorio, que puede diferir
+// en un fork legitimo. Si el upstream se renombra, esta constante deja de coincidir y el contrato falla.
+const EXPECTED_UPSTREAM = "IgnacioBarEsp/project-engineering-os";
 const PACKAGE_ROOT = path.join(ROOT, "node_modules", "create-project-engineering-os");
 const CLI = path.join(PACKAGE_ROOT, "bin", "project-os.mjs");
 const OPEN_SPEC_ROOT = path.join(ROOT, "node_modules", "@fission-ai", "openspec");
@@ -38,6 +41,27 @@ function runNode(args, { cwd = ROOT, expect = 0 } = {}) {
     `project-os ${args.join(" ")} terminó ${result.status}\nstdout:\n${result.stdout}\nstderr:\n${result.stderr}`,
   );
   return result;
+}
+
+// La coincidencia de version entre manifiesto, lockfile, instalacion y CLI no prueba identidad: la release
+// 0.1.4 era consistente en numero y declaraba un owner que ya no existe.
+function assertUpstreamIdentity(pkg, expectedUpstream) {
+  const fields = {
+    "repository.url": pkg.repository?.url,
+    homepage: pkg.homepage,
+    "bugs.url": pkg.bugs?.url,
+  };
+  for (const [field, value] of Object.entries(fields)) {
+    assert.equal(
+      typeof value,
+      "string",
+      `El paquete instalado no declara ${field}; no puede verificarse la identidad del upstream.`,
+    );
+    assert.ok(
+      value.includes(expectedUpstream),
+      `${field} declara "${value}" y no resuelve a ${expectedUpstream}: la release fijada apunta a un upstream que no es el vigente.`,
+    );
+  }
 }
 
 function linkDirectory(target, destination) {
@@ -65,6 +89,31 @@ assert.deepEqual(publicPackage.bin, {
 });
 assert.equal(typeof preArchiveGate, "function");
 assert.equal(typeof preProposeGate, "function");
+
+assertUpstreamIdentity(publicPackage, EXPECTED_UPSTREAM);
+
+// Verificacion en negativo: una release con el owner anterior debe fallar aunque su version sea consistente.
+assert.throws(
+  () =>
+    assertUpstreamIdentity(
+      {
+        version: EXPECTED_VERSION,
+        repository: { url: "git+https://github.com/RitualBoat/project-engineering-os.git" },
+        homepage: "https://github.com/RitualBoat/project-engineering-os#readme",
+        bugs: { url: "https://github.com/RitualBoat/project-engineering-os/issues" },
+      },
+      EXPECTED_UPSTREAM,
+    ),
+  /repository\.url declara .* y no resuelve a /,
+  "La verificacion de identidad debe fallar ante un owner anterior del upstream.",
+);
+
+// Un campo ausente tampoco puede pasar en silencio.
+assert.throws(
+  () => assertUpstreamIdentity({ version: EXPECTED_VERSION }, EXPECTED_UPSTREAM),
+  /no declara repository\.url/,
+  "La verificacion de identidad debe fallar cuando el paquete no declara los campos.",
+);
 
 const version = runNode(["--version"]).stdout.trim();
 assert.equal(version, EXPECTED_VERSION);
