@@ -28,7 +28,7 @@ esconder comportamiento, amontonar capturas o reducir letra para cumplir un cont
 |---:|---|---|---|
 | 1 | Bienvenida | Qué estoy construyendo para MACA y periodo de residencia | Portada floral, sin UI |
 | 2 | Problema actual | Reducir la parte repetitiva de cotizar | Ilustración editorial de hoja de cálculo |
-| 3 | Vista completa | Catálogo, cotización, pedido y seguimiento | Diagrama editorial de cuatro momentos |
+| 3 | Vista completa | Proceso explicado desde elegir o ajustar el ramo hasta registrar la aceptación, convertir en pedido y seguir entrega y pago; catálogo, cotización, pedido y seguimiento se rotulan como módulos y funciones | Diagrama editorial de cuatro momentos |
 | 4 | Catálogo interno | Flores, insumos, precios, modelos y recetas | `01-catalogo-y-editor.png` completo |
 | 5 | Crear o editar | Cambiar permanentemente foto, receta o precio de un modelo | Recorte limpio del editor en `01-catalogo-y-editor.png` |
 | 6 | Tres formas de empezar | Desde modelo, desde cero o por presupuesto | `02-tres-formas-de-cotizar.png` |

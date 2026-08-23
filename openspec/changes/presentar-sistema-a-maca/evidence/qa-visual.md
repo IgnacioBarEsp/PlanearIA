@@ -49,6 +49,23 @@ La evidencia instrumental local quedó en `tmp/maca-deck-build/qa/metrics.json`,
 Después de estas correcciones se regeneraron HTML, PDF y PNG, se repitió Playwright y se inspeccionaron otra
 vez el contact sheet y las páginas afectadas a tamaño completo. No quedan hallazgos visuales mayores abiertos.
 
+## Ajuste posterior de la lámina 3
+
+La solicitud posterior a la primera entrega amplió la explicación del proceso sin modificar los cuatro
+bloques existentes. La lámina ahora explica, en este orden:
+
+1. elegir un ramo del catálogo o ajustarlo;
+2. dejar lista la cotización para compartirla por WhatsApp o cualquier otra vía;
+3. registrar manualmente la aceptación del cliente;
+4. elegir `Convertir en pedido`;
+5. seguir el pedido hasta la entrega y el pago.
+
+Los bloques `Catálogo`, `Cotización`, `Pedido` y `Seguimiento` aparecen bajo la nueva etiqueta `Módulos y
+funciones del sistema`. Se regeneraron los tres formatos desde el mismo HTML. Playwright volvió a confirmar
+quince láminas, HTTP 200, ancho del documento igual al viewport y cero contenidos recortados. En media print,
+el contenido directo de la lámina 3 termina en 874.28 px dentro de una página de 982.67 px. El PDF conserva
+quince páginas de 312 × 737.04 pt y la imagen final mide 1248 × 2949 px.
+
 ## Validación humana pendiente
 
 La prueba con una persona no técnica ajena al proyecto permanece pendiente y no se sustituye con esta

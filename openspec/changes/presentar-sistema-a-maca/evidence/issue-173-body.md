@@ -70,7 +70,8 @@ pedido confirmado. Las dos vías son posibilidades por elegir, no funcionalidad 
 
 1. Portada.
 2. Problema actual y beneficio principal.
-3. Vista completa en cuatro momentos.
+3. Vista completa del proceso, desde elegir o ajustar el ramo hasta la entrega y el pago, con catálogo,
+   cotización, pedido y seguimiento rotulados como módulos y funciones del sistema.
 4. Flores, insumos, precios y modelos.
 5. Crear o editar permanentemente la receta de un modelo.
 6. Tres formas de cotizar.

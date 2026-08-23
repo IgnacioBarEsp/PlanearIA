@@ -10,6 +10,11 @@ completo, conserva el ritmo móvil y no añade alcance. Los archivos finales son
 `Deck MACA - FINAL.pdf` y `Deck MACA FINAL (imagenes para WhatsApp)/`; las fuentes de la sección siguiente
 se mantienen como baseline recuperable. La marca final de cada captura es `Ejemplo · prototipo alfa`.
 
+El ajuste solicitado después de la primera entrega amplía la lámina 3 para explicar el proceso completo sin
+presentador: elegir o ajustar un ramo, dejar lista la cotización para compartir por WhatsApp o cualquier otra
+vía, registrar manualmente la aceptación, elegir `Convertir en pedido` y seguirlo hasta la entrega y el pago.
+Los cuatro bloques existentes se conservan bajo la etiqueta `Módulos y funciones del sistema`.
+
 Los bloques siguientes documentan el prompt pre-apply que orientó la reconstrucción; `design.md` y la
 evidencia final registran la estructura exacta aplicada.
 

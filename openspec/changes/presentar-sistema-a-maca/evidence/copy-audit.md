@@ -8,6 +8,8 @@ Fuente revisada: `B - Para la floreria/deck-maca-final.html`.
 | Leyendas exactas `Ejemplo · prototipo alfa` | 10 |
 | CTA final exacta | 1 |
 | Frase futura aprobada exacta | 1 |
+| Etiqueta visible `Módulos y funciones del sistema` | 1 |
+| Promesas de envío o pedido automático | 0 |
 | `llenamos`, `llénenla` o `capturamos juntos` | 0 |
 | `no está prometida` | 0 |
 
@@ -18,6 +20,8 @@ trabajo a Mayra o Stephanie.
 También se comprobó manualmente que:
 
 - la aceptación de la cotización ocurre fuera del sistema y se registra de forma manual;
+- en la lámina 3, `marcarán como aceptada` aparece antes de `Convertir en pedido` y la creación del pedido;
+- WhatsApp se presenta como una vía posible junto con cualquier otra vía, no como el único canal;
 - el pago se registra, no se procesa;
 - la página pública conserva las dos vías posibles y el condicional aprobado;
 - no aparece una pantalla ni módulo independiente de clientes;

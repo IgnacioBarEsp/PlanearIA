@@ -63,3 +63,12 @@
 - [ ] 5.3 Migrar este change cuando exista el proyecto formal de la residencia y cerrar el flujo SDD en
   PlanearIA con evidencia proporcional.
   - Evidencia: repositorio o ruta destino y PR de cierre.
+
+## 6. Ajuste posterior de claridad
+
+- [x] 6.1 Ampliar la lámina 3 para explicar el proceso desde elegir o ajustar el ramo hasta la entrega y el
+  pago, sin prometer automatizaciones inexistentes y conservando los cuatro bloques originales.
+  - Evidencia: `B - Para la floreria/deck-maca-final.html` y `evidence/copy-audit.md`.
+- [x] 6.2 Rotular los cuatro bloques como `Módulos y funciones del sistema`, regenerar HTML, PDF e imágenes y
+  repetir la revisión visual móvil y de impresión.
+  - Evidencia: `evidence/qa-visual.md` y veredicto posterior en `evidence/adversarial-review.md`.

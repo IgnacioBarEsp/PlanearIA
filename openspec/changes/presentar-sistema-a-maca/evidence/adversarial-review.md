@@ -64,6 +64,23 @@ Resolución:
 - La frase futura y la CTA aprobadas permanecen exactas; no reapareció lenguaje descartado.
 - No quedan inconsistencias visuales o de contenido detectadas por la revisión adversarial.
 
+## Pase posterior: ampliación de la lámina 3
+
+Después de la primera entrega se revisó nuevamente la lámina 3 y su relación con las láminas 10 a 12.
+
+**READY**
+
+- La secuencia se entiende sin conocimientos técnicos: elegir o ajustar el ramo, preparar y compartir la
+  cotización, registrar la aceptación, convertir manualmente en pedido y seguirlo hasta entrega y pago.
+- `para que puedan compartirla` no promete un envío automático; `la marcarán como aceptada` y `elegirán
+  «Convertir en pedido»` conservan el control manual.
+- `Módulos y funciones del sistema` agrupa correctamente Catálogo, Cotización, Pedido y Seguimiento sin
+  modificar el contenido aprobado de esos cuatro bloques.
+- La lámina no presenta recortes ni solapamientos. Su PNG de 1248 × 2949 px coincide con la página 3
+  renderizada del PDF y la QA del HTML informa `contentClipped: false` en móvil, escritorio e impresión.
+- El copy permanece coherente con compartir por cualquier vía, la aceptación y conversión manuales y el
+  seguimiento de entrega y pagos sin procesar cobros.
+
 ## Límite de esta evidencia
 
 El veredicto no sustituye la lectura por una persona no técnica ajena al proyecto ni acredita el envío real
