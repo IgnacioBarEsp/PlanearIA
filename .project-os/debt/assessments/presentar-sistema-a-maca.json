@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "flow": "presentar-sistema-a-maca",
+  "date": "2026-08-24",
+  "kind": "feature",
+  "result": "clean",
+  "candidates": [],
+  "resolves": [],
+  "notes": "Cierre de un change exclusivamente documental y visual para la presentacion de MACA. La entrega real, respuesta de las destinatarias y handoff de archivos quedaron documentados; no se modificaron runtime, dependencias, build, datos ni codigo de PlanearIA. Las dudas de formulas y normalizacion pertenecen al futuro proyecto de la residencia y estan registradas en su carpeta fuente, no son deuda tecnica de PlanearIA. No quedan candidatos de deuda dentro del alcance de este repositorio."
+}
