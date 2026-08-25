@@ -87,18 +87,18 @@ pedido confirmado. Las dos vías son posibilidades por elegir, no funcionalidad 
 
 ### Criterios de aceptación
 
-- [ ] Se entiende sin presentador al leerlo en un teléfono desde WhatsApp.
-- [ ] El guion cubre todo el alcance interno de forma agrupada y conserva un recorrido continuo.
-- [ ] No existe límite rígido de doce; la extensión final se decide por legibilidad y comprensión.
-- [ ] No aparece un módulo de clientes ni una pantalla de exclusiones.
-- [ ] El botón principal de salida se llama `Compartir` y no ata el sistema a un canal o formato.
-- [ ] La cotización aceptada se marca manualmente antes de convertirse en pedido.
-- [ ] La actualización selectiva de modelos se trata como opción avanzada demostrativa.
-- [ ] La página pública está condicionada al cierre de la parte interna y muestra exactamente dos vías
+- [x] Se entiende sin presentador al leerlo en un teléfono desde WhatsApp.
+- [x] El guion cubre todo el alcance interno de forma agrupada y conserva un recorrido continuo.
+- [x] No existe límite rígido de doce; la extensión final se decide por legibilidad y comprensión.
+- [x] No aparece un módulo de clientes ni una pantalla de exclusiones.
+- [x] El botón principal de salida se llama `Compartir` y no ata el sistema a un canal o formato.
+- [x] La cotización aceptada se marca manualmente antes de convertirse en pedido.
+- [x] La actualización selectiva de modelos se trata como opción avanzada demostrativa.
+- [x] La página pública está condicionada al cierre de la parte interna y muestra exactamente dos vías
   posibles sin crear pedidos confirmados automáticamente.
-- [ ] Toda captura y dato de ejemplo está etiquetado y no se presenta como funcionalidad existente.
-- [ ] HTML, PDF e imágenes para WhatsApp coinciden en copy, orden y contenido.
-- [ ] Sólo la última lámina pide algo y usa este texto aprobado:
+- [x] Toda captura y dato de ejemplo está etiquetado y no se presenta como funcionalidad existente.
+- [x] HTML, PDF e imágenes para WhatsApp coinciden en copy, orden y contenido.
+- [x] Sólo la última lámina pide algo y usa este texto aprobado:
 
 > Para empezar a trabajar necesitaré las recetas de sus ramos, su cotizador de Excel y los demás datos,
 > fotografías o archivos que ya utilicen para sus ramos. Pueden enviarme todo conforme lo tengan y vayan

@@ -1,6 +1,6 @@
 # Artefactos finales
 
-Fecha de generación: 2026-08-22.
+Fecha de generación: 2026-08-22. Entrega confirmada: 2026-08-24.
 
 ## Versiones recuperables conservadas
 
@@ -35,3 +35,16 @@ de ejemplo e importes.
 
 HTML, PDF y PNG proceden del mismo HTML final. El PDF contiene exactamente quince páginas y las imágenes se
 renderizaron directamente de ese PDF, por lo que orden, copy y contenido coinciden.
+
+## Entrega y resultado
+
+- El PDF final se envió por WhatsApp a Mayra y Stephanie.
+- Ambas destinatarias lo leyeron por su cuenta, sin explicación en vivo.
+- La respuesta reportada fue que les gustó mucho y que estaban agradecidas por el compromiso puesto en el
+  proyecto.
+- Después de la entrega proporcionaron su cotizador, listado de flores e insumos, 22 fichas técnicas,
+  fotografías, comentarios y audio. El inventario vive en la carpeta de la residencia y no se duplica en
+  PlanearIA.
+
+La entrega real acredita la comprensión autónoma buscada por el change. No se interpreta como aceptación
+contractual de todos los requisitos del sistema.

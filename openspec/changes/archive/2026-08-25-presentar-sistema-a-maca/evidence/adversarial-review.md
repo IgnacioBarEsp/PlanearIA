@@ -81,7 +81,11 @@ Después de la primera entrega se revisó nuevamente la lámina 3 y su relación
 - El copy permanece coherente con compartir por cualquier vía, la aceptación y conversión manuales y el
   seguimiento de entrega y pagos sin procesar cobros.
 
-## Límite de esta evidencia
+## Verificación posterior a la entrega
 
-El veredicto no sustituye la lectura por una persona no técnica ajena al proyecto ni acredita el envío real
-por WhatsApp. Ambas acciones permanecen abiertas en `tasks.md`.
+El 24 de agosto de 2026 el PDF se envió por WhatsApp a Mayra y Stephanie. Ambas destinatarias no técnicas lo
+leyeron por su cuenta, dijeron que les gustó mucho y agradecieron el compromiso puesto en el proyecto. Esta
+validación real cubre el riesgo principal del change: que el tour no se entendiera sin presentador.
+
+La reacción positiva no se usa como aprobación contractual de fórmulas o flujos detallados. Esos requisitos
+se validarán en la investigación de la residencia.

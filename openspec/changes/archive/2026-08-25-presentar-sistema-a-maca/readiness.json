@@ -38,6 +38,14 @@
     {
       "id": "nielsen",
       "ref": "evidence/qa-visual.md"
+    },
+    {
+      "id": "delivery-and-human-validation",
+      "ref": "evidence/delivery-feedback-and-handoff.md"
+    },
+    {
+      "id": "debt-assessment",
+      "ref": "evidence/debt-assessment-input.json; result clean, no candidates"
     }
   ],
   "rollback": {

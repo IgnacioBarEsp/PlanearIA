@@ -33,3 +33,10 @@ Este change no construye el sistema: deja lista su explicación visual y evita p
 ya no representan la intención del residente. El resultado esperado es un tour autónomo, cercano y
 ordenado que muestre de principio a fin qué recibirá MACA, aproveche las pantallas alfa relevantes y permita
 que ellas colaboren sin aprender una plantilla ni preparar sus archivos de una forma especial.
+
+# Resultado
+
+El PDF se entregó por WhatsApp el 24 de agosto de 2026. Mayra y Stephanie lo leyeron por su cuenta, dijeron
+que les gustó mucho y agradecieron el compromiso. Después enviaron cotizador, listado de materiales, 22
+fichas técnicas, fotografías, comentarios y audio; el handoff quedó inventariado en la carpeta de la
+residencia. El objetivo documental se cumplió y el change puede archivarse.

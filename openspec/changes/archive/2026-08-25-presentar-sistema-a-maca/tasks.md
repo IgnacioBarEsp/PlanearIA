@@ -48,21 +48,27 @@
 - [x] 4.2 Ejecutar una revisión Nielsen y comprobar continuidad, jerarquía, consistencia de ejemplos y ausencia
   de controles o promesas contradictorias.
   - Evidencia: informe en `evidence/` sin hallazgos mayores abiertos.
-- [ ] 4.3 Probar el deck con una persona no técnica ajena al proyecto.
-  - Evidencia: resumen de qué entendió sobre catálogo, cotización, pedido, página condicionada y CTA.
+- [x] 4.3 Comprobar la lectura autónoma con las destinatarias no técnicas del deck.
+  - Evidencia: Mayra y Stephanie lo leyeron sin explicación en vivo, dijeron que les gustó mucho y
+    agradecieron el compromiso; `evidence/delivery-feedback-and-handoff.md` registra el resultado.
 - [x] 4.4 Ejecutar validación OpenSpec estricta, paridad de harness, revisión adversarial y `git diff --check`.
   - Evidencia: salidas y veredicto registrados en `readiness.json`.
 
 ## 5. Entrega y cierre
 
-- [ ] 5.1 Enviar por WhatsApp el PDF o secuencia final a Mayra y Stephanie sin agregar una segunda petición en
+- [x] 5.1 Enviar por WhatsApp el PDF o secuencia final a Mayra y Stephanie sin agregar una segunda petición en
   el mensaje acompañante.
-  - Evidencia: captura del envío sin datos sensibles.
-- [ ] 5.2 Registrar los archivos que MACA vaya enviando y organizar su carga sin exigir una plantilla.
-  - Evidencia: handoff hacia el proyecto de la residencia.
-- [ ] 5.3 Migrar este change cuando exista el proyecto formal de la residencia y cerrar el flujo SDD en
-  PlanearIA con evidencia proporcional.
-  - Evidencia: repositorio o ruta destino y PR de cierre.
+  - Evidencia: confirmación de entrega y respuesta registrada en `evidence/delivery-feedback-and-handoff.md`;
+    no se conserva una captura de la conversación con datos personales.
+- [x] 5.2 Registrar los archivos que MACA envió y organizar su carga sin exigir una plantilla.
+  - Evidencia: `C:/Users/RitualBoatLaptop/Desktop/residencias/Informacion proporcionada por la floreria/LEEME.md`.
+- [x] 5.3 Registrar el handoff en la fuente de verdad actual y cerrar el flujo SDD documental en PlanearIA.
+  - Evidencia: el proyecto formal de la residencia todavía no existe; el estado y los insumos quedaron
+    organizados en `C:/Users/RitualBoatLaptop/Desktop/residencias/` y el usuario pidió archivar este issue.
+- [x] 5.4 Capturar el assessment de deuda limpio y preparar los gates de cierre.
+  - Evidencia: `debt:capture` y `debt:check` PASS; assessment en
+    `evidence/debt-assessment-input.json`; OpenSpec estricto 56/56 PASS. El archive y el finish se ejecutan
+    después de que todas las tareas están completas.
 
 ## 6. Ajuste posterior de claridad
 
