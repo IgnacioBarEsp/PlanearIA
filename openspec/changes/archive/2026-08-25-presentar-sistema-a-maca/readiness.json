@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "issue": 173,
+  "change": "presentar-sistema-a-maca",
+  "surfaces": [
+    "docs",
+    "ui"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/173"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se registrara al cerrar el change mediante opsx:finish."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "evidence/adversarial-review.md"
+    },
+    {
+      "id": "docs-verification",
+      "ref": "evidence/qa-visual.md; openspec:validate 56/56 PASS; agent:harness:check PASS"
+    },
+    {
+      "id": "web-http-200",
+      "ref": "evidence/qa-visual.md: deck-maca-final.html respondio HTTP 200"
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "evidence/qa-visual.md: Playwright 360x800, 390x844, 1440x1000 y media print"
+    },
+    {
+      "id": "nielsen",
+      "ref": "evidence/qa-visual.md"
+    },
+    {
+      "id": "delivery-and-human-validation",
+      "ref": "evidence/delivery-feedback-and-handoff.md"
+    },
+    {
+      "id": "debt-assessment",
+      "ref": "evidence/debt-assessment-input.json; result clean, no candidates"
+    }
+  ],
+  "rollback": {
+    "strategy": "Restaurar el HTML, PDF e imagenes para WhatsApp anteriores desde su copia o historial y revertir por PR normal solo los documentos de este change; conservar intactas las fuentes de prototipo alfa."
+  },
+  "adversarialReview": {
+    "ref": "evidence/adversarial-review.md"
+  },
+  "exceptions": []
+}
