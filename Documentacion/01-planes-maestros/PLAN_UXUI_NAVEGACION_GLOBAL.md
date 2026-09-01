@@ -216,8 +216,9 @@ Antes de aprobar un frame de Figma o cerrar la validacion visual de un change, l
 - **Figma MCP** (`get_design_context`, `get_screenshot`): traduccion pixel-perfect frame -> tokens/layout. Requiere autenticacion previa.
 - **GitNexus** (indexado en `.gitnexus/`): herramienta primaria para inventario estructural, flujos MVVM,
   call chains, dependencias, procesos e impacto ANTES de editar. Verificar frescura con
-  `npx -y gitnexus@latest status`; reindexar con
-  `npx -y gitnexus@latest analyze --index-only --name PlanearIA .`.
+  `npm run gitnexus:diagnose`; reindexar con `npm run gitnexus:repair` y despues
+  `npm run gitnexus:verify`. Nunca invocar `gitnexus@latest` para escribir el indice: un build distinto
+  del analizador graba otra identidad y el wrapper (fijado en `GITNEXUS_VERSION`) lo declara stale.
 - **CodeGraph** (indexado en `.codegraph/`): herramienta secundaria/fallback para fuente lineada estilo Read,
   simbolos puntuales y comprobacion cuando GitNexus sea ambiguo, stale o no devuelva contexto editable suficiente.
 - **Context7**: docs vigentes de reanimated/gesture-handler/tentap/expo antes de usar sus APIs; cero APIs alucinadas.
