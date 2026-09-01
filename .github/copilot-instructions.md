@@ -23,7 +23,7 @@ Arquitectura:
 
 PlanearIA tiene dos herramientas de inteligencia de codigo con routing estricto:
 
-- **GitNexus primario**: para preguntas estructurales (MVVM, call chains, dependencias, blast radius, backend/IA, sync/offline). CLI: `npx -y gitnexus@latest query -r PlanearIA "<pregunta>"`. Impact: `npx -y gitnexus@latest impact -r PlanearIA <simbolo>`.
+- **GitNexus primario**: para preguntas estructurales (MVVM, call chains, dependencias, blast radius, backend/IA, sync/offline). CLI: `npx -y gitnexus@1.6.10 query -r PlanearIA "<pregunta>"`. Impact: `npx -y gitnexus@1.6.10 impact -r PlanearIA <simbolo>`. Frescura: `npm run gitnexus:diagnose`; reindex: `npm run gitnexus:repair`. La version debe coincidir con `GITNEXUS_VERSION` en `scripts/gitNexusFts.mjs`; nunca uses `gitnexus@latest` para escribir el indice.
 - **CodeGraph fallback**: para fuente lineada estilo Read cuando GitNexus no devuelva suficiente contexto editable, este desactualizado o no este disponible. MCP: `codegraph_explore`. CLI: `npm run codegraph:explore -- "<pregunta>"`.
 - No usar ambos por reflejo; usar el segundo solo si el primero falla o es ambiguo.
 - Lectura directa/rg para Markdown, docs, assets o archivos fuera del indice.
