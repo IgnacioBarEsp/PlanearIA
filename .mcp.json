@@ -2,8 +2,8 @@
   "mcpServers": {
     "codegraph": {
       "type": "stdio",
-      "command": "codegraph",
-      "args": ["serve", "--mcp"]
+      "command": "npx",
+      "args": ["-y", "@colbymchenry/codegraph", "serve", "--mcp"]
     },
     "figma": {
       "type": "http",
