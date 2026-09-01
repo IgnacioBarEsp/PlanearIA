@@ -47,7 +47,7 @@ Branches conservadas:
 Abre PowerShell y ejecuta:
 
 ```powershell
-cd C:\Users\RitualBoatLaptop\Documents\Projects\PlanearIA
+Set-Location 'C:\ruta\local\PlanearIA'
 git status --short
 git diff --stat
 git diff --name-only
@@ -86,7 +86,7 @@ El token actual tiene `repo`, `workflow`, `read:org` y `gist`, pero no puede con
 En PowerShell:
 
 ```powershell
-cd C:\Users\RitualBoatLaptop\Documents\Projects\PlanearIA
+Set-Location 'C:\ruta\local\PlanearIA'
 gh auth refresh -h github.com -s read:project,project --clipboard
 ```
 

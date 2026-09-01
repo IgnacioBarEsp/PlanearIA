@@ -5,9 +5,11 @@ import {
   GITNEXUS_VERSION,
   STALE,
   UNCLASSIFIABLE,
+  WINDOWS_OPENSSL_BINS,
   assertDiagnosticStatusHealthy,
   buildWindowsGitNexusInvocation,
   classifyIndexFreshness,
+  findWindowsOpenSslBin,
   findUnexpectedAgentChanges,
   hasFtsDiagnostic,
   hasRepositoryDiagnostic,
@@ -67,6 +69,13 @@ assert.deepEqual(windowsInvocation.args, [
   `gitnexus@${GITNEXUS_VERSION}`,
   'status',
 ]);
+
+const gitOpenSslFiles = new Set([
+  `${WINDOWS_OPENSSL_BINS[1]}\\libcrypto-3-x64.dll`,
+  `${WINDOWS_OPENSSL_BINS[1]}\\libssl-3-x64.dll`,
+]);
+assert.equal(findWindowsOpenSslBin((path) => gitOpenSslFiles.has(path)), WINDOWS_OPENSSL_BINS[1]);
+assert.equal(findWindowsOpenSslBin(() => false), undefined);
 
 verifyQueryResult({ definitions: [{ id: 'File:src/hooks/useCrearPlaneacionViewModel.ts' }] });
 assert.throws(() => verifyQueryResult({ definitions: [], process_symbols: [] }), /no structural context/i);

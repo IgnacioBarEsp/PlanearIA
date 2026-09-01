@@ -63,6 +63,8 @@ stitch-results
 # single-source harness (change: single-source-agent-harness). The generic "skills/" and ".agents/*"
 # patterns above also match these, so re-include the project-owned ones explicitly.
 !.codex/config.toml
+!.codex/environments/
+!.codex/environments/**
 !.codex/skills/
 !.codex/skills/**
 !.claude/skills/
