@@ -2,10 +2,14 @@ import { spawnSync } from 'node:child_process';
 import { existsSync } from 'node:fs';
 import { pathToFileURL } from 'node:url';
 
-export const GITNEXUS_VERSION = '1.6.10-rc.23';
+export const GITNEXUS_VERSION = '1.6.10';
 export const FIXTURE_UID =
   'Function:src/hooks/useCrearPlaneacionViewModel.ts:useCrearPlaneacionViewModel';
 export const FIXTURE_QUERY = 'useCrearPlaneacionViewModel MVVM dependencies';
+export const WINDOWS_OPENSSL_BINS = [
+  'C:\\Program Files\\OpenSSL-Win64\\bin',
+  'C:\\Program Files\\Git\\mingw64\\bin',
+];
 
 const FTS_DIAGNOSTIC = /FTS indexes missing|FTS extension unavailable|full-text search degraded/i;
 const REPOSITORY_DIAGNOSTIC = /not a git repository/i;
@@ -95,14 +99,22 @@ export function findUnexpectedAgentChanges(statusOutput, allowedPaths = []) {
   return changedPaths.filter((filePath) => AGENT_PATH.test(filePath) && !allowed.has(filePath));
 }
 
+export function findWindowsOpenSslBin(pathExists = existsSync) {
+  return WINDOWS_OPENSSL_BINS.find(
+    (bin) =>
+      pathExists(`${bin}\\libcrypto-3-x64.dll`) &&
+      pathExists(`${bin}\\libssl-3-x64.dll`),
+  );
+}
+
 function commandEnvironment() {
   const env = {
     ...process.env,
     GITNEXUS_LBUG_EXTENSION_INSTALL: 'auto',
   };
-  const openSslBin = 'C:\\Program Files\\OpenSSL-Win64\\bin';
+  const openSslBin = findWindowsOpenSslBin();
 
-  if (process.platform === 'win32' && existsSync(openSslBin)) {
+  if (process.platform === 'win32' && openSslBin) {
     const inheritedPath = env.PATH ?? env.Path ?? '';
     env.PATH = `${openSslBin};C:\\Program Files\\nodejs;${inheritedPath}`;
     env.Path = env.PATH;

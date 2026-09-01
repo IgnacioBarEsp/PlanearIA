@@ -243,11 +243,8 @@ Priorizar en revision: bugs, perdida de datos, auth/aislamiento por `userId`, sy
 
 ## Python
 
-Ejecutable local:
-
-```text
-C:/Users/RitualBoatLaptop/AppData/Local/Programs/Python/Python314/python.exe
-```
+- Usar `python` desde `PATH`; en Windows, `py -3` es el fallback.
+- No fijar nombres de usuario ni rutas absolutas de una workstation en instrucciones versionadas.
 
 ## Reglas Por Path (referencia embebida)
 
@@ -296,7 +293,7 @@ Para harnesses sin soporte nativo de path-globs, estas reglas aplican al editar 
 - Jest + Testing Library for React Native
 - Every functional code change requires tests
 - Run: npm test -- --testPathPattern="<pattern>"
-- Windows: add --rootDir C:\Users\RitualBoatLaptop\Documents\Projects\PlanearIA
+- Windows: ejecutar desde la raiz Git y, si Jest lo requiere, agregar `--rootDir .`
 - Classroom tests: npm run test:classroom -- --runInBand
 - Sync tests: npm run test:sync -- --runInBand
 - Backend smoke: npm run backend:check

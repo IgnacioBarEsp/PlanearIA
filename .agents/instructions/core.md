@@ -217,8 +217,5 @@ Priorizar en revision: bugs, perdida de datos, auth/aislamiento por `userId`, sy
 
 ## Python
 
-Ejecutable local:
-
-```text
-C:/Users/RitualBoatLaptop/AppData/Local/Programs/Python/Python314/python.exe
-```
+- Usar `python` desde `PATH`; en Windows, `py -3` es el fallback.
+- No fijar nombres de usuario ni rutas absolutas de una workstation en instrucciones versionadas.

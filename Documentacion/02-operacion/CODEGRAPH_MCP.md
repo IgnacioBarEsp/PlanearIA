@@ -30,8 +30,8 @@ npm run gitnexus:repair
 npm run gitnexus:verify
 ```
 
-Los wrappers fijan GitNexus `1.6.10-rc.23`, activan la instalacion acotada de la extension FTS y, en Windows,
-agregan al proceso la carpeta local de OpenSSL si existe. `repair` solo regenera `.gitnexus/`; no ejecutar
+Los wrappers fijan GitNexus `1.6.10`, activan la instalacion acotada de la extension FTS y, en Windows,
+agregan al proceso OpenSSL 3 desde una instalacion dedicada o desde Git for Windows. `repair` solo regenera `.gitnexus/`; no ejecutar
 `gitnexus setup`. `verify` comprueba que no haya diagnostico FTS, que la query MVVM tenga contexto y que el
 impact por UID de `useCrearPlaneacionViewModel` sea exacto.
 
@@ -120,7 +120,7 @@ primario para mapa estructural amplio y CodeGraph queda como fallback/fuente lin
 ## Mantenimiento
 
 - Tras `git pull` grande o cambios externos: `npm run codegraph:sync`.
-- Para rollback de GitNexus, limpiar solo su indice local con `npx -y gitnexus@1.6.10-rc.23 clean --force` y
+- Para rollback de GitNexus, limpiar solo su indice local con `npx -y gitnexus@1.6.10 clean --force` y
   reconstruir con `npm run gitnexus:repair`; no borrar datos de PlanearIA ni editar instrucciones de agentes.
 - Si algo queda bloqueado: `codegraph unlock`.
 - Si se quiere borrar el indice local: `codegraph uninit`.

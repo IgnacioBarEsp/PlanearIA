@@ -18,7 +18,7 @@ Antes de auditar, corre y anota como linea base:
 - `npm run lint -- --quiet`
 - `npm test -- --runInBand` (o los suites focalizados: test:classroom, test:planeaciones, test:sync)
 - `npm run backend:check`
-En Windows, si Jest necesita rootDir: `--rootDir C:\Users\RitualBoatLaptop\Documents\Projects\PlanearIA`.
+En Windows, ejecutar desde la raiz Git y, si Jest necesita rootDir, usar `--rootDir .`.
 
 ## Fases de la auditoria
 ### Phase 0: Pre-analisis
