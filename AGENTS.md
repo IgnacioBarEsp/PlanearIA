@@ -4,10 +4,13 @@
 PlanearIA uses two local code-intelligence tools with strict routing:
 
 - **GitNexus is primary for structural questions**: architecture maps, MVVM screen -> hook/ViewModel -> service flows, call chains, dependency impact, backend/AI gateway paths, sync/offline paths, and SDD blast-radius decisions.
-  - CLI: `npx -y gitnexus@latest query -r PlanearIA "<question>"`
-  - Impact: `npx -y gitnexus@latest impact -r PlanearIA <symbol>`
-  - Freshness: `npx -y gitnexus@latest status`
-  - Reindex: `npx -y gitnexus@latest analyze --index-only --name PlanearIA .`
+  - CLI: `npx -y gitnexus@1.6.10 query -r PlanearIA "<question>"`
+  - Impact: `npx -y gitnexus@1.6.10 impact -r PlanearIA <symbol>`
+  - Freshness: `npm run gitnexus:diagnose`
+  - Reindex: `npm run gitnexus:repair` (then `npm run gitnexus:verify`)
+  - Pin note: the version above must match `GITNEXUS_VERSION` in `scripts/gitNexusFts.mjs`. Never invoke
+    `gitnexus@latest` for anything that writes the index: a different analyzer build stamps a different
+    runner identity, and the wrapper then classifies the freshly built index as stale.
 - **CodeGraph is secondary/fallback for line-numbered source context** once files/symbols are known, or when GitNexus is unavailable, stale, ambiguous, or does not return enough editable source.
   - MCP tool when available: `codegraph_explore`.
   - CLI fallback: `npm run codegraph:explore -- "<question>"`.

@@ -195,8 +195,9 @@ Pasos y paradas:
   Reporte con capturas adjunto al issue. **PROHIBIDO archivar un change de UI sin cumplir los 5 criterios.**
 - **Paso 4 - Cierre.** Tras `/adversarial-review` y `/opsx:archive`: actualizar el backlog del plan maestro,
   mover el item del Project, actualizar la documentacion afectada (`Documentacion/`, CLAUDE.md/config.yaml si
-  cambiaron reglas) y verificar que GitNexus este fresco para el siguiente ciclo (`gitnexus status`;
-  reindex con `npx -y gitnexus@latest analyze --index-only --name PlanearIA .` si hace falta). Si se necesita
+  cambiaron reglas) y verificar que GitNexus este fresco para el siguiente ciclo
+  (`npm run gitnexus:diagnose`; reindex con `npm run gitnexus:repair` y despues `npm run gitnexus:verify`
+  si hace falta; nunca `gitnexus@latest`, que escribe el indice con otra identidad). Si se necesita
   fuente lineada o fallback, correr una consulta `codegraph_explore` de sanidad.
 
 Override: si el desarrollador dice "hazlo de inicio a fin en automatico", se corren los 5 pasos de corrido
