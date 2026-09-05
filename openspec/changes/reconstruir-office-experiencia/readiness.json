@@ -17,51 +17,51 @@
     },
     {
       "id": "pr-link",
-      "ref": "Pendiente: se completa mediante opsx:finish tras apply, aprobacion visual y archive."
+      "ref": "Pendiente: se completa mediante opsx:finish tras archive."
     },
     {
       "id": "adversarial-review",
-      "ref": "Pendiente: se registra en evidencia/06-revision-adversarial.md durante apply. Sin ella el change no archiva."
+      "ref": "openspec/changes/reconstruir-office-experiencia/evidencia/06-revision-adversarial.md - PASS CON HUECOS; 0 Blockers, 3 Majors encontrados y corregidos dentro del change (uno en implementacion, dos en spec), 4 Minors de los que 3 quedan corregidos y 1 se clasifico como observacion y no como deuda."
     },
     {
       "id": "docs-verification",
-      "ref": "Pendiente: openspec validate --all --strict, checkOpenSpecTldr, checkSourceEncoding y agent:harness:check durante apply. No se ejecutan typecheck ni tests: el change no toca src/, backend/ ni dependencias."
+      "ref": "2026-09-04: openspec validate --all --strict --no-interactive 57/57 PASS; checkOpenSpecTldr OK; checkSourceEncoding OK; agent:harness:check OK con 36 mirrors. No se ejecutan typecheck ni tests: el change no toca src/, backend/ ni dependencias."
     },
     {
       "id": "web-http-200",
-      "ref": "Pendiente: sólo si el gate visual exige comparar con runtime. Este change no edita runtime, por lo que puede quedar declarado como no requerido con causa."
+      "ref": "No requerido y no ejecutado: el change no edita runtime y no existe superficie de destino que comparar. Se declara explicitamente en vez de omitirse."
     },
     {
       "id": "playwright-breakpoints",
-      "ref": "Pendiente de decision: precedente de #163 es no ejecutarlo cuando el change no modifica runtime y verificar la navegacion por alcanzabilidad sobre el grafo Figma. Se declara explicitamente al cerrar, nunca se omite en silencio."
+      "ref": "No ejecutado, siguiendo el precedente de #163 para changes que no modifican runtime. La verificacion de navegacion se hizo por ancho de frame sobre el grafo Figma (evidencia/02) y el gate visual fue el recorrido humano en Present, en dos rondas, no una captura automatica."
     },
     {
       "id": "nielsen",
-      "ref": "Pendiente: evidencia/03-qa-anti-slop-accesibilidad.md con severidad Nielsen y auditoria de 44 pt sin hitSlop, foco, orden y contraste."
+      "ref": "openspec/changes/reconstruir-office-experiencia/evidencia/03-qa-anti-slop-accesibilidad.md - checklist de diez heuristicas con severidad maxima 0, auditoria de objetivo tactil sin hitSlop, verificacion de tema oscuro por valor resuelto y refutacion de los patrones genericos."
     },
     {
       "id": "breakpoint-integrity",
-      "ref": "Pendiente: evidencia/02-auditoria-grafo-por-ancho.md. Criterio de cierre heredado de #166: clasificar por ancho de frame, contar aristas salientes y reportar cero fugas dispositivo a dispositivo en la seccion de Office."
+      "ref": "openspec/changes/reconstruir-office-experiencia/evidencia/02-auditoria-grafo-por-ancho.md - 33 superficies, 320 aristas de navegacion y 52 de overlay; 0 fugas dispositivo a dispositivo (134 escritorio, 107 tablet, 79 movil); 0 destinos rotos; 0 destinos de filtro o plantilla incorrectos; 0 controles bajo 44 pt. Clasificacion por ancho de frame, conteo de aristas salientes y resolucion del contexto de cada overlay por quien lo abre, con la limitacion transitiva declarada."
     },
     {
       "id": "human-approval",
-      "ref": "Pendiente: veredicto humano explicito del owner tras Figma Present por breakpoint, registrado en el issue #177. Ninguna auditoria automatica lo sustituye."
+      "ref": "APROBADO. El owner recorrio Figma Present en escritorio, tablet y movil en dos rondas. La primera emitio dos condiciones -filtros que alternaban entre dos vistas y plantillas de movil sin separar por tipo- y dos decisiones -chips activos pulsables y tarjetas de creacion compactadas en movil-; las cuatro se corrigieron dentro del change. La segunda ronda salio limpia. Veredicto: https://github.com/IgnacioBarEsp/PlanearIA/issues/177#issuecomment-5549514143"
     },
     {
       "id": "runtime-handoff",
-      "ref": "Pendiente: evidencia/05-handoff-runtime-office.md. Debe declarar el costo no dimensionado de la descarga con fidelidad de formato contra la excepcion vigente por el cuelgue sincrono de SheetJS ante xlsx corrupto. No autoriza crear issue ni change de runtime."
+      "ref": "openspec/changes/reconstruir-office-experiencia/evidencia/05-handoff-runtime-office.md - correspondencia de superficies, roles perceptuales mapeados a familias de token sin copiar hex, contratos MVVM/OfficeStack/navigateToHub/src/sync/userId/44pt y las seis promesas que el runtime todavia no tiene, con la descarga con fidelidad de formato declarada como el costo mas alto y sin dimensionar. No autoriza crear issue ni change de runtime."
     },
     {
       "id": "figma-promotion",
-      "ref": "Pendiente: la seccion permanece candidate hasta el veredicto. Los nodos heredados 257:951, 277:958 y 274:958 se conservan intactos como baseline historico."
+      "ref": "Seccion renombrada 'Office · approved v1.0 · #177 · puentes de otros modulos candidate' (461:968); promovidas 33 superficies propias de Office. Los frames heredados 257:951, 277:958 y 274:958 se conservan intactos y siguen candidate como baseline historico."
     },
     {
       "id": "debt-assessment",
-      "ref": "Pendiente: evidencia/debt-assessment-input.json capturado con debt:capture, incluso si el resultado es clean. El plan uxui-navegacion-global esta en 4/5 unidades y una tercera deuda transversal dispara saneamiento."
+      "ref": "openspec/changes/reconstruir-office-experiencia/evidencia/debt-assessment-input.json capturado con debt:capture; resultado clean, sin candidatos. Cierra la porcion de Office de debt-a40b2b029a63 y debt-b1d35a5b5915, que siguen abiertos por los demas modulos. Tres observaciones clasificadas y razonadas como no deuda."
     }
   ],
   "rollback": {
-    "strategy": "Conservar los nodos historicos 257:951, 277:958 y 274:958 y trabajar en una seccion candidate identificable; restaurar por historial Figma o por los frames previos y revertir artefactos versionados por PR normal. Runtime, rutas, datos, storage, backend y src/sync permanecen intactos. Si el gate visual se rechaza, se itera o se restaura el candidate y no se promueve ni se crea el change de runtime."
+    "strategy": "Los nodos historicos 257:951, 277:958 y 274:958 permanecen intactos, asi que restaurar Office a su estado previo es volver a apuntar a ellos. La seccion 461:968 es recuperable por historial de Figma y los artefactos versionados se revierten por PR normal. Runtime, rutas, datos, storage, backend y src/sync permanecen intactos: este change no toco una sola linea de codigo de producto."
   },
   "adversarialReview": {
     "ref": "openspec/changes/reconstruir-office-experiencia/evidencia/06-revision-adversarial.md"

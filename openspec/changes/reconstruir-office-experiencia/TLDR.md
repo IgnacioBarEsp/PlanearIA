@@ -26,19 +26,19 @@ con texto visible. Importar funciona con la biblioteca llena y vacía. Los tres 
 información y ningún enlace cruza de tamaño. Siete estados negativos tienen salida honesta y la descarga no
 se simula.
 
-## Plan de trabajo — qué hará el apply
+## Plan de trabajo — qué hizo el apply
 
-Primero se revalida Figma y se registra el punto de restauración. Luego se construye la sección candidate:
-escritorio para fijar la arquitectura, después tablet y móvil como superficies propias, más el estado de
-límite de los editores. Siguen los estados negativos y las conexiones a la hoja Asignar y a Mensajería.
-Después se audita el grafo por ancho de frame hasta reportar cero fugas, y se levanta evidencia visual y de
-accesibilidad. El ciclo se detiene en Figma Present: sin veredicto humano no hay promoción.
+Se revalidó Figma, se construyó la sección con escritorio primero y luego tablet y móvil como superficies
+propias, más los estados de límite, el vacío, el tablero de estados y las conexiones a Asignar y
+Mensajería. La auditoría por ancho de frame se repitió hasta reportar cero fugas. El owner recorrió Present
+en dos rondas: la primera devolvió cuatro correcciones —filtros que alternaban entre dos vistas, plantillas
+de móvil sin separar por tipo, chips activos inertes y densidad de móvil— y la segunda salió limpia.
 
 ## Resumen integral del change
 
 Office pasa de ser tres frames heredados —uno clonado, uno reducido a una tarjeta y uno con la creación
-escondida— a un módulo donde crear es inmediato en cualquier dispositivo y donde cada archivo sabe a qué
-grupo pertenece, dónde se está usando y cómo sale de la app. El prototipo no promete lo que no puede
-sostener: la descarga con formato real se muestra pero no se simula, y su costo queda trasladado al futuro
-change de runtime. Nada de esto se aprueba solo: la sección permanece candidate hasta que el owner la
-recorra y emita veredicto.
+escondida— a treinta y tres superficies aprobadas donde crear es inmediato en cualquier dispositivo y cada
+archivo sabe a qué grupo pertenece, dónde se usa y cómo sale de la app. El prototipo no promete lo que no
+puede sostener: la descarga con formato real se muestra pero no se simula, y su costo queda trasladado al
+futuro change de runtime. El owner aprobó el 2026-09-04; cierra la parte de Office de la deuda de
+superficies responsive y no autoriza runtime.

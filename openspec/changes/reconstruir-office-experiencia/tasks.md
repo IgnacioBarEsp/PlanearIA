@@ -52,15 +52,15 @@
 - [x] 7.1 Preparar los recorridos de Figma Present por breakpoint
 - [x] 7.2 Recorrer Present con el owner y recoger condiciones
 - [x] 7.3 Confirmar en Present las dos decisiones derivadas: importar como acción persistente y el catálogo en familias
-- [ ] 7.4 Corregir dentro de este change las condiciones emitidas y volver a recorrer
-- [ ] 7.5 Registrar el veredicto humano explícito en el issue #177 y en `evidencia/04-gate-visual-issue-177.md`
-- [ ] 7.6 Promover los frames aprobados y renombrar la sección sólo después del veredicto
+- [x] 7.4 Corregir dentro de este change las condiciones emitidas y volver a recorrer
+- [x] 7.5 Registrar el veredicto humano explícito en el issue #177 y en `evidencia/04-gate-visual-issue-177.md`
+- [x] 7.6 Promover los frames aprobados y renombrar la sección sólo después del veredicto
 
 ## 8. Cierre
 
-- [ ] 8.1 Actualizar la matriz de navegación y el ground truth de Office con las superficies aprobadas
-- [ ] 8.2 Documentar el handoff runtime en `evidencia/05-handoff-runtime-office.md`, incluido el costo no dimensionado de la descarga con fidelidad de formato
-- [ ] 8.3 Crear `readiness.json` y `brownfield-baseline.md` completos y verificar `TLDR.md`
-- [ ] 8.4 Ejecutar la revisión adversarial y corregir Blockers y Majors dentro del change
-- [ ] 8.5 Capturar la deuda con `npm run debt:capture`, incluso si el resultado es `clean`, y verificar que el plan no supera su presupuesto
-- [ ] 8.6 Ejecutar `npm run openspec:ready:archive -- --change reconstruir-office-experiencia --run-local` y resolver cada FAIL
+- [x] 8.1 Actualizar la matriz de navegación y el ground truth de Office con las superficies aprobadas
+- [x] 8.2 Documentar el handoff runtime en `evidencia/05-handoff-runtime-office.md`, incluido el costo no dimensionado de la descarga con fidelidad de formato
+- [x] 8.3 Crear `readiness.json` y `brownfield-baseline.md` completos y verificar `TLDR.md`
+- [x] 8.4 Ejecutar la revisión adversarial y corregir Blockers y Majors dentro del change
+- [x] 8.5 Capturar la deuda con `npm run debt:capture`, incluso si el resultado es `clean`, y verificar que el plan no supera su presupuesto
+- [x] 8.6 Ejecutar `npm run openspec:ready:archive -- --change reconstruir-office-experiencia --run-local` y resolver cada FAIL

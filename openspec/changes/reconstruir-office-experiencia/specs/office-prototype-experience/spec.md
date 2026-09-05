@@ -16,7 +16,7 @@ global de Escritorio SHALL permanecer intacto y alcanzable.
 #### Scenario: El docente elige un tipo sin plantilla
 
 - **WHEN** el docente activa documento, hoja o presentación sin elegir plantilla
-- **THEN** el prototipo representa el objeto en blanco de ese tipo y ninguna decisión escolar precede a la elección
+- **THEN** el prototipo entrega la superficie de ese tipo en el mismo ancho, sin que ninguna decisión escolar preceda a la elección; mientras los editores pertenezcan a olas posteriores, esa superficie es el estado honesto de límite y nunca un editor simulado
 
 #### Scenario: El selector global de Escritorio no se degrada
 
@@ -33,7 +33,7 @@ creación por intención escolar antes del tipo.
 #### Scenario: El docente usa una plantilla
 
 - **WHEN** el docente elige un tipo y activa una de sus plantillas
-- **THEN** el prototipo representa el objeto con esa estructura y una salida visible permite volver al tipo en blanco
+- **THEN** el prototipo entrega la superficie de ese tipo en el mismo ancho, declarando qué plantilla se eligió, y una salida visible devuelve al origen para poder empezar en blanco
 
 #### Scenario: El catálogo no duplica estructura
 
@@ -72,8 +72,11 @@ archivos de Office y SHALL NOT representar recursos didácticos ni materiales he
 Cada archivo de la biblioteca SHALL ofrecer descargar en su extensión real, asignar a un grupo, adjuntar a
 una conversación, ver dónde se está usando y duplicar para otro grupo, todas alcanzables sin abrir el
 objeto. Cada acción SHALL llevar label textual visible y SHALL NOT depender de un icono mudo como único
-portador de significado. Asignar SHALL reutilizar la hoja Asignar aprobada y devolver el control a Clases;
-adjuntar SHALL devolverlo a Mensajería. Ambas SHALL retornar a Office declarando qué ocurrió con el
+portador de significado. Asignar SHALL partir de la hoja Asignar aprobada y conservar su diseño; el
+prototipo SHALL usar una copia con el cableado heredado limpiado, porque el original encadena `SWAP` hacia
+el flujo interno de Clases y rompería el retorno exigido aquí, y el runtime SHALL reutilizar el componente
+único que posee `cross-surface-assignment` en vez de duplicarlo. Adjuntar SHALL devolver el control a
+Mensajería. Ambas SHALL retornar a Office declarando qué ocurrió con el
 archivo. La descarga SHALL representarse como afordancia y SHALL NOT simular progreso, archivo generado ni
 confirmación de formato preservado.
 

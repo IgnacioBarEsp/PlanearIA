@@ -23,7 +23,7 @@ de cerrarse.
 #### Scenario: Se recorre una acción de archivo desde móvil
 
 - **WHEN** el docente activa asignar o adjuntar desde la fila de un archivo en 390
-- **THEN** llega a una superficie de 390 del módulo owner y su retorno vuelve a Office en 390, sin entregar ningún frame de 1440
+- **THEN** llega a una superficie del contexto de 390 —la hoja Asignar como overlay dimensionado para ese ancho, o Mensajería en 390— y su retorno vuelve a Office en 390, sin entregar ningún frame de 1440. Cuando el módulo owner todavía no tiene superficie en ese ancho, el destino es el estado de límite de ese mismo ancho
 
 #### Scenario: Un frame mal nombrado no acredita su breakpoint
 

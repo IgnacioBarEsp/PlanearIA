@@ -1,11 +1,14 @@
 # Ground truth: Office Docente
 
-> **Estado:** baseline 0.1 candidate. Sin aprobación visual.
+> **Estado:** baseline 0.1 aplicado; el prototipo derivado fue aprobado por el owner el 2026-09-04.
 > **Ola:** `#157-O3 Office`.
-> **Change previsto:** `reconstruir-office-experiencia`.
-> **Superficies actuales:** `257:951` escritorio, `277:958` clon de escritorio mal llamado tablet y
-> `274:958` móvil de una sola tarjeta. Ninguna está aprobada; las tres son `candidate` heredadas de
-> #156 y #159.
+> **Issue:** [#177](https://github.com/IgnacioBarEsp/PlanearIA/issues/177#issuecomment-5549514143).
+> **Change:** `reconstruir-office-experiencia`.
+> **Superficies aprobadas:** 33 en la seccion `Office · approved v1.0 · #177` (`461:968`). Entradas
+> principales: `461:969` escritorio, `461:1050` tablet, `461:1108` movil. La aprobacion cubre el prototipo;
+> no incluye runtime, `#46`, entrevistas IHC ni los modulos puente, que siguen `candidate`.
+> **Baseline heredado:** `257:951` escritorio, `277:958` clon de escritorio mal llamado tablet y
+> `274:958` móvil de una sola tarjeta. Los tres se conservan intactos y siguen `candidate`.
 
 Esta carpeta acota la evidencia necesaria para reconstruir Office Docente como el módulo donde el docente
 crea material nuevo y vuelve por el que ya hizo. No convierte Microsoft 365, Google Drive ni el runtime
@@ -41,3 +44,19 @@ Asistente y un registro de frames aprobados.
 6. Proto-personas y journeys IHC siguen siendo supuestos. Las entrevistas con docentes están pausadas por
    decisión del owner (2026-09-04); esa pausa no degrada las decisiones de visión confirmadas, pero sí
    mantiene abiertos los supuestos declarados en cada documento.
+
+## Resultado de la ola
+
+El gate visual se cerro en dos rondas. La primera produjo dos condiciones -los filtros `Documentos` y
+`Presentaciones` alternaban entre dos vistas sin mostrar la suya, y el boton `Plantillas` de movil no
+filtraba por tipo- y dos decisiones sobre preguntas abiertas: los chips activos pasan a ser pulsables o a
+presentarse como pestana, y las tarjetas de creacion de movil se compactan. Las cuatro se resolvieron
+dentro del change y la segunda ronda salio limpia.
+
+Las dos decisiones que este documento marcaba como derivadas por el agente quedaron **confirmadas por el
+owner**: importar es accion persistente del hub, y el catalogo de plantillas se agrupa en familias con
+presets en vez de plantillas sueltas.
+
+Queda como resultado medible: 320 aristas de navegacion, 0 fugas dispositivo a dispositivo, 0 destinos de
+filtro o plantilla incorrectos y 0 controles bajo 44 pt. Cierra la porcion de Office de
+`debt-a40b2b029a63` y `debt-b1d35a5b5915`.
