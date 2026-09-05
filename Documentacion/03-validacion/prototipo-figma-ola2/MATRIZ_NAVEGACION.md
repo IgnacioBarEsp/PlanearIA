@@ -244,6 +244,103 @@ llaman tablet y miden 1440x960.
 - Todo lo anterior esta en `debt-a40b2b029a63`, `debt-b1d35a5b5915` y
   [#166](https://github.com/IgnacioBarEsp/PlanearIA/issues/166).
 
+## Ampliacion v1.6 - Office approved #177
+
+Ola `#157-O3`. Seccion `Office · approved v1.0 · #177 · puentes de otros modulos candidate` (`461:968`).
+Los frames heredados `257:951`, `277:958` y `274:958` se conservan intactos y siguen `candidate`.
+
+### Superficies
+
+| Superficie | Escritorio 1440 | Tablet 768 | Movil 390 |
+| --- | --- | --- | --- |
+| Office Docente | `461:969` | `461:1050` | `461:1108` |
+| Biblioteca filtrada por documentos | `495:974` | `495:1254` | `495:1468` |
+| Biblioteca filtrada por hojas | `473:974` | `473:1114` | `473:1221` |
+| Biblioteca filtrada por presentaciones | `495:1114` | `495:1361` | `495:1551` |
+| Superficie pendiente (editor o modulo sin superficie) | `467:968` | `467:986` | `467:1004` |
+| Vacio | `468:1013` | hereda contrato | hereda contrato |
+| Estados negativos | `469:968` | hereda contrato | hereda contrato |
+| Acciones de archivo | en la propia fila | menu `468:992` | hoja `468:968` |
+| Plantillas por tipo | en la tarjeta | en la tarjeta | `477:974`, `498:974`, `498:992` |
+| Asignar a un grupo | `471:968` | `471:986` | `471:1004` |
+| Importar / descargar / donde se usa / duplicar | `470:968` `470:984` `470:1000` `470:1016` | los mismos | `475:974` `475:990` `475:1006` `475:1022` |
+
+### O-01 crear
+
+Los tres tipos estan desplegados al entrar, sin modal intermedio, en los tres breakpoints. `Empezar en
+blanco` y cada plantilla entregan la superficie pendiente del mismo ancho. En movil los tres tipos caben
+sin desplazar: la zona de creacion ocupa 312-660 sobre un corte de pantalla de 844.
+
+Desviacion registrada de D3, acotada al hub de Office: la creacion se despliega dentro del modulo porque
+crear es su tarea principal. El selector tipo-primero global `310:3`, `310:69` y `310:106` permanece
+intacto y conserva sus tres aristas de entrada desde Escritorio.
+
+### O-02 biblioteca y filtros
+
+Eje cronologico con agrupacion secundaria por tipo. Cada chip navega a la vista de su propio tipo; el chip
+de tipo activo limpia el filtro y devuelve a la vista completa. El chip `Todos` de la vista sin filtrar no
+es una pildora sino una pestana de estado actual, y es el unico control sin reaccion de la seccion.
+
+### O-03 acciones sobre el archivo
+
+Descargar, asignar, adjuntar, donde se esta usando y duplicar son alcanzables sin abrir el objeto, con
+label textual visible en los tres breakpoints. Asignar entrega una copia de la hoja aprobada de Clases con
+el cableado heredado limpiado, para que cierre de vuelta a Office en vez de entrar al flujo interno de
+Clases. Adjuntar devuelve el control a Mensajeria del mismo ancho.
+
+### O-04 importar y vacio
+
+Importar es alcanzable con la biblioteca llena y vacia. El estado vacio ofrece crear e importar y declara
+por que no muestra ejemplos.
+
+### O-05 estados
+
+Cargando, error, offline, sync pendiente y sync en conflicto tienen rotulo, texto y salida propios.
+Pendiente y conflicto no se confunden entre si.
+
+### Estado de limite por breakpoint
+
+`467:968`, `467:986` y `467:1004` cubren dos casos: un editor de Office que pertenece a `#157-O4` a
+`#157-O6`, y un modulo que todavia no tiene superficie en ese ancho. `Volver` usa la accion `BACK`, que
+regresa al origen exacto y por tanto nunca cruza de tamano.
+
+### Verificacion por ancho de frame
+
+| Metrica | Valor |
+| --- | ---: |
+| Superficies | 33 |
+| Aristas de navegacion | 320 |
+| Aristas de overlay | 52 |
+| Fugas dispositivo a dispositivo | 0 |
+| Chips de filtro con destino incorrecto | 0 |
+| Botones de plantillas con destino incorrecto | 0 |
+| Controles bajo 44 pt | 0 |
+| Controles sin reaccion | 3 (pestana `Todos`) |
+
+Aristas por contexto: 134 escritorio, 107 tablet, 79 movil.
+
+La auditoria clasifica por ancho de frame, cuenta las aristas que salen de la seccion y resuelve el
+contexto de dispositivo de cada overlay por quien lo abre. `Office · importar archivo` se abre desde
+escritorio y tablet y emite cero aristas de navegacion. Limitacion declarada: un overlay abierto desde otro
+overlay no hereda contexto de forma transitiva; los afectados emiten solo `CLOSE`.
+
+### Gate humano v1.6
+
+El owner recorrio Present en dos rondas. La primera emitio dos condiciones -filtros que alternaban entre
+dos vistas y plantillas de movil sin filtrar por tipo- y dos decisiones: chips activos pulsables y tarjetas
+de creacion compactadas en movil. Las cuatro se corrigieron dentro del change. La segunda ronda salio
+limpia y el owner aprobo el 2026-09-04:
+[comentario en #177](https://github.com/IgnacioBarEsp/PlanearIA/issues/177#issuecomment-5549514143).
+
+### Limites que conserva esta version
+
+- Los editores NotasPLAN, CalcuPLAN y PresentaPLAN siguen sin existir en ningun ancho: pertenecen a
+  `#157-O4` a `#157-O6` y se representan con el estado de limite.
+- Recursos didacticos y materiales heredados de ContenidoTab no se dibujan: D6 se completa en una ola
+  posterior con su propia entrevista, aunque el runtime ya tenga `Contenido` dentro de `OfficeStack`.
+- Fuera de Office y Clases, tablet sigue sin superficies propias; esa parte de #166 pertenece a sus olas.
+- La descarga con fidelidad de formato se representa como afordancia y no se simula.
+
 ## Validaciones y limites honestos
 
 - El API de Figma confirma un solo `flowStartingPoint` (`Escritorio Docente`), cero destinos rotos y ningún

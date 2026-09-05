@@ -1,0 +1,50 @@
+{
+  "schemaVersion": 1,
+  "flow": "reconstruir-office-experiencia",
+  "date": "2026-09-04",
+  "kind": "feature",
+  "result": "clean",
+  "candidates": [],
+  "notes": [
+    {
+      "title": "El estado vacio y el tablero de estados existen solo en escritorio",
+      "classification": "observacion, no deuda",
+      "reasoning": "Ninguna requirement de office-prototype-experience exige esos estados por breakpoint. La requirement de arquitectura en tres breakpoints gobierna las superficies principales -creacion, biblioteca y acciones-, y las tres existen en 1440, 768 y 390. El estado de limite de editor, que si es navegacional, si existe en los tres anchos. El contrato de los siete estados queda trasladado al handoff de runtime, que los exige con dos condiciones explicitas: pendiente y conflicto no pueden verse iguales, y crear no puede depender de la biblioteca. Su ausencia en tablet y movil no bloquea ni encarece trabajo futuro, porque el runtime construye estados desde el contrato y no desde frames de Figma. Registrarlo como optional-improvement habria consumido la quinta unidad del presupuesto del plan y disparado saneamiento por un nice-to-have, que es exactamente la deuda inventada que la politica prohibe."
+    },
+    {
+      "title": "Tres controles sin reaccion en la seccion",
+      "classification": "por diseno, no deuda",
+      "reasoning": "Son la pestana Todos de las tres superficies sin filtrar. Figma rechaza por diseno una navegacion de un frame a si mismo. El owner reporto en la ronda 1 que los chips se leian como pulsables, asi que el significante se cambio: dejaron de ser pildoras y son pestanas de estado actual con barra inferior. Validado por el owner en la ronda 2."
+    },
+    {
+      "title": "Un overlay se abre desde dos breakpoints y otros tres no heredan contexto de forma transitiva",
+      "classification": "limitacion declarada del clasificador, no deuda",
+      "reasoning": "Office · importar archivo se abre desde escritorio y tablet, y los overlays alcanzados desde el menu de tablet no heredan contexto. Se verifico que los cuatro emiten unicamente acciones CLOSE y cero aristas de navegacion, por lo que no pueden entregar una superficie de otro ancho. Queda documentado en la evidencia 02 y en la matriz de navegacion para no presentar la cobertura del gate como mayor de lo que es."
+    }
+  ],
+  "resolvesPartially": [
+    {
+      "id": "debt-a40b2b029a63",
+      "portion": "Office",
+      "detail": "El puente T-G Office 277:958, que se llamaba tablet y media 1440x960, queda sustituido por la superficie propia de 768 461:1050. Las cuatro superficies de tablet de Office resuelven en su propio ancho. El item sigue abierto porque cubre tambien Asistente, Reportes, Diseno, Mensajeria, Agenda y Cuenta, que pertenecen a sus propias olas."
+    },
+    {
+      "id": "debt-b1d35a5b5915",
+      "portion": "Office",
+      "detail": "El control Accion abrir prioridad movil del puente M-G Office 274:958, que entregaba frames de 1440x960, queda sustituido por la superficie propia de 390 461:1108 y por el estado de limite 467:1004. El item sigue abierto por los demas modulos."
+    }
+  ],
+  "verification": {
+    "method": "Auditoria read-only por Plugin API sobre la seccion 461:968: recorrido de cada reactions[].actions[], resolucion del frame de nivel superior de origen y destino, clasificacion por ancho de frame, conteo de aristas salientes de la seccion y resolucion del contexto de dispositivo de cada overlay por quien lo abre. Comprobaciones adicionales de destino por tipo de filtro y de plantilla, objetivo tactil, solapamiento geometrico dentro de las tarjetas y cumplimiento del corte de pantalla por breakpoint.",
+    "result": "33 superficies, 320 aristas de navegacion y 52 de overlay. Cero fugas dispositivo a dispositivo (134 escritorio, 107 tablet, 79 movil). Cero destinos rotos, cero destinos de filtro incorrectos, cero destinos de plantilla incorrectos, cero controles bajo 44 pt, cero solapamientos y la zona de creacion cabe sobre el corte en los tres breakpoints (628 sobre 960, 1018 sobre 1024 y 660 sobre 844).",
+    "date": "2026-09-04"
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/reconstruir-office-experiencia/evidencia/06-revision-adversarial.md",
+    "verdict": "PASS CON HUECOS",
+    "blockers": 0,
+    "majors": 3,
+    "majorsResolved": 3,
+    "detail": "Tres Majors encontrados y corregidos dentro del change: la tercera tarjeta de creacion caia bajo el corte de 1024 en tablet incumpliendo la propia spec, dos escenarios prometian representar el objeto en blanco cuando el diseno lo excluye deliberadamente, y la spec exigia reutilizar la hoja Asignar aprobada cuando su cableado heredado lo hacia imposible sin romper el retorno a Office."
+  }
+}
