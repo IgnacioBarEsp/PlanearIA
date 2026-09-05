@@ -14,10 +14,15 @@ previa de un formulario.
 - **WHEN** el docente abre un documento en 1440, 768 o 390
 - **THEN** ve la hoja con su formato de página declarado, con las siete secciones presentes como encabezados con nombre, y puede escribir sobre ella
 
-#### Scenario: El docente navega por el índice
+#### Scenario: El docente navega por el índice con la página visible
 
-- **WHEN** el docente activa una sección en el índice
-- **THEN** la hoja se sitúa en ese encabezado sin cambiar de superficie ni perder lo escrito
+- **WHEN** el docente activa una sección en el índice y la página completa cabe en pantalla
+- **THEN** esa sección queda enfocada dentro del documento, el contenido no se desplaza y ningún elemento queda fuera del margen de la hoja
+
+#### Scenario: El docente navega por el índice en una pantalla pequeña
+
+- **WHEN** el docente activa una sección desde el panel de índice en tablet o móvil
+- **THEN** el panel se cierra y devuelve al documento. El prototipo SHALL NOT fingir un desplazamiento que no representa, y esa limitación queda declarada
 
 #### Scenario: La estructura no vive fuera del documento
 
@@ -49,8 +54,8 @@ formulario SHALL estar a un toque.
 
 #### Scenario: El docente usa el formulario en una sección con estructura
 
-- **WHEN** el docente abre la lente de formulario estando en sesiones o en evaluación
-- **THEN** ve los campos de esa sección y al volver a la hoja el contenido aparece bajo el encabezado correspondiente
+- **WHEN** el docente abre la lente de formulario desde una sección con estructura
+- **THEN** ve los campos de esa sección, la pantalla declara de qué sección son, y al volver a la hoja el contenido aparece bajo el encabezado correspondiente. El prototipo demuestra la lente sobre Sesiones y declara que es una instancia, no la única sección con formulario
 
 #### Scenario: Móvil abre la hoja
 

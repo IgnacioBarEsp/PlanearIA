@@ -18,24 +18,25 @@ niveles de andamiaje sin bloquear la creación.
 
 ## Comportamiento — qué garantizan las specs
 
-La hoja es la superficie principal en los tres tamaños y declara su formato de página. El índice navega los
-siete encabezados. El formulario proyecta la sección activa sin ser fuente de verdad. La IA propone sólo a
-petición y el docente acepta o descarta. Seis acciones viven en el editor, y compartir por enlace es de sólo
-lectura y revocable: quien quiera editar necesita cuenta y permiso. Nueve estados tienen salida honesta,
-incluido uno que declara qué sobrevivió al volver de Word.
+La hoja es la superficie principal en los tres tamaños y declara su formato de página. El índice enfoca la
+sección elegida sin mover el documento. El formulario proyecta la sección activa sin ser fuente de verdad.
+La IA propone sólo a petición y el docente acepta o descarta. Seis acciones viven en el editor, y compartir
+por enlace es de sólo lectura y revocable: quien quiera editar necesita cuenta y permiso. Ocho estados
+tienen salida honesta.
 
-## Plan de trabajo — qué hará el apply
+## Plan de trabajo — qué hizo el apply
 
-Primero se revalida Figma y se confirma que no existe editor fuera de escritorio. Luego se construye la
-sección candidate: escritorio para fijar la arquitectura, después tablet y móvil como superficies propias,
-más el estado de límite de las familias que aún no existen. Siguen la plantilla por niveles, las acciones,
-el compartir con permisos y los nueve estados. Después se audita el grafo por ancho **y por corrección de
-destino**. El ciclo se detiene en Figma Present.
+Se revalidó Figma, se confirmó que no existía editor fuera de escritorio y se construyó la sección: la hoja
+con sus siete encabezados, la barra con un estado por comando, la lente de formulario, la plantilla por
+niveles, las acciones, el compartir con permisos y los estados. El owner recorrió Present en tres rondas:
+la primera devolvió tres fallos de navegación, la segunda un fallo conceptual en cómo se representaba el
+índice, y la tercera salió limpia.
 
 ## Resumen integral del change
 
-NotasPLAN pasa de cuatro frames de escritorio que imitan Word a un editor que existe en los tres tamaños y
-cuyo archivo es un documento de verdad. La decisión de fondo la revisó el owner dos veces hasta llegar a la
-única opción que conserva su condición inicial sin tirar los ocho componentes de sección que ya funcionan.
-El costo real —migrar el almacenamiento del runtime a documento-primero— queda declarado, no escondido. Y
-la promesa de volver desde Word se acota: qué sobrevive y qué degrada está escrito.
+NotasPLAN pasa de cuatro frames de escritorio que imitan Word a cincuenta y una superficies aprobadas
+donde el archivo es un documento de verdad. La decisión de fondo la revisó el owner dos veces hasta llegar
+a la única opción que conserva su condición inicial sin tirar los ocho componentes de sección que ya
+funcionan. El costo real —migrar el almacenamiento del runtime a documento-primero— queda declarado, no
+escondido. Y el aviso sobre qué degrada al editar fuera salió de la interfaz por decisión del owner, sin
+que el límite deje de estar escrito donde sirve.

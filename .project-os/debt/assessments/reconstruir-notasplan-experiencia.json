@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "flow": "reconstruir-notasplan-experiencia",
+  "date": "2026-09-05",
+  "kind": "feature",
+  "result": "clean",
+  "candidates": [],
+  "notes": [
+    {
+      "title": "El estado de documento nuevo vacio existe como panel del tablero y no como superficie propia",
+      "classification": "observacion, no deuda",
+      "reasoning": "La requirement de estados pide disenar el estado, no dedicarle una superficie. El panel declara su salida -escribir o cambiar el nivel de plantilla- y el nivel de plantilla si tiene superficie propia en dos anchos. Office le dedico un frame porque alli el vacio era la entrada de un docente nuevo al modulo; aqui el vacio es una hoja con encabezados, que es exactamente lo que el editor muestra al crear. No bloquea ni encarece trabajo futuro."
+    },
+    {
+      "title": "En tablet y movil el indice no simula el desplazamiento del documento",
+      "classification": "limitacion declarada, no deuda",
+      "reasoning": "En escritorio la pagina completa cabe en pantalla, asi que seleccionar una seccion la enfoca. En tablet y movil no cabe, y representar el desplazamiento exigiria una superficie por seccion y por breakpoint, catorce mas, para demostrar un gesto que el runtime resuelve con scroll nativo. El panel cierra y devuelve al documento, que es honesto y no lleva a la seccion equivocada. La spec lo recoge en un escenario propio y prohibe fingir un desplazamiento que no se representa."
+    },
+    {
+      "title": "La evidencia archivada de #177 conserva cifras que ya no reflejan su seccion",
+      "classification": "registro historico, no deuda",
+      "reasoning": "Este change recableo 61 controles de entrada de tipo documento de la seccion aprobada de Office, asi que su conteo de aristas cambio. La evidencia de #177 es el registro de aquel cierre y no se reescribe. El estado vigente vive en MATRIZ_NAVEGACION.md, que si se actualizo a v1.7, y la auditoria de esta ola verifico que Office conserva sus cero fugas tras la integracion."
+    }
+  ],
+  "verification": {
+    "method": "Auditoria read-only por Plugin API sobre la seccion 516:974 y sobre la seccion aprobada de Office 461:968: recorrido de cada reactions[].actions[], clasificacion por ancho de frame, conteo de aristas salientes, resolucion del contexto de dispositivo de cada overlay por quien lo abre, comprobacion de correccion de destino por identidad para comandos de barra, filas de indice, niveles de plantilla y acciones del documento, deteccion de overlays sin accion de salida, objetivo tactil, solapamiento geometrico dentro de la hoja y del indice, y verificacion de que ningun elemento del documento quede por encima del borde del papel.",
+    "result": "51 superficies, 352 aristas de navegacion y 151 de overlay. Cero fugas dispositivo a dispositivo (248 escritorio, 65 tablet, 39 movil). Cero destinos incorrectos, cero overlays sin salida, cero contenido fuera del margen de la hoja, cero solapamientos y cero controles bajo 44 pt. Office conserva cero fugas tras el recableado de sus entradas de documento.",
+    "date": "2026-09-05"
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/reconstruir-notasplan-experiencia/evidencia/06-revision-adversarial.md",
+    "verdict": "PASS CON HUECOS",
+    "blockers": 0,
+    "majors": 3,
+    "majorsResolved": 3,
+    "detail": "Tres Majors encontrados y corregidos dentro del change: la lente de formulario no tenia ninguna entrada en escritorio pese a que la spec la exige alcanzable en los tres breakpoints; un escenario prometia que la lente muestra los campos de la seccion desde la que se abre cuando las tres declaran siempre Sesiones; y el escenario del indice afirmaba que la hoja se situa en el encabezado, algo que en tablet y movil no ocurre."
+  },
+  "aportesAlGate": [
+    "Overlays sin ninguna accion de salida, tras el callejon sin salida de la hoja Asignar.",
+    "Correccion de destino tambien para los comandos de la barra de formato.",
+    "Contexto de dispositivo de cada overlay resuelto por quien lo abre, que detecto una fuga invisible a la clasificacion por ancho.",
+    "Ningun elemento del documento por encima del borde del papel, tras el desplazamiento incorrecto del indice."
+  ]
+}

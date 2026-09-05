@@ -57,15 +57,15 @@
 - [x] 7.1 Preparar los recorridos de Figma Present por breakpoint
 - [x] 7.2 Recorrer Present con el owner y recoger condiciones
 - [x] 7.3 Confirmar en Present las tres decisiones derivadas: nivel con default, formulario no default en móvil y secciones como encabezados
-- [ ] 7.4 Corregir dentro de este change las condiciones emitidas y volver a recorrer
-- [ ] 7.5 Registrar el veredicto humano explícito en el issue #180 y en `evidencia/04-gate-visual-issue-180.md`
-- [ ] 7.6 Promover los frames aprobados y renombrar la sección sólo después del veredicto
+- [x] 7.4 Corregir dentro de este change las condiciones emitidas y volver a recorrer
+- [x] 7.5 Registrar el veredicto humano explícito en el issue #180 y en `evidencia/04-gate-visual-issue-180.md`
+- [x] 7.6 Promover los frames aprobados y renombrar la sección sólo después del veredicto
 
 ## 8. Cierre
 
-- [ ] 8.1 Actualizar la matriz de navegación y el ground truth de NotasPLAN con las superficies aprobadas
-- [ ] 8.2 Documentar el handoff runtime en `evidencia/05-handoff-runtime-notasplan.md`, con los cuatro costos declarados
-- [ ] 8.3 Completar `readiness.json` y `brownfield-baseline.md` y actualizar `TLDR.md`
-- [ ] 8.4 Ejecutar la revisión adversarial y corregir Blockers y Majors dentro del change
-- [ ] 8.5 Capturar la deuda con `npm run debt:capture`, incluso si el resultado es `clean`
-- [ ] 8.6 Ejecutar `npm run openspec:ready:archive -- --change reconstruir-notasplan-experiencia --run-local` y resolver cada FAIL
+- [x] 8.1 Actualizar la matriz de navegación y el ground truth de NotasPLAN con las superficies aprobadas
+- [x] 8.2 Documentar el handoff runtime en `evidencia/05-handoff-runtime-notasplan.md`, con los cuatro costos declarados
+- [x] 8.3 Completar `readiness.json` y `brownfield-baseline.md` y actualizar `TLDR.md`
+- [x] 8.4 Ejecutar la revisión adversarial y corregir Blockers y Majors dentro del change
+- [x] 8.5 Capturar la deuda con `npm run debt:capture`, incluso si el resultado es `clean`
+- [x] 8.6 Ejecutar `npm run openspec:ready:archive -- --change reconstruir-notasplan-experiencia --run-local` y resolver cada FAIL
