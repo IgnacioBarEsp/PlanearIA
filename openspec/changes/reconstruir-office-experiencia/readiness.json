@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "issue": 177,
+  "change": "reconstruir-office-experiencia",
+  "surfaces": [
+    "docs",
+    "ui"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/177"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish tras apply, aprobacion visual y archive."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "Pendiente: se registra en evidencia/06-revision-adversarial.md durante apply. Sin ella el change no archiva."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "Pendiente: openspec validate --all --strict, checkOpenSpecTldr, checkSourceEncoding y agent:harness:check durante apply. No se ejecutan typecheck ni tests: el change no toca src/, backend/ ni dependencias."
+    },
+    {
+      "id": "web-http-200",
+      "ref": "Pendiente: sólo si el gate visual exige comparar con runtime. Este change no edita runtime, por lo que puede quedar declarado como no requerido con causa."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "Pendiente de decision: precedente de #163 es no ejecutarlo cuando el change no modifica runtime y verificar la navegacion por alcanzabilidad sobre el grafo Figma. Se declara explicitamente al cerrar, nunca se omite en silencio."
+    },
+    {
+      "id": "nielsen",
+      "ref": "Pendiente: evidencia/03-qa-anti-slop-accesibilidad.md con severidad Nielsen y auditoria de 44 pt sin hitSlop, foco, orden y contraste."
+    },
+    {
+      "id": "breakpoint-integrity",
+      "ref": "Pendiente: evidencia/02-auditoria-grafo-por-ancho.md. Criterio de cierre heredado de #166: clasificar por ancho de frame, contar aristas salientes y reportar cero fugas dispositivo a dispositivo en la seccion de Office."
+    },
+    {
+      "id": "human-approval",
+      "ref": "Pendiente: veredicto humano explicito del owner tras Figma Present por breakpoint, registrado en el issue #177. Ninguna auditoria automatica lo sustituye."
+    },
+    {
+      "id": "runtime-handoff",
+      "ref": "Pendiente: evidencia/05-handoff-runtime-office.md. Debe declarar el costo no dimensionado de la descarga con fidelidad de formato contra la excepcion vigente por el cuelgue sincrono de SheetJS ante xlsx corrupto. No autoriza crear issue ni change de runtime."
+    },
+    {
+      "id": "figma-promotion",
+      "ref": "Pendiente: la seccion permanece candidate hasta el veredicto. Los nodos heredados 257:951, 277:958 y 274:958 se conservan intactos como baseline historico."
+    },
+    {
+      "id": "debt-assessment",
+      "ref": "Pendiente: evidencia/debt-assessment-input.json capturado con debt:capture, incluso si el resultado es clean. El plan uxui-navegacion-global esta en 4/5 unidades y una tercera deuda transversal dispara saneamiento."
+    }
+  ],
+  "rollback": {
+    "strategy": "Conservar los nodos historicos 257:951, 277:958 y 274:958 y trabajar en una seccion candidate identificable; restaurar por historial Figma o por los frames previos y revertir artefactos versionados por PR normal. Runtime, rutas, datos, storage, backend y src/sync permanecen intactos. Si el gate visual se rechaza, se itera o se restaura el candidate y no se promueve ni se crea el change de runtime."
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/reconstruir-office-experiencia/evidencia/06-revision-adversarial.md"
+  },
+  "exceptions": []
+}
