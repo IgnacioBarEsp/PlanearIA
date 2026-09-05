@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "issue": 180,
+  "change": "reconstruir-notasplan-experiencia",
+  "surfaces": [
+    "docs",
+    "ui"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/180"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish tras archive."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "openspec/changes/reconstruir-notasplan-experiencia/evidencia/06-revision-adversarial.md - PASS CON HUECOS; 0 Blockers, 3 Majors encontrados y corregidos dentro del change (uno en implementacion, dos en spec), 3 Minors de los que dos quedan corregidos y uno se clasifica como observacion."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "2026-09-05: openspec validate --all --strict --no-interactive 58/58 PASS; checkOpenSpecTldr OK; checkSourceEncoding OK; agent:harness:check OK con 37 mirrors. No se ejecutan typecheck ni tests: el change no toca src/, backend/ ni dependencias."
+    },
+    {
+      "id": "web-http-200",
+      "ref": "No requerido y no ejecutado: el change no edita runtime y no existe superficie de destino que comparar. Se declara explicitamente en vez de omitirse."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "No ejecutado, siguiendo el precedente de #163 y #177 para changes que no modifican runtime. La verificacion de navegacion se hizo sobre el grafo Figma y el gate visual fue el recorrido humano en Present, en tres rondas."
+    },
+    {
+      "id": "nielsen",
+      "ref": "openspec/changes/reconstruir-notasplan-experiencia/evidencia/03-qa-anti-slop-accesibilidad.md - checklist de diez heuristicas con severidad maxima 0, objetivo tactil sin hitSlop, verificacion de tema oscuro por valor resuelto incluida la hoja, y refutacion del clon de Word, el formulario con vista previa y la IA al frente."
+    },
+    {
+      "id": "breakpoint-integrity",
+      "ref": "openspec/changes/reconstruir-notasplan-experiencia/evidencia/02-auditoria-grafo-por-ancho.md - 51 superficies, 352 aristas de navegacion y 151 de overlay; 0 fugas dispositivo a dispositivo (248 escritorio, 65 tablet, 39 movil); 0 destinos incorrectos; 0 overlays sin salida; 0 contenido fuera del margen de la hoja; 0 controles bajo 44 pt. La ola anade cuatro comprobaciones al gate que heredan las siguientes olas."
+    },
+    {
+      "id": "human-approval",
+      "ref": "APROBADO. El owner recorrio Figma Present en tres rondas. La primera emitio tres fallos de navegacion y tres correcciones de detalle; la segunda un fallo conceptual en la representacion del indice; la tercera salio limpia. Veredicto: https://github.com/IgnacioBarEsp/PlanearIA/issues/180#issuecomment-5551089735"
+    },
+    {
+      "id": "runtime-handoff",
+      "ref": "openspec/changes/reconstruir-notasplan-experiencia/evidencia/05-handoff-runtime-notasplan.md - declara la migracion del PlaneacionDocumento tipado a documento-primero como el costo mayor, las cinco promesas que el runtime no tiene, la decision de privacidad del enlace revocable, y el limite tecnico del viaje de vuelta que sale de la interfaz pero no del contrato. No autoriza crear issue ni change de runtime."
+    },
+    {
+      "id": "figma-promotion",
+      "ref": "Seccion renombrada 'NotasPLAN · approved v1.0 · #180'; promovidas 51 superficies. Los frames heredados 62:3, 66:40, 151:77 y 151:123 se conservan intactos y siguen draft. Se recablearon ademas 61 controles de entrada de tipo documento de la seccion aprobada de Office, edicion declarada y acotada que la spec archivada de #177 anticipaba."
+    },
+    {
+      "id": "debt-assessment",
+      "ref": "openspec/changes/reconstruir-notasplan-experiencia/evidencia/debt-assessment-input.json capturado con debt:capture; resultado clean. Dos observaciones clasificadas y razonadas como no deuda."
+    }
+  ],
+  "rollback": {
+    "strategy": "Los nodos historicos 62:3, 66:40, 151:77 y 151:123 permanecen intactos, asi que restaurar NotasPLAN a su estado previo es volver a apuntar a ellos. La seccion 516:974 es recuperable por historial de Figma. El recableado de las entradas de documento de Office se revierte devolviendolas al estado de limite, que sigue existiendo. Los artefactos versionados se revierten por PR normal. Runtime, rutas, datos, storage, backend y src/sync permanecen intactos: este change no toca una sola linea de codigo de producto, y la migracion a documento-primero que la decision implica pertenece a un change de runtime posterior que aun no existe."
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/reconstruir-notasplan-experiencia/evidencia/06-revision-adversarial.md"
+  },
+  "exceptions": []
+}

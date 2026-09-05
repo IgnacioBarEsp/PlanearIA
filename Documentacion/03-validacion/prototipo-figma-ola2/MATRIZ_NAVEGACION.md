@@ -341,6 +341,116 @@ limpia y el owner aprobo el 2026-09-04:
 - Fuera de Office y Clases, tablet sigue sin superficies propias; esa parte de #166 pertenece a sus olas.
 - La descarga con fidelidad de formato se representa como afordancia y no se simula.
 
+## Ampliacion v1.7 - NotasPLAN approved #180
+
+Ola `#157-O4`. Seccion `NotasPLAN · approved v1.0 · #180` (`516:974`), 51 superficies. Los frames heredados
+`62:3`, `66:40`, `151:77` y `151:123` se conservan intactos y siguen `draft`.
+
+### Superficies
+
+| Grupo | Escritorio 1440 | Tablet 768 | Movil 390 |
+| --- | --- | --- | --- |
+| Editor | `516:975` | `518:974` | `518:1025` |
+| Vistas de seccion (7, una por seccion) | `516:975` y `558:980`..`558:1605` | por panel | por panel |
+| Formato aplicado (una por comando) | 7 variantes | 5 variantes | 3 variantes |
+| Formulario (lente de la seccion activa) | `523:980` | `523:1121` | `523:1195` |
+| Familia pendiente | `520:974` | `520:992` | `520:1010` |
+| Indice como panel | en el frame | `524:980` | `524:1011` |
+| Acciones del documento | panel derecho | `524:1042` | `524:1065` |
+| Nivel de plantilla | `520:1028` | `533:980` | `520:1047` |
+| Descargar / Compartir / Historial / Permiso | `521:974` `521:1002` `522:974` `522:1008` | los mismos | `521:988` `521:1022` `522:991` `522:1025` |
+| Asignar a un grupo | `522:1042` | `522:1060` | `522:1078` |
+| Propuesta de IA | `526:1196` | `526:1196` | `526:1211` |
+| Estados | `525:980` | — | — |
+
+### N-01 la hoja es el archivo
+
+La hoja es la superficie principal en los tres anchos y declara su formato de pagina. Las siete secciones
+del runtime -informacion institucional, datos generales, curricular, sesiones, evaluacion, observaciones y
+firmas- viven **dentro del documento** como encabezados con nombre. El formulario las proyecta y lo declara
+en pantalla; no es la fuente de verdad.
+
+Decision de fondo de la ola: documento-primero con lente de formulario. Es lo unico que permite descargar,
+editar fuera y volver sin perder la estructura, porque la estructura viaja dentro del archivo.
+
+### N-02 la barra refleja el cursor
+
+Barra compacta de siete comandos, sin cinta de pestanias. Cada comando lleva a su propio estado, donde
+queda activo y el parrafo muestra el formato aplicado. Pulsar el comando activo lo desactiva.
+
+### N-03 el indice enfoca la seccion
+
+Con la pagina entera visible en escritorio, seleccionar una seccion no la desplaza: la enfoca con una banda
+detras del texto. El contenido no se mueve y nada se sale del papel. En tablet y movil el indice es un
+panel que se cierra y devuelve al documento; ahi no se simula desplazamiento y queda declarado.
+
+### N-04 plantilla por niveles
+
+Tres niveles -sencillo, moderado y autocompletado- con valor por defecto y sin bloquear la creacion, para
+no contradecir la spec archivada de #177. En autocompletado los datos prellenados se marcan como editables.
+
+### N-05 acciones del documento
+
+Seis sin salir del editor: guardar en la biblioteca, descargar, asignar a un grupo, guardar como plantilla
+propia, ver historial y compartir. Compartir ofrece copia en PDF o docx y enlace, por ruta interna y
+externa. El enlace es de solo lectura y revocable; editar exige cuenta en PlanearIA y solicitud de permiso.
+
+### N-06 la IA propone
+
+Actua a peticion sobre la seccion activa y su resultado se compara antes de aplicarse. Sin proveedor, el
+editor funciona completo.
+
+### Integracion con Office
+
+61 controles de entrada de tipo documento de la seccion aprobada de Office pasan del estado de limite al
+editor o al selector de nivel de su propio ancho. Las entradas de hoja y presentacion siguen en el limite
+porque pertenecen a `#157-O5` y `#157-O6`. Es una edicion declarada de una seccion aprobada, anticipada por
+la propia spec de Office.
+
+### Verificacion
+
+| Metrica | Valor |
+| --- | ---: |
+| Superficies | 51 |
+| Aristas de navegacion | 352 |
+| Aristas de overlay | 151 |
+| Fugas dispositivo a dispositivo | 0 |
+| Destinos incorrectos | 0 |
+| Overlays sin salida | 0 |
+| Contenido fuera del margen de la hoja | 0 |
+| Controles bajo 44 pt | 0 |
+
+Aristas por contexto: 248 escritorio, 65 tablet, 39 movil.
+
+Comprobaciones que esta ola anade al gate y que heredan las siguientes:
+
+1. **Overlays sin ninguna accion de salida**, tras el callejon sin salida de la hoja Asignar.
+2. **Correccion de destino tambien para los comandos de la barra**, no solo para indice, plantilla y
+   acciones.
+3. **Contexto de dispositivo de cada overlay resuelto por quien lo abre**, que detecto una fuga que la
+   clasificacion por ancho no puede ver: un overlay abierto desde tablet que navegaba a un frame de 1440.
+4. **Ningun elemento del documento por encima del borde del papel**, tras el desplazamiento incorrecto.
+
+### Gate humano v1.7
+
+Tres rondas. La primera devolvio tres fallos de navegacion y tres correcciones de detalle; la segunda, un
+fallo conceptual en como se representaba el indice; la tercera salio limpia. Veredicto del owner el
+2026-09-05:
+[comentario en #180](https://github.com/IgnacioBarEsp/PlanearIA/issues/180#issuecomment-5551089735).
+
+Leccion registrada: la auditoria automatica verifica que un control llegue al destino correcto, pero no si
+lo que ese destino muestra es una simulacion fiel. Las dos primeras rondas encontraron el mismo tipo de
+error en esas dos capas. Por eso el gate humano no se sustituye por evidencia automatica.
+
+### Limites que conserva esta version
+
+- CalcuPLAN y PresentaPLAN no existen: pertenecen a `#157-O5` y `#157-O6` y se representan con el estado de
+  limite.
+- Instrumento de evaluacion y Documento academico tampoco: son familias posteriores del tipo documento.
+- En tablet y movil el indice no simula desplazamiento del documento.
+- La migracion del almacenamiento del runtime a documento-primero es el costo mayor de la ola y pertenece a
+  un change de runtime que aun no existe.
+
 ## Validaciones y limites honestos
 
 - El API de Figma confirma un solo `flowStartingPoint` (`Escritorio Docente`), cero destinos rotos y ningún
