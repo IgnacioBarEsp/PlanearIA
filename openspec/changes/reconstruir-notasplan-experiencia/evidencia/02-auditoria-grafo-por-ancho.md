@@ -187,3 +187,60 @@ declarada —el prototipo no simula desplazamiento en esos anchos— pero ya no 
 
 Los siete controles sin reacción son la fila del índice de la sección en la que ya estás. Como en Office,
 dejaron de parecer botón: sin relleno, con una barra de acento a la izquierda y el texto en color de marca.
+
+---
+
+# Tercera auditoría — tras la ronda 2 del gate visual
+
+**Fecha:** 2026-09-05.
+
+## El fallo del índice era conceptual, no de cableado
+
+El owner: "al darle clic en las secciones, lo unico que hace es mover el documento de arriba hacia abajo y
+de hecho termina saliendo la informacion hacia arriba fuera del margen de la hoja... del 6 al 7 no hace
+nada el boton".
+
+La corrección de la ronda 1 cableó bien cada fila, pero simuló el desplazamiento **moviendo el contenido
+dentro de la hoja**. Eso es incorrecto por dos motivos:
+
+1. Un documento no desplaza su contenido fuera del papel. Lo que se desplaza es la página dentro de la
+   ventana; el contenido no se sale de la hoja.
+2. Medido: la hoja de escritorio mide 1120 px, su contenido termina en 1091 y el área visible es de 1144.
+   **La página completa ya cabe en pantalla**, así que no hay nada que desplazar. Por eso las secciones 6 y
+   7 no hacían nada: el desplazamiento estaba limitado a cero.
+
+## Corrección
+
+Cuando la página entera es visible, seleccionar una sección no la desplaza: **la enfoca**. Cada vista de
+sección lleva ahora una banda de enfoque detrás del texto, con acento a la izquierda, que abarca desde el
+encabezado hasta el final de esa sección. El contenido no se mueve ni un píxel.
+
+Comprobación añadida a la auditoría: **ninguna banda de enfoque puede salirse de la hoja, y ningún elemento
+del documento puede quedar por encima del borde del papel.** Resultado: 0 en las siete vistas.
+
+## Resultado
+
+| Métrica | Valor |
+| --- | ---: |
+| Superficies | 51 |
+| Aristas de navegación | 352 |
+| Aristas de overlay | 151 |
+| Fugas dispositivo a dispositivo | 0 |
+| Errores de destino en el índice | 0 |
+| Bandas de enfoque fuera del papel | 0 |
+| Contenido fuera del margen de la hoja | 0 |
+| Controles bajo 44 pt | 0 |
+
+| Origen a destino | Aristas |
+| --- | ---: |
+| escritorio a escritorio | 248 |
+| tablet a tablet | 65 |
+| móvil a móvil | 39 |
+
+## Lección
+
+Las dos primeras rondas del gate encontraron el mismo tipo de error en capas distintas: primero un destino
+equivocado, después una representación equivocada del mismo gesto. La auditoría automática detecta lo
+primero pero no lo segundo: que un control llegue al destino correcto no dice nada sobre si lo que ese
+destino muestra es una simulación fiel. Eso sólo lo ve una persona recorriendo el prototipo, y es
+exactamente por lo que el gate humano no se sustituye por evidencia automática.

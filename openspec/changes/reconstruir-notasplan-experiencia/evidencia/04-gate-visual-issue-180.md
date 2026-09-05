@@ -132,3 +132,7 @@ declarado.
 
 Comprueba los recuadros de logo en tablet, el botón Ver la hoja en móvil, y que el tablero de estados ya no
 habla de reimportación.
+
+### R3 · Sólo el índice
+
+Pulsa las siete secciones en escritorio. **Comprueba:** el documento no se mueve; se enfoca la sección elegida con una banda, y ningún texto se sale del papel. Las siete responden, incluidas Observaciones y Firmas.
