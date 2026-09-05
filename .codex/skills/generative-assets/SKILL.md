@@ -11,8 +11,15 @@ elimina el argumento de "no hay presupuesto para arte", pero **no** el de
 "presupuesto cero de rendimiento en Android gama media". Esta skill existe para
 que la segunda restricción siga ganando.
 
+La mecánica vive fuera de este repo, en el hub global
+`Documents\Projects\generacion-de-contenido\`: `ROUTING.md` dice qué herramienta
+usar, `HARDWARE.md` qué formatos acelera esta GPU, `CATALOGO.md` qué modelos hay
+instalados y `recetas/` los pipelines ya verificados. No reconstruyas un grafo
+desde cero si hay una receta que ya hace el trabajo.
+
 Trabaja con las otras capas, no en lugar de ellas:
 
+- Hub `generacion-de-contenido` → herramientas, modelos y recetas verificadas.
 - `comfyui-assets` (personal) → cómo generar, optimizar e integrar.
 - `awwwards` → en qué zona de intensidad estás y si el resultado aprueba.
 - `impeccable` → vocabulario de diseño por elemento.
