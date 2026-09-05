@@ -81,3 +81,37 @@ y sync en conflicto tienen rótulo, texto y salida propios, y que pendiente y co
 
 Hasta entonces las 25 superficies permanecen `candidate` y ninguna evidencia automática de este change
 cuenta como aprobación visual.
+
+
+---
+
+# Ronda 1 — resultado
+
+**Fecha:** 2026-09-04. El owner recorrió Present en escritorio, tablet y móvil.
+
+## Veredicto
+
+**Aprobado con condiciones.** El recorrido funciona en las tres vistas. Una condición bloqueante y una
+mejora.
+
+## Condiciones emitidas
+
+| # | Condición | Estado |
+| --- | --- | --- |
+| C1 | Los filtros `Documentos` y `Presentaciones` no muestran su contenido: alternan entre `Todos` y `Hojas`, y se pueden pulsar indefinidamente | **Corregida.** Nueve vistas filtradas, una por tipo y breakpoint; comprobación de destino por tipo añadida al gate |
+| C2 | El botón `Plantillas` de móvil debe mostrar sólo las plantillas del tipo que se va a crear | **Corregida.** Tres hojas, una por tipo |
+
+## Respuestas a las preguntas abiertas
+
+| # | Pregunta | Respuesta del owner | Consecuencia |
+| --- | --- | --- | --- |
+| 1 | ¿La zona de creación compite con la biblioteca en 390? | Pide explicación más detallada antes de decidir | **Abierta.** No se cambia nada hasta que decida |
+| 2 | ¿El chip de filtro activo se lee como pulsable? | Sí, se intuye fácilmente que son pulsables | **Resuelta.** Chip de tipo activo ahora limpia el filtro; `Todos` activo pasa a pestaña |
+| 3 | Confirmar importar persistente y catálogo en familias | "Está perfecto y sí funciona tal cual" | **Confirmadas.** Las dos decisiones derivadas quedan aprobadas |
+| 4 | ¿Plantillas de móvil por tipo? | Sí, sólo las del tipo a crear | **Resuelta.** Ver C2 |
+
+## Qué falta
+
+- Cerrar la pregunta 1 con el owner.
+- Segundo recorrido de Present sobre las correcciones (tarea 7.4).
+- Veredicto definitivo y promoción de frames (tareas 7.5 y 7.6).

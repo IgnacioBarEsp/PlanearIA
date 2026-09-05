@@ -109,3 +109,65 @@ criterio con el que #163 dejó sin reacción el elemento de navegación activo.
 
 Queda como observación para Present: si el owner considera que un chip activo se lee como pulsable, se
 diferencia visualmente sin volverlo navegable.
+
+
+---
+
+# Segunda auditoría — tras la ronda 1 del gate visual
+
+**Fecha:** 2026-09-04. Motivo: el owner recorrió Present y reportó que los filtros de la biblioteca no
+funcionaban.
+
+## Defecto reportado y su causa
+
+El owner observó que `Todos` y `Hojas de cálculo` respondían bien, pero `Documentos` y `Presentaciones`
+alternaban entre esas dos vistas sin mostrar nunca su propio contenido, y que podían pulsarse
+indefinidamente para alternar.
+
+Causa raíz: existía **una sola vista filtrada por breakpoint**, la de hojas, y el cableado mandaba a ella
+*todos* los chips inactivos. Desde la vista filtrada, cualquier chip inactivo regresaba a la principal. El
+resultado es exactamente el alternador de dos estados que el owner describió. La primera auditoría no lo
+detectó porque comprobaba que cada arista no cruzara de breakpoint, no que su destino fuera el correcto.
+
+## Corrección
+
+- Se crearon las vistas filtradas que faltaban: **una por tipo y por breakpoint**, nueve en total
+  (documentos, hojas y presentaciones en 1440, 768 y 390).
+- Cada chip navega ahora a la vista de **su** tipo.
+- El chip de tipo activo pasa a ser pulsable y **limpia el filtro**, devolviendo a la vista sin filtrar.
+- Se añadió al gate una comprobación nueva que verifica que el destino de cada chip corresponde a su tipo,
+  no sólo que no cruce de ancho.
+
+## Resultado de la segunda auditoría
+
+| Métrica | Valor |
+| --- | ---: |
+| Superficies en la sección | 33 |
+| Aristas de navegación | 320 |
+| Aristas de overlay | 52 |
+| **Fugas dispositivo a dispositivo** | **0** |
+| Destinos rotos | 0 |
+| **Chips de filtro con destino incorrecto** | **0** |
+| **Botones de plantillas con destino incorrecto** | **0** |
+| Controles bajo 44 pt | 0 |
+| Controles sin reacción | 3 |
+
+| Origen → destino | Aristas |
+| --- | ---: |
+| escritorio → escritorio | 134 |
+| tablet → tablet | 107 |
+| móvil → móvil | 79 |
+
+Los 3 controles sin reacción son el chip `Todos` de las tres superficies principales, que dejó de ser una
+píldora y ahora se presenta como pestaña de estado actual. Ver la evidencia de QA.
+
+## Overlay con contexto múltiple
+
+`Office · importar archivo` (`470:968`, 560 px) se abre desde escritorio y desde tablet. El clasificador lo
+reporta como contexto múltiple en vez de dejarlo pasar. Se verificó que **emite cero aristas de
+navegación**: sus únicas acciones son `CLOSE`, así que no puede entregar una superficie de otro ancho.
+
+Limitación declarada del clasificador: un overlay abierto **desde otro overlay** no hereda contexto de
+dispositivo de forma transitiva. Afecta a `descargar`, `dónde se está usando` y `duplicar` cuando se abren
+desde el menú de acciones de tablet. Las tres emiten únicamente `CLOSE`, por lo que la conclusión no
+cambia; queda anotado para no presentar la cobertura como mayor de lo que es.

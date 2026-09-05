@@ -121,3 +121,45 @@ propiedad de `cross-surface-assignment`; el runtime debe reutilizar el component
 3. Confirmar las dos decisiones derivadas: importar como acción persistente y el catálogo en familias.
 4. Si el catálogo de plantillas de móvil debería ser por tipo en vez de una hoja única con los tres.
 5. Contraste medido en runtime con daltonismo y alto contraste: fuera del alcance de Figma.
+
+
+---
+
+# Correcciones de la ronda 1 del gate visual
+
+**Fecha:** 2026-09-04.
+
+## Chips de filtro: de control inerte a estado legible
+
+El owner respondió que **sí intuye fácilmente que los chips son pulsables**, lo que convertía en defecto
+real que el chip activo no hiciera nada. Se resolvió eliminando el caso inerte allí donde había una acción
+sensata, y cambiando el significante donde no la hay:
+
+| Caso | Antes | Ahora |
+| --- | --- | --- |
+| Chip de tipo activo (`Documentos`, `Hojas`, `Presentaciones`) | Píldora rellena sin reacción | Píldora rellena **pulsable**: limpia el filtro y vuelve a la vista sin filtrar |
+| Chip `Todos` activo en la vista sin filtrar | Píldora rellena sin reacción | **Pestaña**: sin píldora ni borde, texto en color de marca y barra inferior de 3 px |
+
+Quedan 3 controles sin reacción y los tres son esa pestaña `Todos`. Ya no se parecen a un botón: son el
+indicador de "estás aquí", que es un patrón que el docente reconoce de cualquier barra de pestañas.
+
+## Objetivo táctil, segunda pasada
+
+Aparecieron 9 controles nuevos bajo 44 pt. La causa es instructiva: la primera corrección sólo elevó
+controles **con reacción**, y los chips activos no tenían ninguna, así que conservaron sus 36-38 px.
+Al volverse pulsables con el arreglo de filtros, salieron a la luz. Los 9 se elevaron a 44.
+
+Además se alinearon a 44 las tres pestañas `Todos`, que no son interactivas pero comparten fila con chips
+que sí lo son: dejarlas más bajas rompía la línea base del grupo.
+
+**Controles interactivos bajo 44 pt: 0.**
+
+## Plantillas por tipo en móvil
+
+El owner pidió que el botón `Plantillas` muestre sólo las plantillas del tipo que se va a crear. La hoja
+única con los tres grupos se sustituyó por **tres hojas, una por tipo**, y cada tarjeta de creación apunta
+a la suya. La comprobación de destino por tipo forma parte ahora del gate automático.
+
+Durante el arreglo se cometió y corrigió un error: la primera versión clonó la hoja después de podarla,
+así que las hojas de hoja de cálculo y presentación salieron vacías. Se rehicieron desde la hoja de
+documento, retextando sus filas.

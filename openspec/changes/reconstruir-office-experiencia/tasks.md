@@ -50,8 +50,8 @@
 ## 7. Gate humano
 
 - [x] 7.1 Preparar los recorridos de Figma Present por breakpoint
-- [ ] 7.2 Recorrer Present con el owner y recoger condiciones
-- [ ] 7.3 Confirmar en Present las dos decisiones derivadas: importar como acción persistente y el catálogo en familias
+- [x] 7.2 Recorrer Present con el owner y recoger condiciones
+- [x] 7.3 Confirmar en Present las dos decisiones derivadas: importar como acción persistente y el catálogo en familias
 - [ ] 7.4 Corregir dentro de este change las condiciones emitidas y volver a recorrer
 - [ ] 7.5 Registrar el veredicto humano explícito en el issue #177 y en `evidencia/04-gate-visual-issue-177.md`
 - [ ] 7.6 Promover los frames aprobados y renombrar la sección sólo después del veredicto
