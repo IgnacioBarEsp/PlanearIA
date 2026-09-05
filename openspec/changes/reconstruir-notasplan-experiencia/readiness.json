@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "issue": 180,
+  "change": "reconstruir-notasplan-experiencia",
+  "surfaces": [
+    "docs",
+    "ui"
+  ],
+  "validations": [
+    "openspec-strict",
+    "harness-parity"
+  ],
+  "evidence": [
+    {
+      "id": "issue-link",
+      "ref": "https://github.com/IgnacioBarEsp/PlanearIA/issues/180"
+    },
+    {
+      "id": "pr-link",
+      "ref": "Pendiente: se completa mediante opsx:finish tras apply, aprobacion visual y archive."
+    },
+    {
+      "id": "adversarial-review",
+      "ref": "Pendiente: se registra en evidencia/06-revision-adversarial.md durante apply. Sin ella el change no archiva."
+    },
+    {
+      "id": "docs-verification",
+      "ref": "Pendiente: openspec validate --all --strict, checkOpenSpecTldr, checkSourceEncoding y agent:harness:check durante apply. No se ejecutan typecheck ni tests: el change no toca src/, backend/ ni dependencias."
+    },
+    {
+      "id": "web-http-200",
+      "ref": "Pendiente de decision: el change no edita runtime, por lo que puede quedar declarado como no requerido con causa, siguiendo el precedente de #163 y #177."
+    },
+    {
+      "id": "playwright-breakpoints",
+      "ref": "Pendiente de decision: precedente de #163 y #177 es no ejecutarlo cuando el change no modifica runtime, y verificar la navegacion sobre el grafo Figma. Se declara explicitamente al cerrar, nunca se omite en silencio."
+    },
+    {
+      "id": "nielsen",
+      "ref": "Pendiente: evidencia/03-qa-anti-slop-accesibilidad.md con severidad Nielsen, auditoria de 44 pt sin hitSlop incluida la barra compacta, labels accesibles en iconos de formato y verificacion de fuente ampliada sobre hoja y barra."
+    },
+    {
+      "id": "breakpoint-integrity",
+      "ref": "Pendiente: evidencia/02-auditoria-grafo-por-ancho.md. Criterio doble: cero fugas dispositivo a dispositivo clasificando por ancho de frame y contando aristas salientes, y cero destinos incorrectos verificados por identidad del control. La segunda comprobacion se anadio tras el defecto que #177 dejo pasar."
+    },
+    {
+      "id": "human-approval",
+      "ref": "Pendiente: veredicto humano explicito del owner tras Figma Present por breakpoint, registrado en el issue #180. Ninguna auditoria automatica lo sustituye."
+    },
+    {
+      "id": "runtime-handoff",
+      "ref": "Pendiente: evidencia/05-handoff-runtime-notasplan.md. Debe declarar cuatro costos: la migracion del modelo tipado PlaneacionDocumento a documento-primero, el enlace revocable con solicitud de permiso, el historial con puntos de guardado, y la exportacion con fidelidad heredada de #177 mas el requisito nuevo del viaje de vuelta. No autoriza crear issue ni change de runtime."
+    },
+    {
+      "id": "figma-promotion",
+      "ref": "Pendiente: la seccion permanece candidate hasta el veredicto. Los nodos heredados 62:3, 66:40, 151:77 y 151:123 se conservan intactos como baseline historico."
+    },
+    {
+      "id": "debt-assessment",
+      "ref": "Pendiente: evidencia/debt-assessment-input.json capturado con debt:capture, incluso si el resultado es clean. El plan uxui-navegacion-global esta en 4/5 unidades y una tercera deuda transversal dispara saneamiento."
+    }
+  ],
+  "rollback": {
+    "strategy": "Los nodos historicos 62:3, 66:40, 151:77 y 151:123 permanecen intactos, asi que restaurar NotasPLAN a su estado previo es volver a apuntar a ellos. La seccion candidate es recuperable por historial de Figma y los artefactos versionados se revierten por PR normal. Runtime, rutas, datos, storage, backend y src/sync permanecen intactos: este change no toca una sola linea de codigo de producto, y la migracion a documento-primero que la decision implica pertenece a un change de runtime posterior que aun no existe."
+  },
+  "adversarialReview": {
+    "ref": "openspec/changes/reconstruir-notasplan-experiencia/evidencia/06-revision-adversarial.md"
+  },
+  "exceptions": []
+}
