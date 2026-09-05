@@ -160,6 +160,10 @@ sin deliberar ni pedir permiso ni releer archivos a mano; asi no se gastan token
 - Playwright: QA visual web obligatoria para UI.
 - Expo/Vercel: diagnostico operativo.
 - PlanearIA SQLite: inspeccion read-only de SQLite opt-in.
+- ComfyUI local (`comfyui-local`, puente en `Documents/Projects/comfyui-bridge`): generacion de arte
+  propio (ilustracion, textura, arte de marca, moodboards, video e imagen para landing, audio).
+  No es un RAG: se OFRECE, no se invoca por reflejo. Decision de uso y presupuesto en la skill
+  `generative-assets`; mecanica en la skill personal `comfyui-assets`.
 
 Detalle: `Documentacion/02-operacion/MCP_FLUJOS_PLANEARIA.md`.
 
@@ -181,6 +185,7 @@ Referencias open source son inspiracion y analisis; no son codigo de PlanearIA.
 - Completar el preflight por superficie: tarea docente, zona de intensidad, jerarquía, estructura, firma útil, patrón genérico refutado, tokens, estados negativos, accesibilidad y evidencia siguiente.
 - Glass, blur, gradientes, halos, bento, cards, pills, sombras e iconos no son una receta. Solo una excepción documentada puede usarlos con propósito, contraste, fallback sólido, reducir movimiento, presupuesto de rendimiento y rollback.
 - Si no hay skill, Figma, MCP o ground truth, declarar la limitación y producir un draft reversible; nunca declarar paridad o aprobación inexistente.
+- Si a una superficie le falta una imagen, ilustración, textura, referencia visual o audio que no existe, ofrecer generarlo con ComfyUI local (skill `generative-assets`) en vez de rellenar con un patrón genérico o dejarlo vacío. Ofrecer con costo y alternativa; generar sin preguntar solo si el usuario ya lo pidió. Un asset generado no exime del preflight anti-slop ni del presupuesto de rendimiento.
 - Figma, QA automática y screenshots no cierran los gates manuales de aprobación visual o entrevistas docentes.
 
 ## Validacion

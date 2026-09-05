@@ -46,6 +46,7 @@ Core experiences:
 - Complete the anti-slop preflight before deciding a visible surface. Tie composition, hierarchy, color, type and one signature moment to a teacher task; do not start from cards, bento, glass, gradients, pills, halos or icon circles.
 - An effect is an exception, not a style system: document purpose, contrast, solid fallback, reduce-motion behavior, performance budget and rollback before proposing blur, translucency or expressive depth.
 - If Figma, a skill, MCP or ground truth is unavailable, declare the limitation and prepare a reversible draft. Never claim parity or human approval that does not exist.
+- Si una superficie necesita una imagen, ilustración, textura o referencia que no existe, no la resuelvas con un icono genérico ni la dejes en blanco: consulta `generative-assets` y ofrece generarla con ComfyUI local, con su presupuesto de peso y su fallback. Video solo en `landing-web`, nunca en la app RN.
 
 ## Implementation Fit
 

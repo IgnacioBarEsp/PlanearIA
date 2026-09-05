@@ -189,6 +189,10 @@ sin deliberar ni pedir permiso ni releer archivos a mano; asi no se gastan token
 - Playwright: QA visual web obligatoria para UI.
 - Expo/Vercel: diagnostico operativo.
 - PlanearIA SQLite: inspeccion read-only de SQLite opt-in.
+- ComfyUI local (`comfyui-local`, puente en `Documents/Projects/comfyui-bridge`): generacion de arte
+  propio (ilustracion, textura, arte de marca, moodboards, video e imagen para landing, audio).
+  No es un RAG: se OFRECE, no se invoca por reflejo. Decision de uso y presupuesto en la skill
+  `generative-assets`; mecanica en la skill personal `comfyui-assets`.
 
 Detalle: `Documentacion/02-operacion/MCP_FLUJOS_PLANEARIA.md`.
 
@@ -210,6 +214,7 @@ Referencias open source son inspiracion y analisis; no son codigo de PlanearIA.
 - Completar el preflight por superficie: tarea docente, zona de intensidad, jerarquía, estructura, firma útil, patrón genérico refutado, tokens, estados negativos, accesibilidad y evidencia siguiente.
 - Glass, blur, gradientes, halos, bento, cards, pills, sombras e iconos no son una receta. Solo una excepción documentada puede usarlos con propósito, contraste, fallback sólido, reducir movimiento, presupuesto de rendimiento y rollback.
 - Si no hay skill, Figma, MCP o ground truth, declarar la limitación y producir un draft reversible; nunca declarar paridad o aprobación inexistente.
+- Si a una superficie le falta una imagen, ilustración, textura, referencia visual o audio que no existe, ofrecer generarlo con ComfyUI local (skill `generative-assets`) en vez de rellenar con un patrón genérico o dejarlo vacío. Ofrecer con costo y alternativa; generar sin preguntar solo si el usuario ya lo pidió. Un asset generado no exime del preflight anti-slop ni del presupuesto de rendimiento.
 - Figma, QA automática y screenshots no cierran los gates manuales de aprobación visual o entrevistas docentes.
 
 ## Validacion
@@ -288,6 +293,7 @@ Para harnesses sin soporte nativo de path-globs, estas reglas aplican al editar 
 - Every animation must respect the OS reduce-motion setting and hit 60fps on mid-range Android; degrade effects (blur/gradients) to solid surfaces if they jank
 - New/redesigned UI must pass the Design Excellence standard (PLAN_UXUI_NAVEGACION_GLOBAL.md section 1.9): anti-slop checklist, intentional typography from tokens, at least one meaningful micro-interaction, designed loading/empty/error/offline states
 - Verify library APIs (reanimated, gesture-handler, tentap, expo-*) against Context7 docs before writing them; explore code with GitNexus first (CodeGraph fallback) before editing
+- Generated art (ComfyUI local, skill `generative-assets`): offer it, never assume it. Allowed as static illustration/texture in onboarding, empty states and brand art (<=150 KB, light+dark variants, meaning never encoded by color alone for DaltonismoContext); PROHIBITED as video or permanent loop inside the RN app — video belongs to the separate landing-web artifact. Every generated asset needs a recipe in assets/generated/ASSETS.md and a screen that still reads correctly when the asset fails to load
 
 > Globs: src/__tests__/**/*.{ts,tsx}, **/*.test.{ts,tsx}
 
