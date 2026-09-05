@@ -163,3 +163,35 @@ a la suya. La comprobación de destino por tipo forma parte ahora del gate autom
 Durante el arreglo se cometió y corrigió un error: la primera versión clonó la hoja después de podarla,
 así que las hojas de hoja de cálculo y presentación salieron vacías. Se rehicieron desde la hoja de
 documento, retextando sus filas.
+
+
+## Densidad de móvil: resolución de la pregunta 1
+
+El owner eligió compactar las tarjetas de creación. La decisión de que **crear es la tarea principal** se
+conserva; lo que cambia es cuánto espacio necesita para expresarse.
+
+| Antes | Después |
+| --- | --- |
+| Tarjeta de 140 px: chip, título, subtítulo, y los dos botones en filas separadas | Tarjeta de 108 px: chip y título en la misma línea, subtítulo a 11 px, y los dos botones compartiendo una sola fila |
+| Zona de creación 312-756 | Zona de creación 312-660 |
+| Nada de la biblioteca visible sin desplazar | Cabecera, filtros y el nombre del primer archivo visibles sin desplazar |
+
+Reparto verificado contra el corte real de pantalla de 844 px en `461:1108`:
+
+| Elemento | Desde | Hasta |
+| --- | ---: | ---: |
+| Cabecera, título, subtítulo, importar | 0 | 270 |
+| Tarjeta Documento | 312 | 420 |
+| Tarjeta Hoja de cálculo | 432 | 540 |
+| Tarjeta Presentación | 552 | 660 |
+| TU BIBLIOTECA | 684 | 699 |
+| Filtros | 705 | 749 |
+| LO MÁS RECIENTE PRIMERO | 760 | 774 |
+| Primer archivo (su nombre termina en 834) | 784 | 916 |
+| **Corte de pantalla** | | **844** |
+
+El frame bajó de 1440 a 1344 px de alto y la barra inferior se reancló al nuevo borde. Los tres botones de
+cada tarjeta conservan sus 44 pt y no hay solapamientos entre elementos dentro de ninguna tarjeta.
+
+El cambio se aplicó también a las tres vistas filtradas de móvil, para que la densidad no cambie según el
+filtro aplicado.

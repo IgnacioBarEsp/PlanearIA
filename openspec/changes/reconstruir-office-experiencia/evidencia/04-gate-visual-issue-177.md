@@ -115,3 +115,30 @@ mejora.
 - Cerrar la pregunta 1 con el owner.
 - Segundo recorrido de Present sobre las correcciones (tarea 7.4).
 - Veredicto definitivo y promoción de frames (tareas 7.5 y 7.6).
+
+
+## Ronda 2 — qué revisar
+
+Correcciones aplicadas sobre C1, C2 y las preguntas 2 y 1. Recorrido corto, centrado en lo que cambió.
+
+### R2-01 · Filtros (los tres breakpoints)
+
+1. Pulsa `Documentos`. **Comprueba:** aparece sólo el documento, y el chip queda marcado.
+2. Pulsa `Hojas de cálculo` y luego `Presentaciones`. **Comprueba:** cada uno muestra su propio archivo. Ya
+   no debe alternar entre dos vistas.
+3. Con un filtro puesto, vuelve a pulsar **ese mismo chip**. **Comprueba:** limpia el filtro y vuelve a la
+   lista completa.
+4. Mira el chip `Todos` en la vista sin filtrar. **Comprueba:** ya no parece un botón: es una pestaña con
+   barra inferior que indica dónde estás.
+
+### R2-02 · Plantillas por tipo (móvil)
+
+Pulsa `Plantillas` en cada una de las tres tarjetas. **Comprueba:** cada una abre sólo las plantillas de su
+tipo, y el título de la hoja lo dice.
+
+### R2-03 · Densidad de móvil
+
+Abre Office en móvil sin desplazarte. **Comprueba:** ves los tres tipos completos y, además, la cabecera de
+la biblioteca, los filtros y el nombre del primer archivo.
+
+Si esto ya responde a lo que buscabas, el gate queda listo para veredicto definitivo.
