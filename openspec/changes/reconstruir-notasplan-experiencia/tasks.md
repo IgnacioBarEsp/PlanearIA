@@ -32,7 +32,7 @@
 - [x] 4.5 Construir compartir con copia y enlace, rutas interna y externa, y la declaración de sólo lectura y revocable
 - [x] 4.6 Construir la solicitud de permiso de edición estilo cuenta más aprobación del docente
 - [x] 4.7 Construir el historial con puntos de guardado con nombre, previsualización y restaurar
-- [x] 4.8 Construir los nueve estados, incluido el de reimportación que declara qué se conservó
+- [x] 4.8 Construir los ocho estados; el de reimportación se retira de la interfaz por decisión del owner y su límite queda en el handoff
 - [x] 4.9 Rotular todo dato de ejemplo
 
 ## 5. Auditoría del grafo
@@ -55,8 +55,8 @@
 ## 7. Gate humano
 
 - [x] 7.1 Preparar los recorridos de Figma Present por breakpoint
-- [ ] 7.2 Recorrer Present con el owner y recoger condiciones
-- [ ] 7.3 Confirmar en Present las tres decisiones derivadas: nivel con default, formulario no default en móvil y secciones como encabezados
+- [x] 7.2 Recorrer Present con el owner y recoger condiciones
+- [x] 7.3 Confirmar en Present las tres decisiones derivadas: nivel con default, formulario no default en móvil y secciones como encabezados
 - [ ] 7.4 Corregir dentro de este change las condiciones emitidas y volver a recorrer
 - [ ] 7.5 Registrar el veredicto humano explícito en el issue #180 y en `evidencia/04-gate-visual-issue-180.md`
 - [ ] 7.6 Promover los frames aprobados y renombrar la sección sólo después del veredicto

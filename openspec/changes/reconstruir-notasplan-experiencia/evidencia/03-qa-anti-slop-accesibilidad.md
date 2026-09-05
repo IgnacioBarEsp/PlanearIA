@@ -112,3 +112,51 @@ Pendiente y conflicto tienen rótulo, texto y salida distintos, que es la confus
    superficies duplicadas.
 6. Confirmar las tres decisiones derivadas: nivel con valor por defecto, formulario no default en móvil, y
    las siete secciones como encabezados dentro del documento.
+
+---
+
+# Correcciones de la ronda 1 del gate visual
+
+**Fecha:** 2026-09-05.
+
+## Los tres fallos compartían una causa
+
+No fueron errores de estilo: los tres eran **controles que prometían una acción y entregaban otra**. Es la
+misma familia de defecto que la ronda 1 de Office destapó con los filtros, y confirma que la comprobación
+de corrección de destino tiene que cubrir todos los grupos de control, no sólo los que uno recuerda
+auditar.
+
+En esta ola la comprobación cubría índice, nivel de plantilla y acciones del documento. **No cubría los
+comandos de la barra.** Ahora sí, y con ella el gate detecta que `Cursiva` aterrice en el estado de cursiva
+y no en el de lista.
+
+## Lo que cambió en la interfaz
+
+| Cambio | Antes | Ahora |
+| --- | --- | --- |
+| Hoja Asignar | Se abría sin salida: había que recargar | Controles recableados y un `Cerrar` propio y visible |
+| Barra de formato | Siete comandos, una sola variante, sin efecto en el texto | Quince variantes: cada comando queda activo y el párrafo muestra el formato aplicado |
+| Índice | Siete filas, un solo destino | Siete vistas de sección, con la hoja desplazada a la sección elegida |
+| Documento | Cinco secciones de siete | Las siete, en las dieciocho hojas de la sección |
+| Recuadros de logo | Dos cajas vacías | Etiquetados LOGO TECNM y LOGO ESCUELA |
+| Ver la hoja en móvil | Se salía del panel | Comparte fila con Agregar otra sesión, ambos dentro del ancho |
+
+## Respuestas del owner a las cuatro preguntas
+
+| # | Pregunta | Respuesta | Consecuencia |
+| --- | --- | --- | --- |
+| 1 | ¿Editar en línea en 390 px es cómodo en Sesiones? | Sí, quedó bien. Sólo el botón Ver la hoja se salía | Corregido. La decisión de hoja-primero en móvil se confirma |
+| 2 | ¿El formato de página como dato declarado sirve? | "Así está bien de momento" | Se conserva el indicador declarado; no se duplican superficies |
+| 3 | ¿Se distinguen los tres niveles de plantilla? | Sí | Confirmado |
+| 4 | ¿El estado de reimportación se entiende? | "Totalmente innecesario, el docente no debería saber nada de eso; con que diga descargar en docx o pdf es suficiente" | **Se retira de la interfaz.** Ver abajo |
+
+## El estado de reimportación sale de la interfaz, no del contrato
+
+El owner tiene razón en el plano del producto: explicarle a un docente qué es un objeto flotante que no
+sobrevivió al viaje es cargarle un problema de ingeniería que no le corresponde. El tablero baja de nueve
+estados a ocho y la superficie de descarga se simplifica a lo que él pidió: elegir formato.
+
+Lo que **no** cambia es el hecho técnico. El viaje de ida y vuelta sigue teniendo límites y siguen
+declarados donde corresponde: en el ground truth y en el handoff de runtime, que es documentación para
+quien implemente, no para el docente. Retirar el aviso de la interfaz no es lo mismo que negar el límite, y
+la spec se corrige para reflejar exactamente eso.

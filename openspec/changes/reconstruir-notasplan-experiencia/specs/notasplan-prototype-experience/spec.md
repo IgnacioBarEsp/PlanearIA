@@ -152,21 +152,26 @@ Instrumento de evaluación o Documento académico SHALL entregar el estado hones
 ### Requirement: NotasPLAN representa estados y recuperación honestos
 
 El prototipo SHALL diseñar documento nuevo vacío, guardando y guardado, cambios sin guardar al salir, error
-al guardar, offline, sync pendiente, sync en conflicto, IA no disponible y documento reimportado desde otro
-editor. Cada estado SHALL ofrecer salida o recuperación. Sync pendiente y sync en conflicto SHALL
-distinguirse entre sí y SHALL NOT presentarse como éxito remoto. El estado de reimportación SHALL declarar
-qué se conservó y qué no sobrevivió al viaje. Ningún estado SHALL simular guardado remoto, envío, descarga
-real ni sincronización, y los datos de ejemplo SHALL ir rotulados.
+al guardar, offline, sync pendiente, sync en conflicto e IA no disponible. Cada estado SHALL ofrecer salida
+o recuperación. Sync pendiente y sync en conflicto SHALL distinguirse entre sí y SHALL NOT presentarse como
+éxito remoto. Ningún estado SHALL simular guardado remoto, envío, descarga real ni sincronización, y los
+datos de ejemplo SHALL ir rotulados.
+
+La interfaz SHALL NOT explicar al docente qué elementos degradan al editar el documento fuera de la app: es
+un problema de ingeniería que no le corresponde, y la descarga SHALL limitarse a ofrecer el formato. El
+límite técnico del viaje de ida y vuelta SHALL declararse en el handoff de runtime y en el ground truth, que
+son documentación para quien implementa. Retirar el aviso de la interfaz SHALL NOT interpretarse como que el
+límite no existe.
 
 #### Scenario: El docente sale con cambios sin guardar
 
 - **WHEN** el docente intenta salir del editor con cambios sin guardar
 - **THEN** el prototipo nombra qué se perdería y ofrece guardar, descartar o seguir editando
 
-#### Scenario: Vuelve un documento editado fuera
+#### Scenario: El docente descarga el documento
 
-- **WHEN** el docente reimporta un documento que editó en Word o Docs
-- **THEN** el prototipo declara qué se conservó y qué no sobrevivió, en vez de presentarlo como si nada hubiera cambiado
+- **WHEN** el docente abre la superficie de descarga
+- **THEN** se le ofrece elegir entre `.docx` y PDF, y no se le explica qué elementos podrían degradar al editarlo fuera de la app
 
 #### Scenario: Sin conexión
 

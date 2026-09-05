@@ -116,3 +116,74 @@ La primera pasada encontró dieciséis controles pulsables que no hacían nada. 
 | `Acción · formulario · agregar sesión` | Lleva a la hoja, donde aparece la sesión añadida |
 
 Resultado: **cero controles inertes**, un grado mejor que el cierre de Office, que aceptó tres.
+
+---
+
+# Segunda auditoría — tras la ronda 1 del gate visual
+
+**Fecha:** 2026-09-05. El owner recorrió Present y reportó tres fallos de navegación. Los tres eran reales
+y del mismo tipo: **controles que prometían una cosa y hacían otra**.
+
+## Fallo 1 · La hoja Asignar era un callejón sin salida
+
+El owner: "si se abre el modal pero el flujo se queda atorado, no hay accion clickeable para regresar, toca
+volver a cargar la pagina".
+
+Causa raíz: al clonar las hojas Asignar aprobadas de Office se limpiaron sus reacciones heredadas, y el
+recableado posterior sólo alcanzaba nodos de tipo `FRAME`. Los controles de esas hojas **no son frames**,
+así que quedaron sin ninguna acción y el overlay no tenía salida.
+
+Corrección: se recablearon los controles sin filtrar por tipo, y se añadió a cada hoja un control `Cerrar`
+propio y visible, para que la salida no dependa de que el clon traiga controles reconocibles.
+
+La auditoría gana una comprobación nueva: **overlays sin ninguna acción de salida**. Resultado actual: 0.
+
+## Fallo 2 · La barra de formato alternaba entre dos estados
+
+El owner: "solamente funciona negrita y lista y se alternan entre ellas, no importa en cual de estos
+botones presiones".
+
+Causa raíz: los siete comandos apuntaban a **una única variante**, la que tenía `Lista` activo. Pulsar
+`Cursiva` mostraba `Lista`. Además la variante no mostraba el formato aplicado al texto, sólo cambiaba una
+etiqueta, que es lo que el owner describió como raro.
+
+Corrección: **una variante por comando y por breakpoint** —siete en escritorio, cinco en tablet, tres en
+móvil— donde el comando pulsado queda activo **y el párrafo de destino muestra el formato aplicado de
+verdad**: negrita en seminegrita, cursiva en cursiva real, lista y numerada con su viñeta, título más
+grande, checklist con su casilla y tabla con una rejilla insertada. Pulsar el comando activo lo desactiva y
+devuelve al documento base.
+
+## Fallo 3 · El índice llevaba siempre a Sesiones
+
+El owner: "no importa cual clickees, solamente te lleva a sesiones".
+
+Causa raíz: las siete filas apuntaban a la lente de formulario, que siempre muestra Sesiones.
+
+Corrección: **una vista por sección**, con la hoja desplazada a esa sección y su fila marcada. Antes de
+poder hacerlo hubo que completar el documento: la hoja sólo tenía cinco de las siete secciones, así que se
+añadieron Evaluación, Observaciones y Firmas a las dieciocho hojas de la sección.
+
+En tablet y móvil el índice es un panel: sus filas lo cierran y devuelven al documento. Es una limitación
+declarada —el prototipo no simula desplazamiento en esos anchos— pero ya no lleva a la sección equivocada.
+
+## Resultado de la segunda auditoría
+
+| Métrica | Valor |
+| --- | ---: |
+| Superficies | 51 |
+| Aristas de navegación | 360 |
+| Aristas de overlay | 151 |
+| **Fugas dispositivo a dispositivo** | **0** |
+| **Destinos incorrectos de comando o de índice** | **0** |
+| **Overlays sin salida** | **0** |
+| Controles bajo 44 pt | 0 |
+| Controles sin reacción | 7 |
+
+| Origen a destino | Aristas |
+| --- | ---: |
+| escritorio a escritorio | 256 |
+| tablet a tablet | 65 |
+| móvil a móvil | 39 |
+
+Los siete controles sin reacción son la fila del índice de la sección en la que ya estás. Como en Office,
+dejaron de parecer botón: sin relleno, con una barra de acento a la izquierda y el texto en color de marca.

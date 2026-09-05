@@ -84,3 +84,51 @@ el estado de reimportación dice qué volvió y qué no.
 - Sólo después se promueven los frames.
 
 Hasta entonces las 33 superficies permanecen `candidate`.
+
+---
+
+# Ronda 1 — resultado
+
+**Fecha:** 2026-09-05. El owner recorrió Present en los tres breakpoints.
+
+## Veredicto
+
+**Aprobado con condiciones.** "Todo funcionó bien en el flujo y la navegación", con tres fallos y dos
+correcciones de detalle.
+
+| # | Condición | Estado |
+| --- | --- | --- |
+| C1 | La hoja Asignar se abría sin salida y obligaba a recargar | **Corregida.** Controles recableados sin filtrar por tipo, más un Cerrar propio. La auditoría gana la comprobación de overlays sin salida |
+| C2 | La barra de formato alternaba entre dos estados sin importar qué comando se pulsara | **Corregida.** Quince variantes, una por comando y breakpoint, con el formato aplicado al texto |
+| C3 | El índice llevaba siempre a Sesiones | **Corregida.** Siete vistas de sección; antes hubo que completar el documento de cinco a siete secciones |
+| C4 | En tablet, dos recuadros vacíos sobre el nombre de la escuela | **Corregida.** Etiquetados como LOGO TECNM y LOGO ESCUELA |
+| C5 | Ver la hoja se salía del panel en móvil | **Corregida.** Comparte fila con Agregar otra sesión |
+| C6 | El estado de reimportación es innecesario para el docente | **Aplicada.** Retirado de la interfaz; el límite técnico queda en el handoff |
+
+## Ronda 2 — qué revisar
+
+Recorrido corto, sólo lo que cambió.
+
+### R2-01 · Asignar ya no atrapa
+
+Abre Asignar a un grupo desde el editor en los tres tamaños. **Comprueba:** hay Cerrar visible y vuelves al
+documento sin recargar.
+
+### R2-02 · La barra hace lo que dice
+
+Pulsa Negrita, luego Cursiva, luego Título, luego Tabla. **Comprueba:** cada uno queda activo y el párrafo
+de la sesión cambia de verdad —seminegrita, cursiva, más grande, o con una tabla debajo—. Pulsa el comando
+activo otra vez: se desactiva.
+
+### R2-03 · El índice te lleva a la sección
+
+Pulsa Firmas, luego Datos generales, luego Evaluación. **Comprueba:** la hoja se sitúa en esa sección y la
+fila marcada cambia. La sección donde estás ya no parece un botón: tiene una barra de acento.
+
+En tablet y móvil el índice cierra el panel y te deja en el documento. No simula desplazamiento ahí, y está
+declarado.
+
+### R2-04 · Detalles
+
+Comprueba los recuadros de logo en tablet, el botón Ver la hoja en móvil, y que el tablero de estados ya no
+habla de reimportación.
